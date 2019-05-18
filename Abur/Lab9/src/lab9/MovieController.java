@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import database.Database;
+
 public class MovieController {
     public void create(String name, Integer id) throws SQLException {
         Connection con = Database.getConnection();

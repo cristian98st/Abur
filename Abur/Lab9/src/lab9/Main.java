@@ -6,6 +6,8 @@ package lab9;
 
 import java.sql.SQLException;
 
+import database.Database;
+
 
 /**
  * @author Alex

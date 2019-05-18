@@ -1,7 +1,7 @@
 /**
  * 
  */
-package lab9;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
