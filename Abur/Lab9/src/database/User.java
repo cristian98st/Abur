@@ -95,7 +95,7 @@ public class User {
 	}
 
 	
-	public void setUserByName(String name) throws SQLException, DBException {
+	public void fetchByName(String name) throws SQLException, DBException {
 		Connection con = Database.getConnection();
 		PreparedStatement pstmt = con.prepareStatement("select * from accounts where username like '?'");
 		pstmt.setString(1, name);
@@ -116,7 +116,7 @@ public class User {
 		}
 	}
 	
-	public void setUserByMail(String mail) throws SQLException, DBException {
+	public void fetchByMail(String mail) throws SQLException, DBException {
 		Connection con = Database.getConnection();
 		PreparedStatement pstmt = con.prepareStatement("select * from accounts where email like '?'");
 		pstmt.setString(1, mail);
@@ -135,6 +135,29 @@ public class User {
 			this.mail = rez.getString(4);
 			this.coins = rez.getInt(5);
 		}
+	}
+	
+	public void update() throws SQLException, DBException {
+		Connection con = Database.getConnection();
+        if(this.id==-1) {
+		    throw new DBException("Fetch user first!");
+        }
+        PreparedStatement pstmt1 = con.prepareStatement("select * from accounts where username = '?'");
+		pstmt1.setString(1, this.username);
+		ResultSet rez = pstmt1.executeQuery();
+		rez.next();
+		String sql = "update accounts set updated_at = sysdate";
+		if(this.username != rez.getString(2))
+			sql = sql + " , username = '" + this.username + '\'';
+		if(this.pass != rez.getString(3))
+			sql = sql + " , pass = '" + this.pass + '\'';
+		if(this.mail != rez.getString(4))
+			sql = sql + " , email = '" + this.mail + '\'';
+		if(this.coins != rez.getInt(5))
+			sql = sql + " , coins = " + this.coins;
+		PreparedStatement pstmt2 = con.prepareStatement(sql);
+		pstmt2.executeUpdate();
+        con.commit();
 	}
 	
 	public void commit() throws SQLException {
