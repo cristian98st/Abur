@@ -1,0 +1,70 @@
+.label {
+    -fx-text-fill: #fff;
+}
+
+.button {
+    -fx-background-color: #8f2300;
+    -fx-border-color: #541500;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-text-fill: #fff;
+}
+
+.text-field{
+    -fx-background-color: #535353;
+    -fx-border-color: #000000;
+}
+
+#background2 {
+    -fx-background-color: #252526;
+}
+
+#background, #lblStatus {
+    -fx-background-color: #323232;
+    -fx-text-fill: #8f2300;
+}
+
+#X {
+    -fx-text-fill: #8f2300;
+    -fx-background-color: #323232;
+    -fx-border-color: #323232;
+}
+
+#X1 {
+    -fx-text-fill: #8f2300;
+    -fx-background-color: #252526;
+    -fx-border-color: #252526;
+}
+
+.tab {
+    -fx-background-color: #3f3f3f;
+    -fx-text-fill: #fff;
+}
+
+.tab-header-background {
+    -fx-background-color: #3f3f3f;
+}
+
+.tab-selected-line {
+    -fx-background-color: #323232;
+    -fx-stroke: #8f2300;
+    -fx-stroke-width: 3pt;
+}
+
+#secondary_color {
+    -fx-background-color: #535353;
+}
+
+#btnLogout, #btnMyAccount, #btnMyGames, #btnMyItems, #btnSettings {
+    -fx-background-color: #535353;
+    -fx-border-color: #535353;
+}
+
+#btnLogout:selected, #btnMyAccount:selected, #btnMyGames:selected, #btnMyItems:selected, #btnSettings:selected {
+    -fx-background-color: #4c4c4c;
+    -fx-border-color: #4c4c4c;
+}
+
+#test {
+    -fx-background-color: #27ff3b;
+}

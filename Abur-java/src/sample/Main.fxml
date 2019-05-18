@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="background2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="716.0" prefWidth="1136.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Main">
+   <children>
+      <JFXButton fx:id="X1" layoutX="1074.0" onAction="#Cancel" prefHeight="33.0" prefWidth="35.0" text="X">
+         <font>
+            <Font name="System Bold" size="29.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="507.0" layoutY="14.0" text="ABUR">
+         <font>
+            <Font name="Arial Bold" size="42.0" />
+         </font>
+      </Label>
+      <JFXTabPane fx:id="background" layoutY="65.0" prefHeight="654.0" prefWidth="1136.0" stylesheets="@../resources/dark-theme.css" tabClosingPolicy="UNAVAILABLE" tabMinHeight="50.0" tabMinWidth="180.0">
+         <tabs>
+            <Tab text="Info">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane fx:id="secondary_color" layoutX="-4.0" layoutY="-2.0" prefHeight="605.0" prefWidth="225.0">
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                           <children>
+                              <JFXButton fx:id="btnMyAccount" layoutX="2.0" layoutY="18.0" onAction="#handleButtonAction" prefHeight="33.0" prefWidth="224.0" text="My Account" />
+                              <JFXButton fx:id="btnMyGames" layoutX="2.0" layoutY="53.0" onAction="#handleButtonAction" prefHeight="33.0" prefWidth="224.0" text="My Games" />
+                              <JFXButton fx:id="btnMyItems" layoutX="2.0" layoutY="86.0" onAction="#handleButtonAction" prefHeight="33.0" prefWidth="224.0" text="My Items" />
+                              <JFXButton fx:id="btnSettings" layoutX="2.0" layoutY="119.0" onAction="#handleButtonAction" prefHeight="33.0" prefWidth="224.0" text="Settings" />
+                              <JFXButton fx:id="btnLogout" layoutX="6.0" layoutY="526.0" onAction="#handleButtonAction" prefHeight="33.0" prefWidth="224.0" text="Log out" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="main" layoutX="226.0" layoutY="-2.0" prefHeight="606.0" prefWidth="911.0">
+                           <children>
+                              <AnchorPane fx:id="panelMyAccount" prefHeight="606.0" prefWidth="911.0">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#888a8d" height="200.0" layoutX="29.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+                                    <Circle fill="#6e7379" layoutX="129.0" layoutY="71.0" radius="43.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                                    <Polygon fill="#6e7379" layoutX="129.0" layoutY="167.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                                      <points>
+                                        <Double fx:value="-50.0" />
+                                        <Double fx:value="40.0" />
+                                        <Double fx:value="50.0" />
+                                        <Double fx:value="40.0" />
+                                        <Double fx:value="0.0" />
+                                        <Double fx:value="-60.0" />
+                                      </points>
+                                    </Polygon>
+                                    <Label fx:id="lblName" layoutX="257.0" layoutY="28.0" text="Name:">
+                                       <font>
+                                          <Font name="Arial Bold" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="lblJoined" layoutX="257.0" layoutY="71.0" text="Joined: ">
+                                       <font>
+                                          <Font name="Arial Bold" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="lblNoGames" layoutX="257.0" layoutY="114.0" text="Number of games owned: ">
+                                       <font>
+                                          <Font name="Arial Bold" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="panelMyGames" prefHeight="606.0" prefWidth="911.0" visible="false">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+                                    <Label layoutX="421.0" layoutY="229.0" text="GAMES" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="panelMyItems" prefHeight="606.0" prefWidth="911.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="179.0" layoutY="135.0" text="Item1" />
+                                    <Label layoutX="297.0" layoutY="135.0" text="Item1" />
+                                    <Label layoutX="310.0" layoutY="216.0" text="Item1" />
+                                    <Label layoutX="179.0" layoutY="206.0" text="Item1" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="panelSettings" prefHeight="607.0" prefWidth="911.0" visible="false">
+                                 <children>
+                                    <Label layoutX="308.0" layoutY="293.0" text="Setting, settings, setttings" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Games">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Items">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Marketplace">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Contact Us">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Abous Us">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+         </tabs>
+         <effect>
+            <DropShadow />
+         </effect>
+      </JFXTabPane>
+   </children>
+</AnchorPane>
