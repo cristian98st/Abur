@@ -82,7 +82,7 @@
     -fx-background-color: #535353;
 }
 
-#btnLogout, #btnMyAccount, #btnMyGames, #btnMyItems, #btnSettings {
+#btnLogout, #btnMyAccount, #btnMyGames, #btnMyItems, #btnSettings, #btnSellingItems {
     -fx-background-color: #535353;
     -fx-border-color: #535353;
 }
