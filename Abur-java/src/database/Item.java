@@ -13,7 +13,9 @@ import java.util.List;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -30,7 +32,7 @@ public class Item extends RecursiveTreeObject<Item>{
 	private StringProperty type = new SimpleStringProperty();
 	private StringProperty wear = new SimpleStringProperty();
 	private StringProperty rarity = new SimpleStringProperty();
-	private IntegerProperty price = new SimpleIntegerProperty();
+	private FloatProperty price = new SimpleFloatProperty();
 
 	public Item() {
 		this.id.set(-1);
@@ -145,42 +147,33 @@ public class Item extends RecursiveTreeObject<Item>{
 	/**
 	 * @return the price
 	 */
-	public Integer getPrice() {
+	public Float getPrice() {
 		return this.price.get();
 	}
 
 	/**
 	 * @param price the price to set
 	 */
-	public void setPrice(Integer price) {
+	public void setPrice(Float price) {
 		this.price.set(price);
 	}
 	
 	public List<Item> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
 		Connection con = Database.getConnection();
-		String columns = "ID,ITEM_NAME,TYPEOF,WEAR,RARITY,CLASS,ADDED_AT,UPDATED_AT";
-		String ord = "ASC,DESC";
+		String columns = "id,item_name,typeof,wear,rarity,class,added_at,updated_at";
+		String ord = "asc,desc";
 		List<Item> list = new ArrayList<Item>();
-		PreparedStatement pstmt = con.prepareStatement("select * from items where ? like '%?%' order by ? ?");
-		if(columns.toLowerCase().contains(col) && !col.contains(",")) {
-			pstmt.setString(1, col);
-			pstmt.setString(2, name);
-			if(ord.toLowerCase().contains(col2Order) && !col2Order.contains(",")) {
-				pstmt.setString(3, col2Order);
-				pstmt.setString(4, order);
+		Statement pstmt = con.createStatement();
+		ResultSet rez;
+		if(columns.contains(col) && !col.contains(",")) {
+			if(ord.contains(order) && !order.contains(",")) {
+				rez = pstmt.executeQuery("select * from items where "+ col+" like '%"+ name +"%' order by "+col2Order +" "+order);
 			}
-			ResultSet rez = pstmt.executeQuery();
-			int rowNr=0;
-			while(rez.next())
-				rowNr++;
-			if(rowNr<1)
-				throw new DBException("No items found!");
-			else {
-				rez.beforeFirst();
-				while(rez.next()) {	
-					Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
-					list.add(x);
-				}
+			else
+				rez = pstmt.executeQuery("select * from items where "+ col+" like '%"+ name +"%' ");
+			while(rez.next()) {	
+				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+				list.add(x);
 			}
 		}
 		return list;
@@ -204,7 +197,7 @@ public class Item extends RecursiveTreeObject<Item>{
         pstmt.setString(4, this.type.get());
         pstmt.setString(5, this.wear.get());
         pstmt.setString(6, this.rarity.get());
-        pstmt.setInt(7, this.price.get());
+        pstmt.setFloat(7, this.price.get());
         pstmt.executeUpdate();
 	}
 	
