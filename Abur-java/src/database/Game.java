@@ -118,6 +118,10 @@ public class Game extends RecursiveTreeObject<Game>{
 		}
 		return list;
 	}
+
+	public void buyGame(){
+
+	}
 	
 	
 	public void commit() throws SQLException {
