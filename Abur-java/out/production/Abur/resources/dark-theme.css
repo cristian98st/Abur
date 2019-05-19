@@ -10,6 +10,10 @@
     -fx-text-fill: #fff;
 }
 
+.button:pressed{
+    -fx-background-color: #541500;
+}
+
 .text-field{
     -fx-background-color: #535353;
     -fx-border-color: #000000;
@@ -51,6 +55,29 @@
     -fx-stroke-width: 3pt;
 }
 
+.jfx-hamburger StackPane{
+    -fx-background-color: #252526;
+}
+
+#gamesTable {
+    -fx-background-color: #252526;
+}
+
+/*//////////////*/
+.jfx-tree-view {
+    -fx-background-color: #27ff3b;
+}
+
+/*//////////////////*/
+
+#search {
+    /*-fx-padding: px;*/
+    /*-fx-border-insets: 25px;*/
+    /*-fx-background-insets: 25px;*/
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+
 #secondary_color {
     -fx-background-color: #535353;
 }
@@ -65,6 +92,20 @@
     -fx-border-color: #4c4c4c;
 }
 
-#test {
-    -fx-background-color: #27ff3b;
+#Delete {
+    -fx-text-fill: #323232;
+    -fx-text-style: "arial";
+    -fx-background-color: -fx-parent;
+    -fx-border-color: -fx-parent
+}
+
+#link {
+    -fx-underline: true;
+    -fx-text-fill: #0000bd;
+    -fx-background-color: -fx-parent;
+    -fx-border-color: -fx-parent;
+}
+
+#link:pressed{
+    -fx-font-style: italic;
 }

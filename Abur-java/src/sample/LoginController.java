@@ -18,7 +18,7 @@ import java.util.HashMap;
 import static javafx.application.Platform.exit;
 
 
-public class MainController {
+public class LoginController {
     @FXML
     private Label lblStatus;
     @FXML
@@ -56,5 +56,18 @@ public class MainController {
 
     public static void closeStage(){
         stage.close();
+    }
+
+    public void openSignUp(ActionEvent actionEvent) throws IOException {
+        Stage primaryStage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("Signup.fxml"));
+        primaryStage.setTitle("Abur");
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("/resources/dark-theme.css");
+        primaryStage.setScene(scene);
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        primaryStage.show();
+        stage = primaryStage;
+        Main.closeStage();
     }
 }
