@@ -11,43 +11,48 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  * @author Alex
  *
  */
-public class Item {
+public class Item extends RecursiveTreeObject<Item>{
 
-	private Integer id;
-	private String name;
-	private String pclass;
-	private String type;
-	private String wear;
-	private String rarity;
-	private Integer price;
+	private IntegerProperty id;
+	private StringProperty name;
+	private StringProperty pclass;
+	private StringProperty type;
+	private StringProperty wear;
+	private StringProperty rarity;
+	private IntegerProperty price;
 
 	public Item() {
-		this.id=-1;
+		this.id.set(-1);
 	}
 	
 
 	public Item(Integer id,String name,String pclass,String type,String wear,String rarity,Integer price) {
-		this.id=id;
-		this.name=name;
-		this.pclass=pclass;
-		this.type=type;
-		this.wear=wear;
-		this.rarity=rarity;
-		this.price=price;
+		this.id.set(id);
+		this.name.set(name);
+		this.pclass.set(pclass);
+		this.type.set(type);
+		this.wear.set(wear);
+		this.rarity.set(rarity);
+		this.price.set(price);
 	}
 	
 	public Item(String name,String pclass,String type,String wear,String rarity,Integer price) {
-		this.id=-1;
-		this.name=name;
-		this.pclass=pclass;
-		this.type=type;
-		this.wear=wear;
-		this.rarity=rarity;
-		this.price=price;
+		this.id.set(-1);
+		this.name.set(name);
+		this.pclass.set(pclass);
+		this.type.set(type);
+		this.wear.set(wear);
+		this.rarity.set(rarity);
+		this.price.set(price);
 	}
 
 	
@@ -55,98 +60,98 @@ public class Item {
 	 * @return the id
 	 */
 	public Integer getId() {
-		return id;
+		return id.get();
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(Integer id) {
-		this.id = id;
+		this.id.set(id);
 	}
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.name.get();
 	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.name.set(name);
 	}
 
 	/**
 	 * @return the pclass
 	 */
 	public String getPclass() {
-		return pclass;
+		return this.pclass.get();
 	}
 
 	/**
 	 * @param pclass the pclass to set
 	 */
 	public void setPclass(String pclass) {
-		this.pclass = pclass;
+		this.pclass.set(pclass);
 	}
 
 	/**
 	 * @return the type
 	 */
 	public String getType() {
-		return type;
+		return this.type.get();
 	}
 
 	/**
 	 * @param type the type to set
 	 */
 	public void setType(String type) {
-		this.type = type;
+		this.type.set(type);
 	}
 
 	/**
 	 * @return the wear
 	 */
 	public String getWear() {
-		return wear;
+		return this.wear.get();
 	}
 
 	/**
 	 * @param wear the wear to set
 	 */
 	public void setWear(String wear) {
-		this.wear = wear;
+		this.wear.set(wear);
 	}
 
 	/**
 	 * @return the rarity
 	 */
 	public String getRarity() {
-		return rarity;
+		return this.rarity.get();
 	}
 
 	/**
 	 * @param rarity the rarity to set
 	 */
 	public void setRarity(String rarity) {
-		this.rarity = rarity;
+		this.rarity.set(rarity);
 	}
 
 	/**
 	 * @return the price
 	 */
 	public Integer getPrice() {
-		return price;
+		return this.price.get();
 	}
 
 	/**
 	 * @param price the price to set
 	 */
 	public void setPrice(Integer price) {
-		this.price = price;
+		this.price.set(price);
 	}
 
 	//TODO: ADD BY RARITY,PRICE,ETC WITH ORDER BY;
