@@ -37,6 +37,8 @@ public class Main extends Application implements Initializable {
     private TableView<Game> gamesTable;
     @FXML
     private TableView<Item> itemsTable;
+    @FXML
+    private TableView<marketItem> marketItemTable;
 
     static Stage stage = new Stage();
 
@@ -244,9 +246,102 @@ public class Main extends Application implements Initializable {
         items.add(new Item("1", "Sword1", "Warrior", "melee", "destroyed", "rare", "100"));
         items.add(new Item("2", "Bow", "Hunter", "range", "good", "common", "700"));
 
-        gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
         itemsTable.getColumns().setAll(itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
         itemsTable.setItems(items);
+
+
+
+        //Marketplace
+
+        TableColumn<marketItem, String> marketPlayer = new TableColumn<>("Selling player");
+        marketPlayer.setPrefWidth(150);
+        marketPlayer.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+        marketPlayer.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().player;
+            }
+        });
+
+        TableColumn<marketItem, String> marketItemName = new TableColumn<>("Item Name");
+        marketItemName.setPrefWidth(150);
+        marketItemName.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketItemName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().itemName;
+            }
+        });
+
+        TableColumn<marketItem, String> marketClassa = new TableColumn<>("Class");
+        marketClassa.setPrefWidth(150);
+        marketClassa.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketClassa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().itemPrice;
+            }
+        });
+
+        TableColumn<marketItem, String> marketWear = new TableColumn<>("Wear");
+        marketWear.setPrefWidth(150);
+        marketWear.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketWear.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().wear;
+            }
+        });
+
+        TableColumn<marketItem, String> marketRarity = new TableColumn<>("Rarity");
+        marketRarity.setPrefWidth(150);
+        marketRarity.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketRarity.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().rarity;
+            }
+        });
+
+        TableColumn<marketItem, String> marketItemPrice = new TableColumn<>("Price");
+        marketItemPrice.setPrefWidth(150);
+        marketItemPrice.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketItemPrice.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().itemPrice;
+            }
+        });
+
+        TableColumn<marketItem, String> marketExpireDate = new TableColumn<>("Expires at");
+        marketExpireDate.setPrefWidth(150);
+        marketExpireDate.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketExpireDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().expireDate;
+            }
+        });
+
+        ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
+        marketItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
+        marketItems.add(new marketItem("Gica", "SPear", "Hunter", "good", "legendary", "40000", "21/2/2050"));
+
+        marketItemTable.getColumns().setAll(marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
+        marketItemTable.setItems(marketItems);
     }
 
     class Game extends RecursiveTreeObject<Game>{
@@ -280,6 +375,26 @@ public class Main extends Application implements Initializable {
             this.wear = new SimpleStringProperty(wear);
             this.rarity = new SimpleStringProperty(rarity);
             this.itemPrice = new SimpleStringProperty(itemPrice);
+        }
+    }
+
+    class marketItem extends RecursiveTreeObject<marketItem>{
+        StringProperty player;
+        StringProperty itemName;
+        StringProperty classa;
+        StringProperty wear;
+        StringProperty rarity;
+        StringProperty itemPrice;
+        StringProperty expireDate;
+
+        public marketItem(String player, String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate){
+            this.player = new SimpleStringProperty(player);
+            this.itemName = new SimpleStringProperty(itemName);
+            this.classa = new SimpleStringProperty(classa);
+            this.wear = new SimpleStringProperty(wear);
+            this.rarity = new SimpleStringProperty(rarity);
+            this.itemPrice = new SimpleStringProperty(itemPrice);
+            this.expireDate = new SimpleStringProperty(expireDate);
         }
     }
 }
