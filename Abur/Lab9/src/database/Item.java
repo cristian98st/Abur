@@ -149,7 +149,93 @@ public class Item {
 		this.price = price;
 	}
 
-	public List<Item> getItemByName(String name) throws SQLException, DBException {
+	//TODO: ADD BY RARITY,PRICE,ETC WITH ORDER BY;
+	
+	public List<Item> getItemsByName(String name) throws SQLException, DBException {
+		Connection con = Database.getConnection();
+		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
+		pstmt.setString(1, name);
+		ResultSet rez = pstmt.executeQuery();
+		int rowNr=0;
+		while(rez.next())
+			rowNr++;
+		if(rowNr<1)
+			throw new DBException("No items found!");
+		else {
+			rez.beforeFirst();
+			List<Item> list = new ArrayList<Item>();
+			while(rez.next()) {	
+				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+				list.add(x);
+			}
+		return list;
+		}
+	}
+	
+	public List<Item> getItemsByRarity(String rar) throws SQLException, DBException {
+		Connection con = Database.getConnection();
+		PreparedStatement pstmt = con.prepareStatement("select * from items where rarity like '?'");
+		pstmt.setString(1, rar);
+		ResultSet rez = pstmt.executeQuery();
+		int rowNr=0;
+		while(rez.next())
+			rowNr++;
+		if(rowNr<1)
+			throw new DBException("No items found!");
+		else {
+			rez.beforeFirst();
+			List<Item> list = new ArrayList<Item>();
+			while(rez.next()) {	
+				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+				list.add(x);
+			}
+		return list;
+		}
+	}
+	
+	public List<Item> getItemsByName(String name) throws SQLException, DBException {
+		Connection con = Database.getConnection();
+		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
+		pstmt.setString(1, name);
+		ResultSet rez = pstmt.executeQuery();
+		int rowNr=0;
+		while(rez.next())
+			rowNr++;
+		if(rowNr<1)
+			throw new DBException("No items found!");
+		else {
+			rez.beforeFirst();
+			List<Item> list = new ArrayList<Item>();
+			while(rez.next()) {	
+				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+				list.add(x);
+			}
+		return list;
+		}
+	}
+	
+	public List<Item> getItemsByName(String name) throws SQLException, DBException {
+		Connection con = Database.getConnection();
+		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
+		pstmt.setString(1, name);
+		ResultSet rez = pstmt.executeQuery();
+		int rowNr=0;
+		while(rez.next())
+			rowNr++;
+		if(rowNr<1)
+			throw new DBException("No items found!");
+		else {
+			rez.beforeFirst();
+			List<Item> list = new ArrayList<Item>();
+			while(rez.next()) {	
+				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+				list.add(x);
+			}
+		return list;
+		}
+	}
+	
+	public List<Item> getItemsByName(String name) throws SQLException, DBException {
 		Connection con = Database.getConnection();
 		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
 		pstmt.setString(1, name);
