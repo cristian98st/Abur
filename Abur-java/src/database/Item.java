@@ -14,6 +14,8 @@ import java.util.List;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -22,13 +24,13 @@ import javafx.beans.property.StringProperty;
  */
 public class Item extends RecursiveTreeObject<Item>{
 
-	private IntegerProperty id;
-	private StringProperty name;
-	private StringProperty pclass;
-	private StringProperty type;
-	private StringProperty wear;
-	private StringProperty rarity;
-	private IntegerProperty price;
+	private IntegerProperty id = new SimpleIntegerProperty();
+	private StringProperty name = new SimpleStringProperty();
+	private StringProperty pclass = new SimpleStringProperty();
+	private StringProperty type = new SimpleStringProperty();
+	private StringProperty wear = new SimpleStringProperty();
+	private StringProperty rarity = new SimpleStringProperty();
+	private IntegerProperty price = new SimpleIntegerProperty();
 
 	public Item() {
 		this.id.set(-1);
@@ -94,8 +96,8 @@ public class Item extends RecursiveTreeObject<Item>{
 	/**
 	 * @param pclass the pclass to set
 	 */
-	public void setPclass(String pclass) {
-		this.pclass.set(pclass);
+	public void setPclass(String pclas) {
+		this.pclass.set(pclas);
 	}
 
 	/**
@@ -153,132 +155,57 @@ public class Item extends RecursiveTreeObject<Item>{
 	public void setPrice(Integer price) {
 		this.price.set(price);
 	}
-
-	//TODO: ADD BY RARITY,PRICE,ETC WITH ORDER BY;
 	
-	public List<Item> getItemsByName(String name) throws SQLException, DBException {
+	public List<Item> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
 		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
-		pstmt.setString(1, name);
-		ResultSet rez = pstmt.executeQuery();
-		int rowNr=0;
-		while(rez.next())
-			rowNr++;
-		if(rowNr<1)
-			throw new DBException("No items found!");
-		else {
-			rez.beforeFirst();
-			List<Item> list = new ArrayList<Item>();
-			while(rez.next()) {	
-				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
-				list.add(x);
+		String columns = "ID,ITEM_NAME,TYPEOF,WEAR,RARITY,CLASS,ADDED_AT,UPDATED_AT";
+		String ord = "ASC,DESC";
+		List<Item> list = new ArrayList<Item>();
+		PreparedStatement pstmt = con.prepareStatement("select * from items where ? like '%?%' order by ? ?");
+		if(columns.toLowerCase().contains(col) && !col.contains(",")) {
+			pstmt.setString(1, col);
+			pstmt.setString(2, name);
+			if(ord.toLowerCase().contains(col2Order) && !col2Order.contains(",")) {
+				pstmt.setString(3, col2Order);
+				pstmt.setString(4, order);
 			}
-		return list;
+			ResultSet rez = pstmt.executeQuery();
+			int rowNr=0;
+			while(rez.next())
+				rowNr++;
+			if(rowNr<1)
+				throw new DBException("No items found!");
+			else {
+				rez.beforeFirst();
+				while(rez.next()) {	
+					Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+					list.add(x);
+				}
+			}
 		}
+		return list;
 	}
 	
-	public List<Item> getItemsByRarity(String rar) throws SQLException, DBException {
-		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from items where rarity like '?'");
-		pstmt.setString(1, rar);
-		ResultSet rez = pstmt.executeQuery();
-		int rowNr=0;
-		while(rez.next())
-			rowNr++;
-		if(rowNr<1)
-			throw new DBException("No items found!");
-		else {
-			rez.beforeFirst();
-			List<Item> list = new ArrayList<Item>();
-			while(rez.next()) {	
-				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
-				list.add(x);
-			}
-		return list;
-		}
-	}
-	
-	public List<Item> getItemsByName(String name) throws SQLException, DBException {
-		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
-		pstmt.setString(1, name);
-		ResultSet rez = pstmt.executeQuery();
-		int rowNr=0;
-		while(rez.next())
-			rowNr++;
-		if(rowNr<1)
-			throw new DBException("No items found!");
-		else {
-			rez.beforeFirst();
-			List<Item> list = new ArrayList<Item>();
-			while(rez.next()) {	
-				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
-				list.add(x);
-			}
-		return list;
-		}
-	}
-	
-	public List<Item> getItemsByName(String name) throws SQLException, DBException {
-		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
-		pstmt.setString(1, name);
-		ResultSet rez = pstmt.executeQuery();
-		int rowNr=0;
-		while(rez.next())
-			rowNr++;
-		if(rowNr<1)
-			throw new DBException("No items found!");
-		else {
-			rez.beforeFirst();
-			List<Item> list = new ArrayList<Item>();
-			while(rez.next()) {	
-				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
-				list.add(x);
-			}
-		return list;
-		}
-	}
-	
-	public List<Item> getItemsByName(String name) throws SQLException, DBException {
-		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from items where name like '?'");
-		pstmt.setString(1, name);
-		ResultSet rez = pstmt.executeQuery();
-		int rowNr=0;
-		while(rez.next())
-			rowNr++;
-		if(rowNr<1)
-			throw new DBException("No items found!");
-		else {
-			rez.beforeFirst();
-			List<Item> list = new ArrayList<Item>();
-			while(rez.next()) {	
-				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
-				list.add(x);
-			}
-		return list;
-		}
-	}
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
-        if(this.id==-1) {
+        if(this.id.getValue()==-1) {
 		    try (Statement stmt = con.createStatement();
 		    		ResultSet rs = stmt.executeQuery("select max(id) from items")){
-		    	this.id=rs.next() ? rs.getInt(1)+1 : 1;
+		    	this.id.set((int) (rs.next() ? rs.getInt(1)+1 : 1));
 		    }
         }
-        PreparedStatement pstmt = con.prepareStatement("insert into items values(?,'?','?','?','?','?',?,sysdate,sysdate)");
-        pstmt.setInt(1, this.id);
-        pstmt.setString(2, this.name);
-        pstmt.setString(3,this.pclass);
-        pstmt.setString(4,this.type);
-        pstmt.setString(5,this.wear);
-        pstmt.setString(6,this.rarity);
-        pstmt.setInt(7, this.price);
+        PreparedStatement pstmt = con.prepareStatement("insert into items values(?,?,?,?,?,?,?,sysdate,sysdate)");
+        pstmt.setInt(1, this.getId());
+//        System.out.print(this.name.get());
+        System.out.print(this.pclass.get()+'\n');
+        pstmt.setString(2, this.getName());
+        pstmt.setString(3, this.getPclass());
+        pstmt.setString(4, this.type.get());
+        pstmt.setString(5, this.wear.get());
+        pstmt.setString(6, this.rarity.get());
+        pstmt.setInt(7, this.price.get());
         pstmt.executeUpdate();
-        con.commit();
 	}
 	
 }

@@ -12,6 +12,8 @@ import java.sql.Statement;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -19,11 +21,11 @@ import javafx.beans.property.StringProperty;
  *
  */
 public class User extends RecursiveTreeObject<User>{
-	private IntegerProperty id;
-	private StringProperty username;
-	private StringProperty pass;
-	private StringProperty mail;
-	private IntegerProperty coins;
+	private IntegerProperty id = new SimpleIntegerProperty();
+	private StringProperty username = new SimpleStringProperty();
+	private StringProperty pass = new SimpleStringProperty();
+	private StringProperty mail = new SimpleStringProperty();
+	private IntegerProperty coins = new SimpleIntegerProperty();
 
 	public User() {
 		this.id.set(-1);
@@ -31,78 +33,78 @@ public class User extends RecursiveTreeObject<User>{
 	
 	public User(String name,String pass,String mail,Integer coins) {
 		this.id.set(-1);
-		this.username=name;
-		this.pass=pass;
-		this.mail=mail;
-		this.coins=coins;		
+		this.username.set(name);
+		this.pass.set(pass);
+		this.mail.set(mail);
+		this.coins.set(coins);	
 	}
 	/**
 	 * @return the id
 	 */
 	public Integer getId() {
-		return id;
+		return this.id.get();
 	}
 
 	/**
 	 * @return the username
 	 */
 	public String getUsername() {
-		return username;
+		return this.username.get(); 
 	}
 
 	/**
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
-		this.username = username;
+		this.username.set(username);
 	}
 
 	/**
 	 * @return the pass
 	 */
 	public String getPass() {
-		return pass;
+		return this.pass.get();
 	}
 
 	/**
 	 * @param pass the pass to set
 	 */
 	public void setPass(String pass) {
-		this.pass = pass;
+		this.pass.set(pass);
 	}
 
 	/**
 	 * @return the mail
 	 */
 	public String getMail() {
-		return mail;
+		return this.mail.get();
 	}
 
 	/**
 	 * @param mail the mail to set
 	 */
 	public void setMail(String mail) {
-		this.mail = mail;
+		this.mail.set(mail);
 	}
 
 	/**
 	 * @return the coins
 	 */
 	public Integer getCoins() {
-		return coins;
+		return this.coins.get();
 	}
 
 	/**
 	 * @param coins the coins to set
 	 */
 	public void setCoins(Integer coins) {
-		this.coins = coins;
+		this.coins.set(coins);
 	}
 
 	
 	public void fetchByName(String name) throws SQLException, DBException {
 		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from accounts where username like '?'");
+		PreparedStatement pstmt = con.prepareStatement("select * from accounts where username like '%?%'");
 		pstmt.setString(1, name);
 		ResultSet rez = pstmt.executeQuery();
 		int rowNr=0;
@@ -113,17 +115,17 @@ public class User extends RecursiveTreeObject<User>{
 		else {
 			rez.beforeFirst();
 			rez.next();
-			this.id=rez.getInt(1);
-			this.username = rez.getString(2);
-			this.pass = rez.getString(3);
-			this.mail = rez.getString(4);
-			this.coins = rez.getInt(5);
+			this.id.set(rez.getInt(1));
+			this.username.set(rez.getString(2));
+			this.pass.set(rez.getString(3));
+			this.mail.set(rez.getString(4));
+			this.coins.set(rez.getInt(5));
 		}
 	}
 	
 	public void fetchByMail(String mail) throws SQLException, DBException {
 		Connection con = Database.getConnection();
-		PreparedStatement pstmt = con.prepareStatement("select * from accounts where email like '?'");
+		PreparedStatement pstmt = con.prepareStatement("select * from accounts where email like '%?%'");
 		pstmt.setString(1, mail);
 		ResultSet rez = pstmt.executeQuery();
 		int rowNr=0;
@@ -134,31 +136,31 @@ public class User extends RecursiveTreeObject<User>{
 		else {
 			rez.beforeFirst();
 			rez.next();
-			this.id=rez.getInt(1);
-			this.username = rez.getString(2);
-			this.pass = rez.getString(3);
-			this.mail = rez.getString(4);
-			this.coins = rez.getInt(5);
+			this.id.set(rez.getInt(1));
+			this.username.set(rez.getString(2));
+			this.pass.set(rez.getString(3));
+			this.mail.set(rez.getString(4));
+			this.coins.set(rez.getInt(5));
 		}
 	}
 	
 	public void update() throws SQLException, DBException {
 		Connection con = Database.getConnection();
-        if(this.id==-1) {
+        if(this.id.get()==-1) {
 		    throw new DBException("Fetch user first!");
         }
         PreparedStatement pstmt1 = con.prepareStatement("select * from accounts where username = '?'");
-		pstmt1.setString(1, this.username);
+		pstmt1.setString(1, this.username.get());
 		ResultSet rez = pstmt1.executeQuery();
 		rez.next();
 		String sql = "update accounts set updated_at = sysdate";
-		if(this.username != rez.getString(2))
+		if(this.username.get() != rez.getString(2))
 			sql = sql + " , username = '" + this.username + '\'';
-		if(this.pass != rez.getString(3))
+		if(this.pass.get() != rez.getString(3))
 			sql = sql + " , pass = '" + this.pass + '\'';
-		if(this.mail != rez.getString(4))
+		if(this.mail.get() != rez.getString(4))
 			sql = sql + " , email = '" + this.mail + '\'';
-		if(this.coins != rez.getInt(5))
+		if(this.coins.get() != rez.getInt(5))
 			sql = sql + " , coins = " + this.coins;
 		PreparedStatement pstmt2 = con.prepareStatement(sql);
 		pstmt2.executeUpdate();
@@ -167,19 +169,18 @@ public class User extends RecursiveTreeObject<User>{
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
-        if(this.id==-1) {
+        if(this.id.get()==-1) {
 		    try (Statement stmt = con.createStatement();
 		    		ResultSet rs = stmt.executeQuery("select max(id) from accounts")){
-		    	this.id=rs.next() ? rs.getInt(1)+1 : 1;
+		    	this.id.set((int)(rs.next() ? rs.getInt(1)+1 : 1));
 		    }
         }
-        PreparedStatement pstmt = con.prepareStatement("insert into accounts values(?,'?','?','?',?,sysdate,sysdate)");
-        pstmt.setInt(1, this.id);
-        pstmt.setString(2, this.username);
-        pstmt.setString(3,this.pass);
-        pstmt.setString(4,this.mail);
-        pstmt.setInt(5, this.coins);
+        PreparedStatement pstmt = con.prepareStatement("insert into accounts values(?,?,?,?,?,sysdate,sysdate)");
+        pstmt.setInt(1, this.id.get());
+        pstmt.setString(2, this.username.get());
+        pstmt.setString(3,this.pass.get());
+        pstmt.setString(4,this.mail.get());
+        pstmt.setInt(5, this.coins.get());
         pstmt.executeUpdate();
-        con.commit();
 	}
 }
