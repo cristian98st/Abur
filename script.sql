@@ -127,7 +127,7 @@ BEGIN
         ELSE w_email := w_email ||'@yahoo.com';
         END IF;
         w_pass := DBMS_RANDOM.STRING('X', 10);
-        insert into accounts values(v_i, w_user,w_pass, w_email,0,sysdate,sysdate);
+        insert into accounts values(v_i, w_user,w_pass, w_email,dbms_random.value(100,1000),sysdate,sysdate);
     END LOOP;
     FOR v_i IN 1..723 LOOP
         w_user := item_names(v_i);
