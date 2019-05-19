@@ -13,10 +13,6 @@ CREATE OR REPLACE PROCEDURE create_account
   END;
   /
   
-  select * from accounts;
-  
- exec CREATE_ACCOUNT ('Alex1','ALEX','Alex@yahoo.com',100);
-  
 create or replace procedure create_game
   (title in varchar2,price in number,launch_date in date)
   IS
@@ -27,8 +23,6 @@ create or replace procedure create_game
   dbms_output.put_line('DONE');
   END;
   /
-  
-  describe auction
     
 create or replace procedure create_auction
   (id_gamer in number,id_item in number,price in number,exp_date in date)
@@ -38,9 +32,6 @@ create or replace procedure create_auction
   dbms_output.put_line('DONE');
   END;
   /
-  
-  
-  describe games;
   
     create or replace trigger updated_at_accounts
     after update on accounts
@@ -106,7 +97,3 @@ create or replace procedure create_auction
         end if;
     end;
     /
-    
-    
-  insert into accounts values( 
-    
