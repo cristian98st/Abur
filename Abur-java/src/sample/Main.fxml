@@ -99,7 +99,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../resources/dark-theme.css">
                      <children>
-                        <JFXTextField fx:id="search" focusColor="BLACK" labelFloat="true" layoutX="140.0" layoutY="47.0" maxWidth="451.0" minWidth="276.0" prefHeight="35.0" prefWidth="451.0" promptText="Search">
+                        <JFXTextField id="search" fx:id="search1" focusColor="BLACK" labelFloat="true" layoutX="140.0" layoutY="47.0" maxWidth="451.0" minWidth="276.0" prefHeight="35.0" prefWidth="451.0" promptText="Search">
                            <font>
                               <Font name="Arial" size="15.0" />
                            </font></JFXTextField>
@@ -110,45 +110,29 @@
                         </JFXButton>
                         <Separator layoutX="60.0" layoutY="111.0" prefHeight="9.0" prefWidth="1016.0" />
                         <JFXHamburger layoutX="625.0" layoutY="55.0" />
-                        <TableView fx:id="gamesTable" layoutX="45.0" layoutY="126.0" prefHeight="458.0" prefWidth="1050.0" />
+                        <TableView id="table" fx:id="gamesTable" layoutX="45.0" layoutY="126.0" prefHeight="458.0" prefWidth="1050.0" />
                      </children></AnchorPane>
               </content>
             </Tab>
             <Tab text="Items">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../resources/dark-theme.css">
                      <children>
-                        <TableView fx:id="gamesTable1" prefHeight="458.0" prefWidth="1050.0" />
-                        <JFXHamburger />
-                        <Separator prefHeight="9.0" prefWidth="1016.0" />
-                        <JFXButton id="Delete" text="X">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXTextField fx:id="search1" focusColor="BLACK" labelFloat="true" maxWidth="451.0" minWidth="276.0" prefHeight="35.0" prefWidth="451.0" promptText="Search">
+                        <JFXTextField id="search" fx:id="search2" focusColor="BLACK" labelFloat="true" layoutX="140.0" layoutY="47.0" maxWidth="451.0" minWidth="276.0" prefHeight="35.0" prefWidth="451.0" promptText="Search">
                            <font>
                               <Font name="Arial" size="15.0" />
                            </font>
                         </JFXTextField>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../resources/dark-theme.css">
-                           <children>
-                              <JFXTextField fx:id="search1" focusColor="BLACK" labelFloat="true" layoutX="140.0" layoutY="47.0" maxWidth="451.0" minWidth="276.0" prefHeight="35.0" prefWidth="451.0" promptText="Search">
-                                 <font>
-                                    <Font name="Arial" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXButton id="Delete" layoutX="561.0" layoutY="49.0" text="X">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXButton>
-                              <Separator layoutX="60.0" layoutY="111.0" prefHeight="9.0" prefWidth="1016.0" />
-                              <JFXHamburger layoutX="625.0" layoutY="55.0" />
-                              <TableView fx:id="gamesTable1" layoutX="45.0" layoutY="126.0" prefHeight="458.0" prefWidth="1050.0" />
-                           </children>
-                        </AnchorPane>
-                     </children></AnchorPane>
+                        <JFXButton id="Delete" layoutX="561.0" layoutY="49.0" text="X">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </JFXButton>
+                        <Separator layoutX="60.0" layoutY="111.0" prefHeight="9.0" prefWidth="1016.0" />
+                        <JFXHamburger layoutX="625.0" layoutY="55.0" />
+                        <TableView id="table" fx:id="itemsTable" layoutX="45.0" layoutY="126.0" prefHeight="458.0" prefWidth="1050.0" />
+                     </children>
+                  </AnchorPane>
               </content>
             </Tab>
             <Tab text="Marketplace">
