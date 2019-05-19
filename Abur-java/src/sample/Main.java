@@ -3,9 +3,12 @@ package sample;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.sun.istack.internal.Nullable;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,15 +34,17 @@ import static javafx.application.Platform.exit;
 public class Main extends Application implements Initializable {
 
     @FXML
-    private AnchorPane panelMyAccount, panelMyGames, panelMyItems, panelSettings;
+    private AnchorPane panelMyAccount, panelMyGames, panelMyItems, panelSellingItems, panelSettings;
     @FXML
-    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSettings, btnLogout;
+    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout;
     @FXML
     private TableView<Game> gamesTable;
     @FXML
     private TableView<Item> itemsTable;
     @FXML
     private TableView<marketItem> marketItemTable;
+    @FXML
+    private TableView<marketItem> sellingTable;
 
     static Stage stage = new Stage();
 
@@ -68,13 +74,15 @@ public class Main extends Application implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-        makePanelInvisible(panelMyAccount, panelMyGames, panelMyItems, panelSettings);
+        makePanelInvisible(panelMyAccount, panelMyGames, panelMyItems, panelSellingItems, panelSettings);
         if (event.getSource() == btnMyAccount) {
             panelMyAccount.setVisible(true);
         } else if (event.getSource() == btnMyGames) {
             panelMyGames.setVisible(true);
         } else if (event.getSource() == btnMyItems) {
             panelMyItems.setVisible(true);
+        } else if (event.getSource() == btnSellingItems) {
+            panelSellingItems.setVisible(true);
         } else if (event.getSource() == btnSettings) {
             panelSettings.setVisible(true);
         } else if (event.getSource() == btnLogout) {
@@ -98,7 +106,7 @@ public class Main extends Application implements Initializable {
     }
 
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1){
+    public void initialize(URL arg0, ResourceBundle arg1) {
 
         // Games
         TableColumn<Game, String> gameID = new TableColumn<>("ID");
@@ -250,7 +258,6 @@ public class Main extends Application implements Initializable {
         itemsTable.setItems(items);
 
 
-
         //Marketplace
 
         TableColumn<marketItem, String> marketPlayer = new TableColumn<>("Selling player");
@@ -336,15 +343,36 @@ public class Main extends Application implements Initializable {
             }
         });
 
+
+
         ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
         marketItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
         marketItems.add(new marketItem("Gica", "SPear", "Hunter", "good", "legendary", "40000", "21/2/2050"));
 
         marketItemTable.getColumns().setAll(marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
         marketItemTable.setItems(marketItems);
+
+
+        // My selling items
+        TableColumn<marketItem, JFXButton> deleteButton = new TableColumn<>("");
+        deleteButton.setPrefWidth(50);
+        deleteButton.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+        deleteButton.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, JFXButton>, ObservableValue<JFXButton>>() {
+            @Override
+            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<marketItem, JFXButton> param) {
+                return param.getValue().btnDelete;
+            }
+        });
+
+        ObservableList<marketItem> sellingItems = FXCollections.observableArrayList();
+        sellingItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
+
+        sellingTable.getColumns().setAll(deleteButton, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
+        sellingTable.setItems(sellingItems);
     }
 
-    class Game extends RecursiveTreeObject<Game>{
+    class Game extends RecursiveTreeObject<Game> {
         StringProperty id;
         StringProperty title;
         StringProperty price;
@@ -358,7 +386,7 @@ public class Main extends Application implements Initializable {
         }
     }
 
-    class Item extends RecursiveTreeObject<Item>{
+    class Item extends RecursiveTreeObject<Item> {
         StringProperty id;
         StringProperty itemName;
         StringProperty classa;
@@ -367,7 +395,7 @@ public class Main extends Application implements Initializable {
         StringProperty rarity;
         StringProperty itemPrice;
 
-        public Item(String id, String itemName, String classa, String typeOf, String wear, String rarity, String itemPrice){
+        public Item(String id, String itemName, String classa, String typeOf, String wear, String rarity, String itemPrice) {
             this.id = new SimpleStringProperty(id);
             this.itemName = new SimpleStringProperty(itemName);
             this.classa = new SimpleStringProperty(classa);
@@ -378,7 +406,7 @@ public class Main extends Application implements Initializable {
         }
     }
 
-    class marketItem extends RecursiveTreeObject<marketItem>{
+    class marketItem extends RecursiveTreeObject<marketItem> {
         StringProperty player;
         StringProperty itemName;
         StringProperty classa;
@@ -386,8 +414,10 @@ public class Main extends Application implements Initializable {
         StringProperty rarity;
         StringProperty itemPrice;
         StringProperty expireDate;
+        //extra
+        ObservableValue<JFXButton> btnDelete;
 
-        public marketItem(String player, String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate){
+        public marketItem(String player, String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate) {
             this.player = new SimpleStringProperty(player);
             this.itemName = new SimpleStringProperty(itemName);
             this.classa = new SimpleStringProperty(classa);
@@ -395,6 +425,35 @@ public class Main extends Application implements Initializable {
             this.rarity = new SimpleStringProperty(rarity);
             this.itemPrice = new SimpleStringProperty(itemPrice);
             this.expireDate = new SimpleStringProperty(expireDate);
+
+            this.btnDelete =  new ObservableValue<JFXButton>() {
+                @Override
+                public void addListener(ChangeListener<? super JFXButton> listener) {
+
+                }
+
+                @Override
+                public void removeListener(ChangeListener<? super JFXButton> listener) {
+
+                }
+
+                @Override
+                public JFXButton getValue() {
+                    JFXButton button = new JFXButton("X");
+                    button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+                    return button;
+                }
+
+                @Override
+                public void addListener(InvalidationListener listener) {
+
+                }
+
+                @Override
+                public void removeListener(InvalidationListener listener) {
+
+                }
+            };
         }
     }
 }
