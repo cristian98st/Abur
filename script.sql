@@ -1,4 +1,4 @@
-DROP TABLE accounts CASCADE CONSTRAINTS
+﻿DROP TABLE accounts CASCADE CONSTRAINTS
 /
 DROP TABLE auction CASCADE CONSTRAINTS
 /
@@ -86,6 +86,7 @@ CREATE TABLE auction (
     id_gamer INT NOT NULL,
     id_item INT NOT NULL,
     price NUMBER(5,2),
+    exp_date DATE,
     added_at DATE,
     updated_at DATE,
     CONSTRAINT fk_auction_sellers_id_gamer FOREIGN KEY (id_gamer) REFERENCES accounts(id),
@@ -144,13 +145,14 @@ BEGIN
     aux:=TRUNC(DBMS_RANDOM.VALUE(0,699))+1;
     aux1 := TRUNC(DBMS_RANDOM.VALUE(1,400));
     aux2 := TRUNC(DBMS_RANDOM.VALUE(1,723));
-    insert into auction values(aux1,aux2,dbms_random.value(1,1000),sysdate,sysdate);
+    insert into auction values(aux1,aux2,dbms_random.value(1,1000),sysdate+2,sysdate,sysdate);
     FOR v_i in 1..aux LOOP
         aux1 := TRUNC(DBMS_RANDOM.VALUE(1,400));
         aux2 := TRUNC(DBMS_RANDOM.VALUE(1,723));
+        w_launch := sysdate+2;
         select count(*) into aux3 from auction where id_gamer = aux1 and id_item = aux2;
         if aux3 = 0 then
-            insert into auction values(aux1,aux2,dbms_random.value(1,1000),sysdate,sysdate);
+            insert into auction values(aux1,aux2,dbms_random.value(1,1000),w_launch,sysdate,sysdate);
         end if;
     END LOOP;
     FOR v_i IN 1..700 LOOP
