@@ -1,6 +1,9 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
+import database.DBException;
+import database.Database;
+import database.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.sql.*;
 import java.util.HashMap;
 
 import static javafx.application.Platform.exit;
@@ -25,14 +29,25 @@ public class LoginController {
     private TextField txtUsername;
     @FXML
     private TextField txtPassword;
+    private String username;
+    private int id;
+    private String pass;
+    private String mail;
+    private int coins;
+    private User user;
+
     private static Stage stage = new Stage();
+
+
 
     private HashMap<String, String> users = new HashMap<>();
 
-    public void Login(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void Login(javafx.event.ActionEvent actionEvent) throws IOException, SQLException, database.DBException {
         users.put("admin", "admin");
-        if (users.containsValue(txtUsername.getText()) && users.get(txtUsername.getText()).equals(txtPassword.getText())) {
+        if ((users.containsValue(txtUsername.getText()) && users.get(txtUsername.getText()).equals(txtPassword.getText())) || (checkUserAndPassword(txtUsername.getText(), txtPassword.getText()))) {
             lblStatus.setText("Login Success");
+
+            username = txtUsername.getText();
 
             Stage primaryStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
@@ -49,6 +64,16 @@ public class LoginController {
         }
     }
 
+
+    public boolean checkUserAndPassword(String username, String password) throws SQLException {
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT ID FROM accounts WHERE username ='" + username + "' and pass = '" + password + "'");
+
+        if(result.next())
+            return true;
+        return false;
+    }
 
     public void Cancel() {
         exit();
@@ -69,5 +94,23 @@ public class LoginController {
         primaryStage.show();
         stage = primaryStage;
         Main.closeStage();
+    }
+
+    private void retrieveByName(String name) throws SQLException, DBException {
+        Connection con = Database.getConnection();
+        Statement pstmt = con.createStatement();
+        ResultSet rez = pstmt.executeQuery("select * from accounts where username = '" + name + "'");
+        rez.next();
+        id = (rez.getInt(1));
+        System.out.println(rez.getInt(1));
+
+        username = (rez.getString(2));
+        System.out.println(rez.getString(2));
+
+        pass = (rez.getString(3));
+        System.out.println(rez.getString(3));
+
+        mail = (rez.getString(4));
+        coins = (rez.getInt(5));
     }
 }

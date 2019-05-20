@@ -4,11 +4,7 @@ package database;
  * @author Alex
  *
  */
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +16,8 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import static java.sql.Types.VARCHAR;
 
 /**
  * @author Alex
@@ -110,7 +108,24 @@ public class Auction extends RecursiveTreeObject<Auction>{
 		}
 		return list;
 	}
-	
+
+	public static String executeTransaction(int sellerID, int buyerID, int itemID) throws SQLException{
+		Connection con = Database.getConnection();
+		String procedure = "{ call DO_AUCTION_TRANZACTION(?,?,?,?)}";
+		CallableStatement cs = con.prepareCall(procedure);
+
+		cs.setInt(1, sellerID);
+		cs.setInt(2, buyerID);
+		cs.setInt(3, itemID);
+		cs.registerOutParameter(4, VARCHAR);
+
+		cs.execute();
+
+		String result = cs.getString(4);
+		con.close();
+
+		return result;
+	}
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
