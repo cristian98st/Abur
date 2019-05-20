@@ -53,7 +53,7 @@ public class Main extends Application implements Initializable {
     @FXML 
     private TextField search1,search2,search3;
     @FXML
-    private JFXButton Delete2,Delete3;
+    private JFXButton delete2,Delete3;
 
     static Stage stage = new Stage();
 
@@ -115,13 +115,12 @@ public class Main extends Application implements Initializable {
 			}
              gamesTable.setItems(games);
         }
-        if(event.getSource()==Delete2) {
+        if(event.getSource()==delete2) {
             ObservableList<Item> items = FXCollections.observableArrayList();
 	        Item y=new Item();
 	        try {
-				items=y.get("title", search2.getText(), "title","asc");
+				items=y.get("item_name", search2.getText(), "item_name","asc");
 			} catch (SQLException | DBException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	        itemsTable.setItems(items);
