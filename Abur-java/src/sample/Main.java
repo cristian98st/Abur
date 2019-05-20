@@ -55,14 +55,6 @@ public class Main extends Application implements Initializable {
     private TextField search1,search2,search3;
     @FXML
     private JFXButton delete2,delete3;
-    @FXML
-    private Label lblMoney;
-
-    private String username;
-    private int id;
-    private String pass;
-    private String mail;
-    private int coins;
 
     static Stage stage = new Stage();
 
@@ -80,16 +72,6 @@ public class Main extends Application implements Initializable {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
         stage = primaryStage;
-
-    }
-
-    public void init(int id, String username, String pass, String mail, int coins){
-        this.id = id;
-        this.username = username;
-        this.pass = pass;
-        this.mail = mail;
-        this.coins = coins;
-        lblMoney.setText("Coins: " + coins + "$");
     }
 
     public static void main(String[] args) {

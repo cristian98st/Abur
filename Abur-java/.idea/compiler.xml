@@ -2,7 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <excludeFromCompile>
-      <file url="file://$PROJECT_DIR$/src/database/Main.java" />
+      <file url="file://$PROJECT_DIR$/src/database/User.java" />
+      <file url="file://$PROJECT_DIR$/src/database/Item.java" />
+      <file url="file://$PROJECT_DIR$/src/database/TestMain.java" />
     </excludeFromCompile>
     <wildcardResourcePatterns>
       <entry name="!?*.java" />

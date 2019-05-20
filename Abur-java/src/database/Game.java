@@ -7,7 +7,11 @@ package database;
  * @author Alex
  *
  */
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +26,6 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import static java.sql.Types.VARCHAR;
 
 /**
  * @author Alex
@@ -120,24 +122,11 @@ public class Game extends RecursiveTreeObject<Game>{
 		return list;
 	}
 
-	public static String buyGame(int buyerID, int gameID) throws SQLException {
-		Connection con = Database.getConnection();
-		String procedure = "{ call BUY_GAME(?,?,?)}";
-		CallableStatement cs = con.prepareCall(procedure);
+	public void buyGame(){
 
-		cs.setInt(1,buyerID);
-		cs.setInt(2, gameID);
-		cs.registerOutParameter(3, VARCHAR);
-
-		cs.execute();
-
-		String result = cs.getString(3);
-		con.close();
-
-		return result;
 	}
-
-
+	
+	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
         if(this.id.get().equals("-1")) {

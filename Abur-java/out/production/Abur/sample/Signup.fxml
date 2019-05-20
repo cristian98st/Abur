@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="background" prefHeight="566.0" prefWidth="502.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.SignupController">
     <children>
-        <Button fx:id="btnSignup" layoutX="206.0" layoutY="450.0" mnemonicParsing="false" onAction="#Signup" text="Sign Up" GridPane.rowIndex="13">
+        <Button fx:id="btnLogin" layoutX="206.0" layoutY="450.0" mnemonicParsing="false" onAction="#Signup" text="Sign Up" GridPane.rowIndex="13">
             <font>
                 <Font size="18.0" />
             </font></Button>
@@ -43,12 +43,12 @@
             <Font name="System Bold" size="38.0" />
          </font>
       </JFXButton>
-      <PasswordField fx:id="ConfirmPassword" layoutX="138.0" layoutY="343.0" promptText="Confirm Password">
+      <PasswordField fx:id="txtPassword1" layoutX="138.0" layoutY="343.0" promptText="Confirm Password">
          <font>
             <Font size="18.0" />
          </font>
       </PasswordField>
-      <TextField fx:id="txtEmail" layoutX="138.0" layoutY="218.0" promptText="E-mail">
+      <TextField fx:id="txtUsername1" layoutX="138.0" layoutY="218.0" promptText="E-mail">
          <font>
             <Font size="18.0" />
          </font>
