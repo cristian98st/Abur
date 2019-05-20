@@ -8,14 +8,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +35,7 @@ public class Game extends RecursiveTreeObject<Game>{
 	public StringProperty title = new SimpleStringProperty();
 	public StringProperty launch_date = new SimpleStringProperty();
 	public StringProperty price = new SimpleStringProperty();
+	public ObservableValue<JFXButton> buyButton;
 
 	public Game() {
 		this.id.set("-1");
@@ -43,6 +47,35 @@ public class Game extends RecursiveTreeObject<Game>{
 		this.title.set(title);
 		this.launch_date.set(date);
 		this.price.set(price);
+
+		this.buyButton = new ObservableValue<JFXButton>() {
+			@Override
+			public void addListener(ChangeListener<? super JFXButton> listener) {
+
+			}
+
+			@Override
+			public void removeListener(ChangeListener<? super JFXButton> listener) {
+
+			}
+
+			@Override
+			public JFXButton getValue() {
+				JFXButton button = new JFXButton("Buy");
+				button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+				return button;
+			}
+
+			@Override
+			public void addListener(InvalidationListener listener) {
+
+			}
+
+			@Override
+			public void removeListener(InvalidationListener listener) {
+
+			}
+		};
 	}
 
 	public Game(String title,String date,String price) {
@@ -50,6 +83,35 @@ public class Game extends RecursiveTreeObject<Game>{
 		this.title.set(title);
 		this.launch_date.set(date);
 		this.price.set(price);
+
+		this.buyButton = new ObservableValue<JFXButton>() {
+			@Override
+			public void addListener(ChangeListener<? super JFXButton> listener) {
+
+			}
+
+			@Override
+			public void removeListener(ChangeListener<? super JFXButton> listener) {
+
+			}
+
+			@Override
+			public JFXButton getValue() {
+				JFXButton button = new JFXButton("Buy");
+				button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+				return button;
+			}
+
+			@Override
+			public void addListener(InvalidationListener listener) {
+
+			}
+
+			@Override
+			public void removeListener(InvalidationListener listener) {
+
+			}
+		};
 	}
 
 

@@ -25,6 +25,7 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
     public StringProperty expireDate;
     //extra
     public ObservableValue<JFXButton> btnDelete;
+    public ObservableValue<JFXButton> buyButton;
 
     public marketItem() {
     }
@@ -52,6 +53,35 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
             @Override
             public JFXButton getValue() {
                 JFXButton button = new JFXButton("X");
+                button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+                return button;
+            }
+
+            @Override
+            public void addListener(InvalidationListener listener) {
+
+            }
+
+            @Override
+            public void removeListener(InvalidationListener listener) {
+
+            }
+        };
+
+        this.buyButton = new ObservableValue<JFXButton>() {
+            @Override
+            public void addListener(ChangeListener<? super JFXButton> listener) {
+
+            }
+
+            @Override
+            public void removeListener(ChangeListener<? super JFXButton> listener) {
+
+            }
+
+            @Override
+            public JFXButton getValue() {
+                JFXButton button = new JFXButton("Buy");
                 button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
                 return button;
             }

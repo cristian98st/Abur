@@ -223,7 +223,7 @@ public class Main extends Application implements Initializable {
         });
 
         TableColumn<Game, String> date = new TableColumn<>("Release Date");
-        date.setPrefWidth(262);
+        date.setPrefWidth(200);
         date.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
@@ -234,7 +234,18 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
+        TableColumn<Game, JFXButton> buyButton1 = new TableColumn<>("");
+        buyButton1.setPrefWidth(70);
+        buyButton1.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
+
+        buyButton1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Game, JFXButton>, ObservableValue<JFXButton>>() {
+            @Override
+            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<Game, JFXButton> param) {
+                return param.getValue().buyButton;
+            }
+        });
+
+        gamesTable.getColumns().setAll(buyButton1, gameID, title, gamePrice, date);
     }
 
     public void items() {
@@ -321,8 +332,19 @@ public class Main extends Application implements Initializable {
             }
         });
 
+        TableColumn<Item, JFXButton> buyButton2 = new TableColumn<>();
+        buyButton2.setPrefWidth(70);
+        buyButton2.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
-        itemsTable.getColumns().setAll(itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
+        buyButton2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, JFXButton>, ObservableValue<JFXButton>>() {
+            @Override
+            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<Item, JFXButton> param) {
+                return param.getValue().buyButton;
+            }
+        });
+
+
+        itemsTable.getColumns().setAll(buyButton2, itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
     }
 
     public void marketplace() {
@@ -410,7 +432,18 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        marketItemTable.getColumns().setAll(marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
+        TableColumn<marketItem, JFXButton> buyButton3 = new TableColumn<>();
+        buyButton3.setPrefWidth(70);
+        buyButton3.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
+
+        buyButton3.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, JFXButton>, ObservableValue<JFXButton>>() {
+            @Override
+            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<marketItem, JFXButton> param) {
+                return param.getValue().buyButton;
+            }
+        });
+
+        marketItemTable.getColumns().setAll(buyButton3, marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
     }
 
     public void sellingItems() {
@@ -490,7 +523,7 @@ public class Main extends Application implements Initializable {
 
         TableColumn<marketItem, JFXButton> deleteButton = new TableColumn<>("");
         deleteButton.setPrefWidth(50);
-        deleteButton.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+        deleteButton.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
         deleteButton.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
