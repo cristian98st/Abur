@@ -3,6 +3,7 @@
  */
 package database;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import oracle.jdbc.OracleTypes;
 
 /**
  * @author Alex
@@ -169,18 +171,13 @@ public class User extends RecursiveTreeObject<User>{
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
-        if(this.id.get()==-1) {
-		    try (Statement stmt = con.createStatement();
-		    		ResultSet rs = stmt.executeQuery("select max(id) from accounts")){
-		    	this.id.set((int)(rs.next() ? rs.getInt(1)+1 : 1));
-		    }
-        }
-        PreparedStatement pstmt = con.prepareStatement("insert into accounts values(?,?,?,?,?,sysdate,sysdate)");
-        pstmt.setInt(1, this.id.get());
-        pstmt.setString(2, this.username.get());
-        pstmt.setString(3,this.pass.get());
-        pstmt.setString(4,this.mail.get());
-        pstmt.setInt(5, this.coins.get());
-        pstmt.executeUpdate();
+        CallableStatement cstm = con.prepareCall("{call create_account ( ? , ? , ? , ? )}");
+        cstm.setString(1, this.username.get());
+        cstm.setString(2,this.pass.get());
+        cstm.setString(3,this.mail.get());
+        cstm.setInt(4, this.coins.get());
+        System.out.print(this.pass.get());
+        cstm.execute();
+        System.out.print(cstm.getString(1));
 	}
 }

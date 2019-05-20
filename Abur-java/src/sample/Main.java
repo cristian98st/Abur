@@ -4,6 +4,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.sun.istack.internal.Nullable;
+
+import database.DBException;
+import database.Game;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,6 +30,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.exit;
@@ -36,7 +40,7 @@ public class Main extends Application implements Initializable {
     @FXML
     private AnchorPane panelMyAccount, panelMyGames, panelMyItems, panelSellingItems, panelSettings;
     @FXML
-    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout;
+    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout,delete1;
     @FXML
     private TableView<Game> gamesTable;
     @FXML
@@ -45,6 +49,10 @@ public class Main extends Application implements Initializable {
     private TableView<marketItem> marketItemTable;
     @FXML
     private TableView<marketItem> sellingTable;
+    @FXML 
+    private TextField search1,search2,search3;
+    @FXML
+    private JFXButton Delete2,Delete3;
 
     static Stage stage = new Stage();
 
@@ -95,6 +103,18 @@ public class Main extends Application implements Initializable {
             primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.show();
             LoginController.closeStage();
+        }
+        if ( event.getSource() == delete1) {
+        	System.out.print(search1.getText());
+        	Game g = new Game();
+        	 ObservableList<Game> games = FXCollections.observableArrayList();
+             try {
+				games = g.get("title",search1.getText(),"title","asc");
+			} catch (SQLException | DBException e) {
+				e.printStackTrace();
+			}
+             gamesTable.setItems(games);
+        	
         }
     }
 
@@ -152,19 +172,9 @@ public class Main extends Application implements Initializable {
         date.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Game, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Game, String> param) {
-                return param.getValue().date;
+                return param.getValue().launch_date;
             }
         });
-
-        ObservableList<Game> games = FXCollections.observableArrayList();
-        games.add(new Game("1", "AC1", "102", "2/12/2004"));
-        games.add(new Game("2", "AC2", "103", "2/12/2005"));
-        games.add(new Game("3", "AC3", "104", "2/12/2006"));
-        games.add(new Game("4", "AC4", "1005", "2/12/2007"));
-
-        gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
-        gamesTable.setItems(games);
-
 
         //items
         TableColumn<Item, String> itemID = new TableColumn<>("ID");
@@ -283,6 +293,8 @@ public class Main extends Application implements Initializable {
             }
         });
 
+        gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
+        
         TableColumn<marketItem, String> marketClassa = new TableColumn<>("Class");
         marketClassa.setPrefWidth(150);
         marketClassa.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
@@ -372,19 +384,19 @@ public class Main extends Application implements Initializable {
         sellingTable.setItems(sellingItems);
     }
 
-    class Game extends RecursiveTreeObject<Game> {
-        StringProperty id;
-        StringProperty title;
-        StringProperty price;
-        StringProperty date;
-
-        public Game(String id, String title, String price, String date) {
-            this.id = new SimpleStringProperty(id);
-            this.title = new SimpleStringProperty(title);
-            this.price = new SimpleStringProperty(price);
-            this.date = new SimpleStringProperty(date);
-        }
-    }
+//    class Game extends RecursiveTreeObject<Game> {
+//        StringProperty id;
+//        StringProperty title;
+//        StringProperty price;
+//        StringProperty date;
+//
+//        public Game(String id, String title, String price, String date) {
+//            this.id = new SimpleStringProperty(id);
+//            this.title = new SimpleStringProperty(title);
+//            this.price = new SimpleStringProperty(price);
+//            this.date = new SimpleStringProperty(date);
+//        }
+//    }
 
     class Item extends RecursiveTreeObject<Item> {
         StringProperty id;

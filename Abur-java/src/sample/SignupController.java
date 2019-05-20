@@ -1,21 +1,42 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import database.User;
 
 import static javafx.application.Platform.exit;
 
 public class SignupController {
-
+	@FXML
+	private TextField txtUsername;
+	@FXML
+	private TextField txtPassword;
+	@FXML
+	private TextField ConfirmPassword;
+	@FXML
+	private TextField txtEmail;
+	
     private static Stage stage = new Stage();
-
+    
     public void Signup(ActionEvent actionEvent) throws IOException {
+    	if(this.txtPassword.getText().compareTo(this.ConfirmPassword.getText())==0) {
+    		User newAcc = new User(this.txtUsername.getText(),this.txtPassword.getText(),this.txtEmail.getText(),200);
+    		try {
+				newAcc.commit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+    	}
         openLogin();
     }
 
