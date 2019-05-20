@@ -28,13 +28,13 @@ import javafx.collections.ObservableList;
  */
 public class Item extends RecursiveTreeObject<Item>{
 
-	private StringProperty id = new SimpleStringProperty();
-	private StringProperty name = new SimpleStringProperty();
-	private StringProperty pclass = new SimpleStringProperty();
-	private StringProperty type = new SimpleStringProperty();
-	private StringProperty wear = new SimpleStringProperty();
-	private StringProperty rarity = new SimpleStringProperty();
-	private StringProperty price = new SimpleStringProperty();
+	public StringProperty id = new SimpleStringProperty();
+	public StringProperty name = new SimpleStringProperty();
+	public StringProperty pclass = new SimpleStringProperty();
+	public StringProperty type = new SimpleStringProperty();
+	public StringProperty wear = new SimpleStringProperty();
+	public StringProperty rarity = new SimpleStringProperty();
+	public StringProperty price = new SimpleStringProperty();
 
 	public Item() {
 		this.id.set("-1");
