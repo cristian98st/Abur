@@ -7,6 +7,7 @@ import com.sun.istack.internal.Nullable;
 
 import database.DBException;
 import database.Game;
+import database.Item;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
@@ -105,7 +106,6 @@ public class Main extends Application implements Initializable {
             LoginController.closeStage();
         }
         if ( event.getSource() == delete1) {
-        	System.out.print(search1.getText());
         	Game g = new Game();
         	 ObservableList<Game> games = FXCollections.observableArrayList();
              try {
@@ -114,7 +114,17 @@ public class Main extends Application implements Initializable {
 				e.printStackTrace();
 			}
              gamesTable.setItems(games);
-        	
+        }
+        if(event.getSource()==Delete2) {
+            ObservableList<Item> items = FXCollections.observableArrayList();
+	        Item y=new Item();
+	        try {
+				items=y.get("title", search2.getText(), "title","asc");
+			} catch (SQLException | DBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        itemsTable.setItems(items);
         }
     }
 
@@ -196,7 +206,7 @@ public class Main extends Application implements Initializable {
         itemName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Item, String> param) {
-                return param.getValue().itemName;
+                return param.getValue().name;
             }
         });
 
@@ -208,7 +218,7 @@ public class Main extends Application implements Initializable {
         classa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Item, String> param) {
-                return param.getValue().itemPrice;
+                return param.getValue().price;
             }
         });
 
@@ -220,7 +230,7 @@ public class Main extends Application implements Initializable {
         typeOf.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Item, String> param) {
-                return param.getValue().typeOf;
+                return param.getValue().type;
             }
         });
 
@@ -256,17 +266,14 @@ public class Main extends Application implements Initializable {
         itemPrice.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Item, String> param) {
-                return param.getValue().itemPrice;
+                return param.getValue().price;
             }
         });
 
-        ObservableList<Item> items = FXCollections.observableArrayList();
-        items.add(new Item("1", "Sword1", "Warrior", "melee", "destroyed", "rare", "100"));
-        items.add(new Item("2", "Bow", "Hunter", "range", "good", "common", "700"));
+    
 
         itemsTable.getColumns().setAll(itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
-        itemsTable.setItems(items);
-
+       
 
         //Marketplace
 
@@ -398,25 +405,25 @@ public class Main extends Application implements Initializable {
 //        }
 //    }
 
-    class Item extends RecursiveTreeObject<Item> {
-        StringProperty id;
-        StringProperty itemName;
-        StringProperty classa;
-        StringProperty typeOf;
-        StringProperty wear;
-        StringProperty rarity;
-        StringProperty itemPrice;
-
-        public Item(String id, String itemName, String classa, String typeOf, String wear, String rarity, String itemPrice) {
-            this.id = new SimpleStringProperty(id);
-            this.itemName = new SimpleStringProperty(itemName);
-            this.classa = new SimpleStringProperty(classa);
-            this.typeOf = new SimpleStringProperty(typeOf);
-            this.wear = new SimpleStringProperty(wear);
-            this.rarity = new SimpleStringProperty(rarity);
-            this.itemPrice = new SimpleStringProperty(itemPrice);
-        }
-    }
+//    class Item extends RecursiveTreeObject<Item> {
+//        StringProperty id;
+//        StringProperty itemName;
+//        StringProperty classa;
+//        StringProperty typeOf;
+//        StringProperty wear;
+//        StringProperty rarity;
+//        StringProperty itemPrice;
+//
+//        public Item(String id, String itemName, String classa, String typeOf, String wear, String rarity, String itemPrice) {
+//            this.id = new SimpleStringProperty(id);
+//            this.itemName = new SimpleStringProperty(itemName);
+//            this.classa = new SimpleStringProperty(classa);
+//            this.typeOf = new SimpleStringProperty(typeOf);
+//            this.wear = new SimpleStringProperty(wear);
+//            this.rarity = new SimpleStringProperty(rarity);
+//            this.itemPrice = new SimpleStringProperty(itemPrice);
+//        }
+//    }
 
     class marketItem extends RecursiveTreeObject<marketItem> {
         StringProperty player;
