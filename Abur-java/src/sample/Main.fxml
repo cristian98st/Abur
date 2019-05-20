@@ -38,7 +38,7 @@
                         </AnchorPane>
                         <AnchorPane fx:id="main" layoutX="226.0" layoutY="-2.0" prefHeight="606.0" prefWidth="911.0">
                            <children>
-                              <AnchorPane fx:id="panelMyAccount" prefHeight="606.0" prefWidth="911.0">
+                              <AnchorPane fx:id="panelMyAccount" prefHeight="606.0" prefWidth="911.0" visible="false">
                                  <children>
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#888a8d" height="200.0" layoutX="29.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
                                     <Circle fill="#6e7379" layoutX="129.0" layoutY="71.0" radius="43.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
@@ -57,24 +57,34 @@
                                           <Font name="Arial Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="lblJoined" layoutX="257.0" layoutY="71.0" text="Joined: ">
+                                    <Label fx:id="lblEmail" layoutX="257.0" layoutY="80.0" text="Email: ">
                                        <font>
                                           <Font name="Arial Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="lblNoGames" layoutX="257.0" layoutY="114.0" text="Number of games owned: ">
+                                    <Label fx:id="lblCoins" layoutX="257.0" layoutY="130.0" text="Coins: ">
                                        <font>
                                           <Font name="Arial Bold" size="24.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="panelMyGames" prefHeight="606.0" prefWidth="911.0" visible="false">
+                              <AnchorPane fx:id="panelMyGames" prefHeight="606.0" prefWidth="911.0">
                                  <children>
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-                                    <Label layoutX="421.0" layoutY="229.0" text="GAMES" />
-                                 </children>
-                              </AnchorPane>
+                                    <GridPane fx:id="gameGridPane" layoutX="14.0" layoutY="14.0" prefHeight="586.0" prefWidth="889.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                    </GridPane>
+                                 </children></AnchorPane>
                               <AnchorPane fx:id="panelMyItems" prefHeight="606.0" prefWidth="911.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label layoutX="179.0" layoutY="135.0" text="Item1" />
@@ -105,7 +115,7 @@
                            <font>
                               <Font name="Arial" size="15.0" />
                            </font></JFXTextField>
-                        <JFXButton id="delete1" fx:id="delete1" onAction="#handleButtonAction" layoutX="561.0" layoutY="49.0" text="X">
+                        <JFXButton id="delete1" fx:id="delete1" layoutX="561.0" layoutY="49.0" onAction="#handleButtonAction" text="X">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -125,7 +135,7 @@
                               <Font name="Arial" size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXButton id="delete2" fx:id="delete2" onAction="#handleButtonAction" layoutX="561.0" layoutY="49.0" text="X">
+                        <JFXButton id="delete2" fx:id="delete2" layoutX="561.0" layoutY="49.0" onAction="#handleButtonAction" text="X">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -146,7 +156,7 @@
                                   <Font name="Arial" size="15.0" />
                               </font>
                           </JFXTextField>
-                          <JFXButton id="Delete3" fx:id="delete3" onAction="#handleButtonAction" layoutX="561.0" layoutY="49.0" text="X">
+                          <JFXButton id="Delete3" fx:id="delete3" layoutX="561.0" layoutY="49.0" onAction="#handleButtonAction" text="X">
                               <font>
                                   <Font name="System Bold" size="15.0" />
                               </font>

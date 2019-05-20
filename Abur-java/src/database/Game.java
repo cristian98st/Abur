@@ -196,6 +196,20 @@ public class Game extends RecursiveTreeObject<Game>{
 		return result;
 	}
 
+	public List<String> getMyGames(int id) throws SQLException {
+		Connection con = Database.getConnection();
+		List<String> games = new ArrayList<>();
+		Statement stms = con.createStatement();
+		ResultSet result = stms.executeQuery("SELECT title FROM games JOIN owned_games ON games.id = owned_games.id_game " +
+				"WHERE owned_games.id_owner = " + id );
+
+		while(result.next()){
+			games.add(result.getString(1));
+		}
+
+		return games;
+	}
+
 
 	public void commit() throws SQLException {
 		Connection con = Database.getConnection();

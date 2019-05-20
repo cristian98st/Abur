@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -33,6 +34,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.exit;
@@ -54,7 +56,9 @@ public class Main extends Application implements Initializable {
     @FXML
     private TextField search1, search2, search3;
     @FXML
-    private Label lblMoney;
+    private Label lblMoney, lblCoins, lblName, lblEmail;
+    @FXML
+    private GridPane gameGridPane;
 
     private String username;
     private int id;
@@ -88,6 +92,31 @@ public class Main extends Application implements Initializable {
         this.mail = mail;
         this.coins = coins;
         lblMoney.setText("Coins: " + coins + "$");
+        lblCoins.setText("Coins: " + coins + "$");
+        lblName. setText("Name: " + username);
+        lblEmail.setText("Email: " + mail);
+
+        initMyGames();
+    }
+
+    private void initMyGames() {
+        try {
+            Game game = new Game();
+            List<String> games = game.getMyGames(id);
+            int j=0;
+            for(String g : games)
+            {
+                JFXButton button = new JFXButton(g);
+                button.getStyleClass().add("gameOrItem");
+                button.setPrefSize(200, 200);
+                gameGridPane.addColumn(j, button);
+                j++;
+                if(j == 4)
+                    j = 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

@@ -10,8 +10,21 @@
     -fx-text-fill: #fff;
 }
 
+.gameOrItem {
+    -fx-background-color: #323232;
+    -fx-border-color: #252526;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-text-fill: #fff;
+    -fx-ripple: #27ff3b;
+}
+
+.gameOrItem:pressed{
+    -fx-background-color: #ddd;
+}
+
 .button:pressed{
-    -fx-background-color: #541500;
+    -fx-opacity: 0.5;
 }
 
 .text-field{
