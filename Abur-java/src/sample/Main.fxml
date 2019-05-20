@@ -146,7 +146,7 @@
                                   <Font name="Arial" size="15.0" />
                               </font>
                           </JFXTextField>
-                          <JFXButton id="Delete3" layoutX="561.0" layoutY="49.0" text="X">
+                          <JFXButton id="Delete3" fx:id="delete3" onAction="#handleButtonAction" layoutX="561.0" layoutY="49.0" text="X">
                               <font>
                                   <Font name="System Bold" size="15.0" />
                               </font>

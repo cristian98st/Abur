@@ -8,6 +8,7 @@ import com.sun.istack.internal.Nullable;
 import database.DBException;
 import database.Game;
 import database.Item;
+import database.marketItem;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
@@ -41,7 +42,7 @@ public class Main extends Application implements Initializable {
     @FXML
     private AnchorPane panelMyAccount, panelMyGames, panelMyItems, panelSellingItems, panelSettings;
     @FXML
-    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout,delete1;
+    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout, delete1, delete2, delete3;
     @FXML
     private TableView<Game> gamesTable;
     @FXML
@@ -51,9 +52,7 @@ public class Main extends Application implements Initializable {
     @FXML
     private TableView<marketItem> sellingTable;
     @FXML
-    private TextField search1,search2,search3;
-    @FXML
-    private JFXButton delete2,Delete3;
+    private TextField search1, search2, search3;
     @FXML
     private Label lblMoney;
 
@@ -82,7 +81,7 @@ public class Main extends Application implements Initializable {
 
     }
 
-    public void init(int id, String username, String pass, String mail, int coins){
+    public void init(int id, String username, String pass, String mail, int coins) {
         this.id = id;
         this.username = username;
         this.pass = pass;
@@ -123,25 +122,37 @@ public class Main extends Application implements Initializable {
             primaryStage.show();
             LoginController.closeStage();
         }
-        if ( event.getSource() == delete1) {
-            Game g = new Game();
+        if (event.getSource() == delete1) {
+            Game game = new Game();
             ObservableList<Game> games = FXCollections.observableArrayList();
             try {
-                games = g.get("title",search1.getText(),"title","asc");
+                games = game.get("title", search1.getText(), "title", "asc");
             } catch (SQLException | DBException e) {
                 e.printStackTrace();
             }
             gamesTable.setItems(games);
         }
-        if(event.getSource()==delete2) {
+        if (event.getSource() == delete2) {
             ObservableList<Item> items = FXCollections.observableArrayList();
-            Item y=new Item();
+            Item item = new Item();
             try {
-                items=y.get("item_name", search2.getText(), "item_name","asc");
+                items = item.get("item_name", search2.getText(), "item_name", "asc");
             } catch (SQLException | DBException e) {
                 e.printStackTrace();
             }
             itemsTable.setItems(items);
+        }
+        if (event.getSource() == delete3) {
+            ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
+            marketItem market = new marketItem();
+            try {
+                marketItems = market.get("item_name", search3.getText(), "item_name", "asc");
+            } catch (SQLException | DBException e) {
+                e.printStackTrace();
+            }
+            System.out.println("\n\n\n HAAAA: \n" + marketItems);
+
+            marketItemTable.setItems(marketItems);
         }
     }
 
@@ -156,6 +167,19 @@ public class Main extends Application implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
 
         // Games
+        games();
+
+        //items
+        items();
+
+        //Marketplace
+        marketplace();
+
+        // My selling items
+        sellingItems();
+    }
+
+    public void games() {
         TableColumn<Game, String> gameID = new TableColumn<>("ID");
         gameID.setPrefWidth(262);
         gameID.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
@@ -203,7 +227,10 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        //items
+        gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
+    }
+
+    public void items() {
         TableColumn<Item, String> itemID = new TableColumn<>("ID");
         itemID.setPrefWidth(150);
         itemID.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
@@ -288,12 +315,10 @@ public class Main extends Application implements Initializable {
         });
 
 
-
         itemsTable.getColumns().setAll(itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
+    }
 
-
-        //Marketplace
-
+    public void marketplace() {
         TableColumn<marketItem, String> marketPlayer = new TableColumn<>("Selling player");
         marketPlayer.setPrefWidth(150);
         marketPlayer.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
@@ -317,7 +342,6 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
 
         TableColumn<marketItem, String> marketClassa = new TableColumn<>("Class");
         marketClassa.setPrefWidth(150);
@@ -379,17 +403,84 @@ public class Main extends Application implements Initializable {
             }
         });
 
-
-
-        ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
-        marketItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
-        marketItems.add(new marketItem("Gica", "SPear", "Hunter", "good", "legendary", "40000", "21/2/2050"));
-
         marketItemTable.getColumns().setAll(marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
-        marketItemTable.setItems(marketItems);
+    }
+
+    public void sellingItems() {
+
+        TableColumn<marketItem, String> marketItemName = new TableColumn<>("Item Name");
+        marketItemName.setPrefWidth(150);
+        marketItemName.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        // My selling items
+        marketItemName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().itemName;
+            }
+        });
+
+
+        TableColumn<marketItem, String> marketClassa = new TableColumn<>("Class");
+        marketClassa.setPrefWidth(150);
+        marketClassa.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketClassa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().itemPrice;
+            }
+        });
+
+        TableColumn<marketItem, String> marketWear = new TableColumn<>("Wear");
+        marketWear.setPrefWidth(150);
+        marketWear.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketWear.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().wear;
+            }
+        });
+
+        TableColumn<marketItem, String> marketRarity = new TableColumn<>("Rarity");
+        marketRarity.setPrefWidth(150);
+        marketRarity.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketRarity.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().rarity;
+            }
+        });
+
+        TableColumn<marketItem, String> marketItemPrice = new TableColumn<>("Price");
+        marketItemPrice.setPrefWidth(150);
+        marketItemPrice.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketItemPrice.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().itemPrice;
+            }
+        });
+
+        TableColumn<marketItem, String> marketExpireDate = new TableColumn<>("Expires at");
+        marketExpireDate.setPrefWidth(150);
+        marketExpireDate.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
+
+
+        marketExpireDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().expireDate;
+            }
+        });
+
         TableColumn<marketItem, JFXButton> deleteButton = new TableColumn<>("");
         deleteButton.setPrefWidth(50);
         deleteButton.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
@@ -441,55 +532,4 @@ public class Main extends Application implements Initializable {
 //            this.itemPrice = new SimpleStringProperty(itemPrice);
 //        }
 //    }
-
-    class marketItem extends RecursiveTreeObject<marketItem> {
-        StringProperty player;
-        StringProperty itemName;
-        StringProperty classa;
-        StringProperty wear;
-        StringProperty rarity;
-        StringProperty itemPrice;
-        StringProperty expireDate;
-        //extra
-        ObservableValue<JFXButton> btnDelete;
-
-        public marketItem(String player, String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate) {
-            this.player = new SimpleStringProperty(player);
-            this.itemName = new SimpleStringProperty(itemName);
-            this.classa = new SimpleStringProperty(classa);
-            this.wear = new SimpleStringProperty(wear);
-            this.rarity = new SimpleStringProperty(rarity);
-            this.itemPrice = new SimpleStringProperty(itemPrice);
-            this.expireDate = new SimpleStringProperty(expireDate);
-
-            this.btnDelete =  new ObservableValue<JFXButton>() {
-                @Override
-                public void addListener(ChangeListener<? super JFXButton> listener) {
-
-                }
-
-                @Override
-                public void removeListener(ChangeListener<? super JFXButton> listener) {
-
-                }
-
-                @Override
-                public JFXButton getValue() {
-                    JFXButton button = new JFXButton("X");
-                    button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
-                    return button;
-                }
-
-                @Override
-                public void addListener(InvalidationListener listener) {
-
-                }
-
-                @Override
-                public void removeListener(InvalidationListener listener) {
-
-                }
-            };
-        }
-    }
 }
