@@ -2,14 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Pass user.">
-      <change afterPath="$PROJECT_DIR$/src/database/marketItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database/marketItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/marketItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -67,11 +67,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4840">
-              <caret line="507" column="31" lean-forward="true" selection-start-line="507" selection-start-column="31" selection-end-line="507" selection-end-column="31" />
+            <state relative-caret-position="205">
+              <caret line="496" column="45" selection-start-line="496" selection-start-column="45" selection-end-line="496" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2045#2046#0" expanded="true" />
@@ -83,16 +83,6 @@
               </folding>
             </state>
           </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/Main.fxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="155" column="65" selection-start-line="155" selection-start-column="55" selection-end-line="155" selection-end-column="65" />
-            </state>
-          </provider>
-          <provider editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -232,11 +222,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/database/marketItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="984">
-              <caret line="85" column="48" lean-forward="true" selection-start-line="85" selection-start-column="48" selection-end-line="85" selection-end-column="48" />
+            <state relative-caret-position="256">
+              <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -272,6 +262,9 @@
       <find>sellingItem</find>
       <find>sellingItem=</find>
       <find>marketTab</find>
+      <find>sellin</find>
+      <find>System</find>
+      <find>sellingTable</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -302,9 +295,9 @@
         <option value="$PROJECT_DIR$/src/database/Item.java" />
         <option value="$PROJECT_DIR$/src/database/Game.java" />
         <option value="$PROJECT_DIR$/src/sample/Main.fxml" />
+        <option value="$PROJECT_DIR$/src/sample/Main.java" />
+        <option value="$PROJECT_DIR$/src/sample/Main.java" />
         <option value="$PROJECT_DIR$/src/database/marketItem.java" />
-        <option value="$PROJECT_DIR$/src/sample/Main.java" />
-        <option value="$PROJECT_DIR$/src/sample/Main.java" />
       </list>
     </option>
   </component>
@@ -365,7 +358,7 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558372345302" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558374516054" />
     <property name="dynamic.classpath" value="false" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="full.screen.before.presentation.mode" value="false" />
@@ -493,7 +486,7 @@
       <workItem from="1558296287975" duration="4275000" />
       <workItem from="1558325427096" duration="9494000" />
       <workItem from="1558335985256" duration="658000" />
-      <workItem from="1558366241995" duration="5978000" />
+      <workItem from="1558366241995" duration="7861000" />
     </task>
     <task id="LOCAL-00001" summary="My selling items added.">
       <created>1558280083991</created>
@@ -516,11 +509,18 @@
       <option name="project" value="LOCAL" />
       <updated>1558333358928</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Marketplace added.">
+      <created>1558372445945</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1558372445945</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70677000" />
+    <option name="totallyTimeSpent" value="72560000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -533,7 +533,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="Capture Tool" order="1" />
@@ -547,7 +546,7 @@
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" weight="0.18271954" />
       <window_info anchor="bottom" id="Database Changes" order="4" />
-      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.3611898" />
+      <window_info anchor="bottom" id="Run" order="5" weight="0.3611898" />
       <window_info anchor="bottom" id="Debug" order="6" weight="0.39943343" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
@@ -620,7 +619,8 @@
     <MESSAGE value="My selling items added." />
     <MESSAGE value="Login added." />
     <MESSAGE value="Pass user." />
-    <option name="LAST_COMMIT_MESSAGE" value="Pass user." />
+    <MESSAGE value="Marketplace added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Marketplace added." />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -784,28 +784,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/database/marketItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="984">
-          <caret line="85" column="48" lean-forward="true" selection-start-line="85" selection-start-column="48" selection-end-line="85" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.fxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
-          <caret line="155" column="65" selection-start-line="155" selection-start-column="55" selection-end-line="155" selection-end-column="65" />
+          <caret line="85" column="63" selection-start-line="85" selection-start-column="63" selection-end-line="85" selection-end-column="63" />
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4840">
-          <caret line="507" column="31" lean-forward="true" selection-start-line="507" selection-start-column="31" selection-end-line="507" selection-end-column="31" />
+        <state relative-caret-position="205">
+          <caret line="496" column="45" selection-start-line="496" selection-start-column="45" selection-end-line="496" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2045#2046#0" expanded="true" />
@@ -814,6 +804,16 @@
             <element signature="e#2883#2884#0" expanded="true" />
             <element signature="e#2934#2935#0" expanded="true" />
             <element signature="e#2956#2957#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/database/marketItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

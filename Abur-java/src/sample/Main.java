@@ -109,6 +109,14 @@ public class Main extends Application implements Initializable {
             panelMyItems.setVisible(true);
         } else if (event.getSource() == btnSellingItems) {
             panelSellingItems.setVisible(true);
+            ObservableList<marketItem> sellingItems = FXCollections.observableArrayList();
+            marketItem market = new marketItem();
+            try {
+                sellingItems = market.getMyIyems(id);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            sellingTable.setItems(sellingItems);
         } else if (event.getSource() == btnSettings) {
             panelSettings.setVisible(true);
         } else if (event.getSource() == btnLogout) {
@@ -142,6 +150,7 @@ public class Main extends Application implements Initializable {
             }
             itemsTable.setItems(items);
         }
+
         if (event.getSource() == delete3) {
             ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
             marketItem market = new marketItem();
@@ -150,12 +159,10 @@ public class Main extends Application implements Initializable {
             } catch (SQLException | DBException e) {
                 e.printStackTrace();
             }
-            System.out.println("\n\n\n HAAAA: \n" + marketItems);
-
             marketItemTable.setItems(marketItems);
         }
-    }
 
+    }
 
     private void makePanelInvisible(AnchorPane... panels) {
         for (AnchorPane panel : panels) {
@@ -492,44 +499,8 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        ObservableList<marketItem> sellingItems = FXCollections.observableArrayList();
-        sellingItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
 
         sellingTable.getColumns().setAll(deleteButton, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
-        sellingTable.setItems(sellingItems);
+
     }
-
-//    class Game extends RecursiveTreeObject<Game> {
-//        StringProperty id;
-//        StringProperty title;
-//        StringProperty price;
-//        StringProperty date;
-//
-//        public Game(String id, String title, String price, String date) {
-//            this.id = new SimpleStringProperty(id);
-//            this.title = new SimpleStringProperty(title);
-//            this.price = new SimpleStringProperty(price);
-//            this.date = new SimpleStringProperty(date);
-//        }
-//    }
-
-//    class Item extends RecursiveTreeObject<Item> {
-//        StringProperty id;
-//        StringProperty itemName;
-//        StringProperty classa;
-//        StringProperty typeOf;
-//        StringProperty wear;
-//        StringProperty rarity;
-//        StringProperty itemPrice;
-//
-//        public Item(String id, String itemName, String classa, String typeOf, String wear, String rarity, String itemPrice) {
-//            this.id = new SimpleStringProperty(id);
-//            this.itemName = new SimpleStringProperty(itemName);
-//            this.classa = new SimpleStringProperty(classa);
-//            this.typeOf = new SimpleStringProperty(typeOf);
-//            this.wear = new SimpleStringProperty(wear);
-//            this.rarity = new SimpleStringProperty(rarity);
-//            this.itemPrice = new SimpleStringProperty(itemPrice);
-//        }
-//    }
 }
