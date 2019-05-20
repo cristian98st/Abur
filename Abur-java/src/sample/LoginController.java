@@ -29,31 +29,36 @@ public class LoginController {
     private TextField txtUsername;
     @FXML
     private TextField txtPassword;
+
     private String username;
     private int id;
     private String pass;
     private String mail;
     private int coins;
-    private User user;
 
     private static Stage stage = new Stage();
 
 
-
     private HashMap<String, String> users = new HashMap<>();
 
-    public void Login(javafx.event.ActionEvent actionEvent) throws IOException, SQLException, database.DBException {
+    public void Login(javafx.event.ActionEvent actionEvent) throws Exception {
         users.put("admin", "admin");
         if ((users.containsValue(txtUsername.getText()) && users.get(txtUsername.getText()).equals(txtPassword.getText())) || (checkUserAndPassword(txtUsername.getText(), txtPassword.getText()))) {
             lblStatus.setText("Login Success");
 
             username = txtUsername.getText();
+            this.retrieveByName(username);
 
             Stage primaryStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("Main.fxml"));
+            Parent root = loader.load();
             primaryStage.setTitle("Abur");
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/resources/dark-theme.css");
+
+            Main controller = loader.getController();
+            controller.init(id, username, pass, mail, coins);
             primaryStage.setScene(scene);
             primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.show();
@@ -96,6 +101,7 @@ public class LoginController {
         Main.closeStage();
     }
 
+
     private void retrieveByName(String name) throws SQLException, DBException {
         Connection con = Database.getConnection();
         Statement pstmt = con.createStatement();
@@ -112,5 +118,25 @@ public class LoginController {
 
         mail = (rez.getString(4));
         coins = (rez.getInt(5));
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public int getCoins() {
+        return coins;
     }
 }
