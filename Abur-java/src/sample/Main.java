@@ -50,10 +50,18 @@ public class Main extends Application implements Initializable {
     private TableView<marketItem> marketItemTable;
     @FXML
     private TableView<marketItem> sellingTable;
-    @FXML 
+    @FXML
     private TextField search1,search2,search3;
     @FXML
     private JFXButton delete2,Delete3;
+    @FXML
+    private Label lblMoney;
+
+    private String username;
+    private int id;
+    private String pass;
+    private String mail;
+    private int coins;
 
     static Stage stage = new Stage();
 
@@ -71,6 +79,16 @@ public class Main extends Application implements Initializable {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
         stage = primaryStage;
+
+    }
+
+    public void init(int id, String username, String pass, String mail, int coins){
+        this.id = id;
+        this.username = username;
+        this.pass = pass;
+        this.mail = mail;
+        this.coins = coins;
+        lblMoney.setText("Coins: " + coins + "$");
     }
 
     public static void main(String[] args) {
@@ -106,24 +124,24 @@ public class Main extends Application implements Initializable {
             LoginController.closeStage();
         }
         if ( event.getSource() == delete1) {
-        	Game g = new Game();
-        	 ObservableList<Game> games = FXCollections.observableArrayList();
-             try {
-				games = g.get("title",search1.getText(),"title","asc");
-			} catch (SQLException | DBException e) {
-				e.printStackTrace();
-			}
-             gamesTable.setItems(games);
+            Game g = new Game();
+            ObservableList<Game> games = FXCollections.observableArrayList();
+            try {
+                games = g.get("title",search1.getText(),"title","asc");
+            } catch (SQLException | DBException e) {
+                e.printStackTrace();
+            }
+            gamesTable.setItems(games);
         }
         if(event.getSource()==delete2) {
             ObservableList<Item> items = FXCollections.observableArrayList();
-	        Item y=new Item();
-	        try {
-				items=y.get("item_name", search2.getText(), "item_name","asc");
-			} catch (SQLException | DBException e) {
-				e.printStackTrace();
-			}
-	        itemsTable.setItems(items);
+            Item y=new Item();
+            try {
+                items=y.get("item_name", search2.getText(), "item_name","asc");
+            } catch (SQLException | DBException e) {
+                e.printStackTrace();
+            }
+            itemsTable.setItems(items);
         }
     }
 
@@ -269,10 +287,10 @@ public class Main extends Application implements Initializable {
             }
         });
 
-    
+
 
         itemsTable.getColumns().setAll(itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
-       
+
 
         //Marketplace
 
@@ -300,7 +318,7 @@ public class Main extends Application implements Initializable {
         });
 
         gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
-        
+
         TableColumn<marketItem, String> marketClassa = new TableColumn<>("Class");
         marketClassa.setPrefWidth(150);
         marketClassa.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");

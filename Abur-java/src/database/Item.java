@@ -1,13 +1,6 @@
-/**
- * 
- */
 package database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +14,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import static java.sql.Types.VARCHAR;
 
 /**
  * @author Alex
@@ -39,7 +34,7 @@ public class Item extends RecursiveTreeObject<Item>{
 	public Item() {
 		this.id.set("-1");
 	}
-	
+
 
 	public Item(String id,String name,String pclass,String type,String wear,String rarity,String price) {
 		this.id.set(id);
@@ -50,7 +45,7 @@ public class Item extends RecursiveTreeObject<Item>{
 		this.rarity.set(rarity);
 		this.price.set(price);
 	}
-	
+
 	public Item(String name,String pclass,String type,String wear,String rarity,String price) {
 		this.id.set("-1");
 		this.name.set(name);
@@ -61,7 +56,7 @@ public class Item extends RecursiveTreeObject<Item>{
 		this.price.set(price);
 	}
 
-	
+
 	/**
 	 * @return the id
 	 */
@@ -98,7 +93,7 @@ public class Item extends RecursiveTreeObject<Item>{
 	}
 
 	/**
-	 * @param pclass the pclass to set
+	 * @param pclas the pclass to set
 	 */
 	public void setPclass(String pclas) {
 		this.pclass.set(pclas);
@@ -159,7 +154,7 @@ public class Item extends RecursiveTreeObject<Item>{
 	public void setPrice(Float price) {
 		this.price.set(String.valueOf(price));
 	}
-	
+
 	public ObservableList<Item> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
 		Connection con = Database.getConnection();
 		String columns = "id,item_name,typeof,wear,rarity,class,added_at,updated_at";
@@ -173,34 +168,50 @@ public class Item extends RecursiveTreeObject<Item>{
 			}
 			else
 				rez = pstmt.executeQuery("select * from items where "+ col+" like '%"+ name +"%' ");
-			while(rez.next()) {	
+			while(rez.next()) {
 				Item x = new Item(String.valueOf(rez.getInt(1)),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),String.valueOf(rez.getInt(7)));
 				list.add(x);
 			}
 		}
 		return list;
 	}
-	
-	
-	public void commit() throws SQLException {
-        Connection con = Database.getConnection();
-        if(this.id.getValue()=="-1") {
-		    try (Statement stmt = con.createStatement();
-		    		ResultSet rs = stmt.executeQuery("select max(id) from items")){
-		    	this.id.set(String.valueOf((rs.next() ? rs.getInt(1)+1 : 1)));
-		    }
-        }
-        PreparedStatement pstmt = con.prepareStatement("insert into items values(?,?,?,?,?,?,?,sysdate,sysdate)");
-        pstmt.setInt(1, this.getId());
-//        System.out.print(this.name.get());
-        System.out.print(this.pclass.get()+'\n');
-        pstmt.setString(2, this.getName());
-        pstmt.setString(3, this.getPclass());
-        pstmt.setString(4, this.type.get());
-        pstmt.setString(5, this.wear.get());
-        pstmt.setString(6, this.rarity.get());
-        pstmt.setFloat(7, this.getPrice());
-        pstmt.executeUpdate();
+
+	public static String buyItem(int buyerID, int itemID) throws SQLException {
+		Connection con = Database.getConnection();
+		String procedure = "{ call BUY_ITEM(?,?,?)}";
+		CallableStatement cs = con.prepareCall(procedure);
+
+		cs.setInt(1,buyerID);
+		cs.setInt(2, itemID);
+		cs.registerOutParameter(3, VARCHAR);
+
+		cs.execute();
+
+		String result = cs.getString(3);
+		con.close();
+
+		return result;
 	}
-	
+
+	public void commit() throws SQLException {
+		Connection con = Database.getConnection();
+		if(this.id.getValue()=="-1") {
+			try (Statement stmt = con.createStatement();
+				 ResultSet rs = stmt.executeQuery("select max(id) from items")){
+				this.id.set(String.valueOf((rs.next() ? rs.getInt(1)+1 : 1)));
+			}
+		}
+		PreparedStatement pstmt = con.prepareStatement("insert into items values(?,?,?,?,?,?,?,sysdate,sysdate)");
+		pstmt.setInt(1, this.getId());
+//        System.out.print(this.name.get());
+		System.out.print(this.pclass.get()+'\n');
+		pstmt.setString(2, this.getName());
+		pstmt.setString(3, this.getPclass());
+		pstmt.setString(4, this.type.get());
+		pstmt.setString(5, this.wear.get());
+		pstmt.setString(6, this.rarity.get());
+		pstmt.setFloat(7, this.getPrice());
+		pstmt.executeUpdate();
+	}
+
 }
