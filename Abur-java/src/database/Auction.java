@@ -20,6 +20,8 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * @author Alex
@@ -27,27 +29,34 @@ import javafx.beans.property.StringProperty;
  */
 public class Auction extends RecursiveTreeObject<Auction>{
 
-	private IntegerProperty id_gamer = new SimpleIntegerProperty();
-	private IntegerProperty id_item = new SimpleIntegerProperty();
-	private FloatProperty price = new SimpleFloatProperty();
-	private StringProperty exp_date = new SimpleStringProperty();
-
+	public StringProperty id_gamer = new SimpleStringProperty();
+	public StringProperty id_item = new SimpleStringProperty();
+	public StringProperty price = new SimpleStringProperty();
+	public StringProperty exp_date = new SimpleStringProperty();
+	public Item x;
 	public Auction() {
-		this.id_gamer.set(-1);
-		this.id_item.set(-1);
+		this.id_gamer.set("-1");
+		this.id_item.set("-1");
 	}
 	
 //2019-04-01
 	public Auction(Integer id_gamer,Integer id_item,Float price) {
-		this.id_gamer.set(id_gamer);
-		this.id_item.set(id_item);
-		this.price.set(price);
+		this.id_gamer.set(String.valueOf(id_gamer));
+		this.id_item.set(String.valueOf(id_item));
+		this.price.set(String.valueOf(price));
+		try {
+			this.x=this.x.getByName(String.valueOf(id_item));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (DBException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Auction(Integer id_gamer,Integer id_item,Float price,String d) {
-		this.id_gamer.set(id_gamer);
-		this.id_item.set(id_item);
-		this.price.set(price);
+		this.id_gamer.set(String.valueOf(id_gamer));
+		this.id_item.set(String.valueOf(id_item));
+		this.price.set(String.valueOf(price));
 		this.exp_date.set(d);
 	}
 	
@@ -55,66 +64,44 @@ public class Auction extends RecursiveTreeObject<Auction>{
 	 * @return the id
 	 */
 	public Integer getIdGamer() {
-		return this.id_gamer.get();
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setIdGamer(Integer id) {
-		this.id_gamer.set(id);
+		return Integer.valueOf(this.id_gamer.get());
 	}
 	
 	public Integer getIdItem() {
-		return this.id_item.get();
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setIdItem(Integer id) {
-		this.id_item.set(id);
+		return Integer.valueOf(this.id_item.get());
 	}
 
 	/**
 	 * @return the price
 	 */
 	public Float getPrice() {
-		return this.price.get();
+		return Float.valueOf(this.price.get());
 	}
 
 	/**
 	 * @param price the price to set
 	 */
 	public void setPrice(Float price) {
-		this.price.set(price);
+		this.price.set(String.valueOf(price));
 	}
 	
-	public List<Auction> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
+	public ObservableList<Auction> get(String name) throws SQLException, DBException {
 		Connection con = Database.getConnection();
-		String columns = "id_gamer,id_item,price,exp_date,added_at,updated_at";
-		String ord = "asc,desc";
-		List<Auction> list = new ArrayList<Auction>();
+		ObservableList<Auction> list = FXCollections.observableArrayList();
 		Statement pstmt = con.createStatement();
 		ResultSet rez;
-		if(columns.contains(col) && !col.contains(",")) {
-			if(ord.contains(order) && !order.contains(",")) {
-				rez = pstmt.executeQuery("select * from auction where "+ col+" like '%"+ name +"%' order by "+col2Order +" "+order);
-			}
-			else
-				rez = pstmt.executeQuery("select * from auction where "+ col+" like '%"+ name +"%' ");
+		rez = pstmt.executeQuery("select * from auction where id_item in (select id from items where item_name like '%"+ name +"%'");
 			while(rez.next()) {	
 				Auction x = new Auction(rez.getInt(1),rez.getInt(2),rez.getFloat(3),rez.getString(4));
 				list.add(x);
 			}
-		}
 		return list;
 	}
 	
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
-        PreparedStatement pstmt = con.prepareStatement("insert into auction values(?,?,?,to_date(?),sysdate,sysdate)");
+        PreparedStatement pstmt = con.prepareStatement("insert into auction values(?,?,?,to_date(?,'yyyy-mm-dd'),sysdate,sysdate)");
         pstmt.setInt(1, this.getIdGamer());
         pstmt.setInt(2, this.getIdItem());
         pstmt.setFloat(3, this.getPrice());

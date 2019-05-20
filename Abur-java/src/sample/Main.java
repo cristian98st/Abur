@@ -5,6 +5,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.sun.istack.internal.Nullable;
 
+import database.Auction;
 import database.DBException;
 import database.Game;
 import database.Item;
@@ -47,13 +48,13 @@ public class Main extends Application implements Initializable {
     @FXML
     private TableView<Item> itemsTable;
     @FXML
-    private TableView<marketItem> marketItemTable;
+    private TableView<Auction> marketItemTable;
     @FXML
-    private TableView<marketItem> sellingTable;
+    private TableView<Auction> sellingTable;
     @FXML 
     private TextField search1,search2,search3;
     @FXML
-    private JFXButton delete2,Delete3;
+    private JFXButton delete2,delete3;
 
     static Stage stage = new Stage();
 
@@ -124,6 +125,11 @@ public class Main extends Application implements Initializable {
 				e.printStackTrace();
 			}
 	        itemsTable.setItems(items);
+        }
+        if(event.getSource() == delete3) {
+        	Auction x=new Auction();
+            ObservableList<Auction> sellingItems = x.get(search3.getText());
+            sellingTable.setItems(sellingItems);
         }
     }
 
@@ -276,118 +282,106 @@ public class Main extends Application implements Initializable {
 
         //Marketplace
 
-        TableColumn<marketItem, String> marketPlayer = new TableColumn<>("Selling player");
+        TableColumn<Auction, String> marketPlayer = new TableColumn<>("Selling player");
         marketPlayer.setPrefWidth(150);
         marketPlayer.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
-        marketPlayer.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketPlayer.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().player;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().id_gamer;
             }
         });
 
-        TableColumn<marketItem, String> marketItemName = new TableColumn<>("Item Name");
+        TableColumn<Auction, String> marketItemName = new TableColumn<>("Item Name");
         marketItemName.setPrefWidth(150);
         marketItemName.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketItemName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketItemName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().itemName;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().x.name;
             }
         });
 
         gamesTable.getColumns().setAll(gameID, title, gamePrice, date);
         
-        TableColumn<marketItem, String> marketClassa = new TableColumn<>("Class");
+        TableColumn<Auction, String> marketClassa = new TableColumn<>("Class");
         marketClassa.setPrefWidth(150);
         marketClassa.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketClassa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketClassa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().itemPrice;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().price;
             }
         });
 
-        TableColumn<marketItem, String> marketWear = new TableColumn<>("Wear");
+        TableColumn<Auction, String> marketWear = new TableColumn<>("Wear");
         marketWear.setPrefWidth(150);
         marketWear.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketWear.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketWear.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().wear;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().x.wear;
             }
         });
 
-        TableColumn<marketItem, String> marketRarity = new TableColumn<>("Rarity");
+        TableColumn<Auction, String> marketRarity = new TableColumn<>("Rarity");
         marketRarity.setPrefWidth(150);
         marketRarity.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketRarity.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketRarity.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().rarity;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().x.rarity;
             }
         });
 
-        TableColumn<marketItem, String> marketItemPrice = new TableColumn<>("Price");
+        TableColumn<Auction, String> marketItemPrice = new TableColumn<>("Price");
         marketItemPrice.setPrefWidth(150);
         marketItemPrice.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketItemPrice.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketItemPrice.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().itemPrice;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().x.price;
             }
         });
 
-        TableColumn<marketItem, String> marketExpireDate = new TableColumn<>("Expires at");
+        TableColumn<Auction, String> marketExpireDate = new TableColumn<>("Expires at");
         marketExpireDate.setPrefWidth(150);
         marketExpireDate.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketExpireDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+        marketExpireDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().expireDate;
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Auction, String> param) {
+                return param.getValue().exp_date;
             }
         });
-
-
-
-        ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
-        marketItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
-        marketItems.add(new marketItem("Gica", "SPear", "Hunter", "good", "legendary", "40000", "21/2/2050"));
-
         marketItemTable.getColumns().setAll(marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
-        marketItemTable.setItems(marketItems);
 
 
         // My selling items
-        TableColumn<marketItem, JFXButton> deleteButton = new TableColumn<>("");
+        TableColumn<Auction, JFXButton> deleteButton = new TableColumn<>("");
         deleteButton.setPrefWidth(50);
         deleteButton.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
-        deleteButton.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, JFXButton>, ObservableValue<JFXButton>>() {
+        deleteButton.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Auction, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
-            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<marketItem, JFXButton> param) {
+            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<Auction, JFXButton> param) {
                 return param.getValue().btnDelete;
             }
         });
 
-        ObservableList<marketItem> sellingItems = FXCollections.observableArrayList();
-        sellingItems.add(new marketItem("Gigel", "Sword2", "Warrior", "destroyed", "legendary", "400", "12/12/2012"));
-
         sellingTable.getColumns().setAll(deleteButton, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
-        sellingTable.setItems(sellingItems);
     }
 
 //    class Game extends RecursiveTreeObject<Game> {
@@ -424,54 +418,54 @@ public class Main extends Application implements Initializable {
 //        }
 //    }
 
-    class marketItem extends RecursiveTreeObject<marketItem> {
-        StringProperty player;
-        StringProperty itemName;
-        StringProperty classa;
-        StringProperty wear;
-        StringProperty rarity;
-        StringProperty itemPrice;
-        StringProperty expireDate;
-        //extra
-        ObservableValue<JFXButton> btnDelete;
-
-        public marketItem(String player, String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate) {
-            this.player = new SimpleStringProperty(player);
-            this.itemName = new SimpleStringProperty(itemName);
-            this.classa = new SimpleStringProperty(classa);
-            this.wear = new SimpleStringProperty(wear);
-            this.rarity = new SimpleStringProperty(rarity);
-            this.itemPrice = new SimpleStringProperty(itemPrice);
-            this.expireDate = new SimpleStringProperty(expireDate);
-
-            this.btnDelete =  new ObservableValue<JFXButton>() {
-                @Override
-                public void addListener(ChangeListener<? super JFXButton> listener) {
-
-                }
-
-                @Override
-                public void removeListener(ChangeListener<? super JFXButton> listener) {
-
-                }
-
-                @Override
-                public JFXButton getValue() {
-                    JFXButton button = new JFXButton("X");
-                    button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
-                    return button;
-                }
-
-                @Override
-                public void addListener(InvalidationListener listener) {
-
-                }
-
-                @Override
-                public void removeListener(InvalidationListener listener) {
-
-                }
-            };
-        }
+//    class marketItem extends RecursiveTreeObject<marketItem> {
+//        StringProperty player;
+//        StringProperty itemName;
+//        StringProperty classa;
+//        StringProperty wear;
+//        StringProperty rarity;
+//        StringProperty itemPrice;
+//        StringProperty expireDate;
+//        //extra
+//        ObservableValue<JFXButton> btnDelete;
+//
+//        public marketItem(String player, String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate) {
+//            this.player = new SimpleStringProperty(player);
+//            this.itemName = new SimpleStringProperty(itemName);
+//            this.classa = new SimpleStringProperty(classa);
+//            this.wear = new SimpleStringProperty(wear);
+//            this.rarity = new SimpleStringProperty(rarity);
+//            this.itemPrice = new SimpleStringProperty(itemPrice);
+//            this.expireDate = new SimpleStringProperty(expireDate);
+//
+//            this.btnDelete =  new ObservableValue<JFXButton>() {
+//                @Override
+//                public void addListener(ChangeListener<? super JFXButton> listener) {
+//
+//                }
+//
+//                @Override
+//                public void removeListener(ChangeListener<? super JFXButton> listener) {
+//
+//                }
+//
+//                @Override
+//                public JFXButton getValue() {
+//                    JFXButton button = new JFXButton("X");
+//                    button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+//                    return button;
+//                }
+//
+//                @Override
+//                public void addListener(InvalidationListener listener) {
+//
+//                }
+//
+//                @Override
+//                public void removeListener(InvalidationListener listener) {
+//
+//                }
+//            };
+//        }
     }
 }

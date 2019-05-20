@@ -181,6 +181,15 @@ public class Item extends RecursiveTreeObject<Item>{
 		return list;
 	}
 	
+	public Item getByName(String name) throws SQLException,DBException{
+		Connection con = Database.getConnection();
+		Statement pstmt = con.createStatement();
+		ResultSet rez;
+		rez = pstmt.executeQuery("select * from items where id = '"+ name +"' ");
+		rez.next();
+		Item x = new Item(String.valueOf(rez.getInt(1)),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),String.valueOf(rez.getInt(7)));
+		return x;
+	}
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
