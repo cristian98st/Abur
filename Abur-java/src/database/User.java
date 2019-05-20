@@ -109,20 +109,12 @@ public class User extends RecursiveTreeObject<User>{
 		PreparedStatement pstmt = con.prepareStatement("select * from accounts where username like '%?%'");
 		pstmt.setString(1, name);
 		ResultSet rez = pstmt.executeQuery();
-		int rowNr=0;
-		while(rez.next())
-			rowNr++;
-		if(rowNr!=1)
-			throw new DBException("Too many rows!");
-		else {
-			rez.beforeFirst();
 			rez.next();
 			this.id.set(rez.getInt(1));
 			this.username.set(rez.getString(2));
 			this.pass.set(rez.getString(3));
 			this.mail.set(rez.getString(4));
 			this.coins.set(rez.getInt(5));
-		}
 	}
 	
 	public void fetchByMail(String mail) throws SQLException, DBException {

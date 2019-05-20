@@ -40,7 +40,7 @@ public class LoginController {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/resources/dark-theme.css");
             primaryStage.setScene(scene);
-            primaryStage.initStyle(StageStyle.TRANSPARENT);
+//            primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.show();
             stage = primaryStage;
             Main.closeStage();

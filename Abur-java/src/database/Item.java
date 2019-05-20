@@ -19,6 +19,8 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * @author Alex
@@ -26,20 +28,20 @@ import javafx.beans.property.StringProperty;
  */
 public class Item extends RecursiveTreeObject<Item>{
 
-	private IntegerProperty id = new SimpleIntegerProperty();
+	private StringProperty id = new SimpleStringProperty();
 	private StringProperty name = new SimpleStringProperty();
 	private StringProperty pclass = new SimpleStringProperty();
 	private StringProperty type = new SimpleStringProperty();
 	private StringProperty wear = new SimpleStringProperty();
 	private StringProperty rarity = new SimpleStringProperty();
-	private FloatProperty price = new SimpleFloatProperty();
+	private StringProperty price = new SimpleStringProperty();
 
 	public Item() {
-		this.id.set(-1);
+		this.id.set("-1");
 	}
 	
 
-	public Item(Integer id,String name,String pclass,String type,String wear,String rarity,Integer price) {
+	public Item(String id,String name,String pclass,String type,String wear,String rarity,String price) {
 		this.id.set(id);
 		this.name.set(name);
 		this.pclass.set(pclass);
@@ -49,8 +51,8 @@ public class Item extends RecursiveTreeObject<Item>{
 		this.price.set(price);
 	}
 	
-	public Item(String name,String pclass,String type,String wear,String rarity,Integer price) {
-		this.id.set(-1);
+	public Item(String name,String pclass,String type,String wear,String rarity,String price) {
+		this.id.set("-1");
 		this.name.set(name);
 		this.pclass.set(pclass);
 		this.type.set(type);
@@ -64,14 +66,14 @@ public class Item extends RecursiveTreeObject<Item>{
 	 * @return the id
 	 */
 	public Integer getId() {
-		return id.get();
+		return Integer.valueOf(id.get());
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(Integer id) {
-		this.id.set(id);
+		this.id.set(String.valueOf(id));
 	}
 
 	/**
@@ -148,21 +150,21 @@ public class Item extends RecursiveTreeObject<Item>{
 	 * @return the price
 	 */
 	public Float getPrice() {
-		return this.price.get();
+		return Float.valueOf(this.price.get());
 	}
 
 	/**
 	 * @param price the price to set
 	 */
 	public void setPrice(Float price) {
-		this.price.set(price);
+		this.price.set(String.valueOf(price));
 	}
 	
-	public List<Item> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
+	public ObservableList<Item> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
 		Connection con = Database.getConnection();
 		String columns = "id,item_name,typeof,wear,rarity,class,added_at,updated_at";
 		String ord = "asc,desc";
-		List<Item> list = new ArrayList<Item>();
+		ObservableList<Item> list = FXCollections.observableArrayList();
 		Statement pstmt = con.createStatement();
 		ResultSet rez;
 		if(columns.contains(col) && !col.contains(",")) {
@@ -172,7 +174,7 @@ public class Item extends RecursiveTreeObject<Item>{
 			else
 				rez = pstmt.executeQuery("select * from items where "+ col+" like '%"+ name +"%' ");
 			while(rez.next()) {	
-				Item x = new Item(rez.getInt(1),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),rez.getInt(7));
+				Item x = new Item(String.valueOf(rez.getInt(1)),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),String.valueOf(rez.getInt(7)));
 				list.add(x);
 			}
 		}
@@ -182,10 +184,10 @@ public class Item extends RecursiveTreeObject<Item>{
 	
 	public void commit() throws SQLException {
         Connection con = Database.getConnection();
-        if(this.id.getValue()==-1) {
+        if(this.id.getValue()=="-1") {
 		    try (Statement stmt = con.createStatement();
 		    		ResultSet rs = stmt.executeQuery("select max(id) from items")){
-		    	this.id.set((int) (rs.next() ? rs.getInt(1)+1 : 1));
+		    	this.id.set(String.valueOf((rs.next() ? rs.getInt(1)+1 : 1)));
 		    }
         }
         PreparedStatement pstmt = con.prepareStatement("insert into items values(?,?,?,?,?,?,?,sysdate,sysdate)");
@@ -197,7 +199,7 @@ public class Item extends RecursiveTreeObject<Item>{
         pstmt.setString(4, this.type.get());
         pstmt.setString(5, this.wear.get());
         pstmt.setString(6, this.rarity.get());
-        pstmt.setFloat(7, this.price.get());
+        pstmt.setFloat(7, this.getPrice());
         pstmt.executeUpdate();
 	}
 	
