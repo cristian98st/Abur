@@ -256,6 +256,20 @@ public class Item extends RecursiveTreeObject<Item>{
 		return result;
 	}
 
+	public List<String> getMyItems(int id) throws SQLException {
+		Connection con = Database.getConnection();
+		List<String> items = new ArrayList<>();
+		Statement stms = con.createStatement();
+		ResultSet result = stms.executeQuery("SELECT item_name FROM items JOIN owned_items ON items.id = owned_items.id_item " +
+				"WHERE owned_items.id_owner = " + id );
+
+		while(result.next()){
+			items.add(result.getString(1));
+		}
+
+		return items;
+	}
+
 	public void commit() throws SQLException {
 		Connection con = Database.getConnection();
 		if(this.id.getValue()=="-1") {

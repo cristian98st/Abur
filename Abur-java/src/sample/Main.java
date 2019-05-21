@@ -58,7 +58,7 @@ public class Main extends Application implements Initializable {
     @FXML
     private Label lblMoney, lblCoins, lblName, lblEmail;
     @FXML
-    private GridPane gameGridPane;
+    private GridPane gameGridPane, itemGridPane;
 
     private String username;
     private int id;
@@ -97,6 +97,7 @@ public class Main extends Application implements Initializable {
         lblEmail.setText("Email: " + mail);
 
         initMyGames();
+        initMyItems();
     }
 
     private void initMyGames() {
@@ -110,6 +111,26 @@ public class Main extends Application implements Initializable {
                 button.getStyleClass().add("gameOrItem");
                 button.setPrefSize(200, 200);
                 gameGridPane.addColumn(j, button);
+                j++;
+                if(j == 4)
+                    j = 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initMyItems() {
+        try {
+            Item item = new Item();
+            List<String> items = item.getMyItems(id);
+            int j=0;
+            for(String i : items)
+            {
+                JFXButton button = new JFXButton(i);
+                button.getStyleClass().add("gameOrItem");
+                button.setPrefSize(200, 200);
+                itemGridPane.addColumn(j, button);
                 j++;
                 if(j == 4)
                     j = 0;
