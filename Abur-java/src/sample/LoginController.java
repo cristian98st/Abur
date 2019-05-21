@@ -1,9 +1,15 @@
 package sample;
 
-import com.jfoenix.controls.JFXButton;
-import database.DBException;
+import static javafx.application.Platform.exit;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+
 import database.Database;
-import database.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,15 +17,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.HashMap;
-
-import static javafx.application.Platform.exit;
 
 
 public class LoginController {
@@ -102,7 +101,7 @@ public class LoginController {
     }
 
 
-    private void retrieveByName(String name) throws SQLException, DBException {
+    private void retrieveByName(String name) throws SQLException{
         Connection con = Database.getConnection();
         Statement pstmt = con.createStatement();
         ResultSet rez = pstmt.executeQuery("select * from accounts where username = '" + name + "'");

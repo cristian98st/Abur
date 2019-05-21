@@ -1,19 +1,19 @@
 package sample;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.sun.istack.internal.Nullable;
+import static javafx.application.Platform.exit;
 
-import database.DBException;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import com.jfoenix.controls.JFXButton;
+
 import database.Game;
 import database.Item;
 import database.marketItem;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,21 +23,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import static javafx.application.Platform.exit;
 
 public class Main extends Application implements Initializable {
 
@@ -185,7 +179,7 @@ public class Main extends Application implements Initializable {
             ObservableList<Game> games = FXCollections.observableArrayList();
             try {
                 games = game.get("title", search1.getText(), "title", "asc");
-            } catch (SQLException | DBException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             gamesTable.setItems(games);
@@ -195,7 +189,7 @@ public class Main extends Application implements Initializable {
             Item item = new Item();
             try {
                 items = item.get("item_name", search2.getText(), "item_name", "asc");
-            } catch (SQLException | DBException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             itemsTable.setItems(items);
@@ -206,7 +200,7 @@ public class Main extends Application implements Initializable {
             marketItem market = new marketItem();
             try {
                 marketItems = market.get("item_name", search3.getText(), "item_name", "asc");
-            } catch (SQLException | DBException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             marketItemTable.setItems(marketItems);

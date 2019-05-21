@@ -90,7 +90,7 @@ public class Auction extends RecursiveTreeObject<Auction>{
 		this.price.set(price);
 	}
 	
-	public List<Auction> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
+	public List<Auction> get(String col,String name,String col2Order,String order) throws SQLException {
 		Connection con = Database.getConnection();
 		String columns = "id_gamer,id_item,price,exp_date,added_at,updated_at";
 		String ord = "asc,desc";

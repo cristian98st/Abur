@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
@@ -16,7 +15,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import oracle.jdbc.OracleTypes;
 
 /**
  * @author Alex
@@ -104,7 +102,7 @@ public class User extends RecursiveTreeObject<User>{
 	}
 
 	
-	public void fetchByName(String name) throws SQLException, DBException {
+	public void fetchByName(String name) throws SQLException{
 		Connection con = Database.getConnection();
 		PreparedStatement pstmt = con.prepareStatement("select * from accounts where username like '%?%'");
 		pstmt.setString(1, name);
@@ -117,7 +115,7 @@ public class User extends RecursiveTreeObject<User>{
 			this.coins.set(rez.getInt(5));
 	}
 	
-	public void fetchByMail(String mail) throws SQLException, DBException {
+	public void fetchByMail(String mail) throws SQLException{
 		Connection con = Database.getConnection();
 		PreparedStatement pstmt = con.prepareStatement("select * from accounts where email like '%?%'");
 		pstmt.setString(1, mail);
@@ -126,7 +124,7 @@ public class User extends RecursiveTreeObject<User>{
 		while(rez.next())
 			rowNr++;
 		if(rowNr!=1)
-			throw new DBException("Too many rows!");
+			throw new SQLException("Too many rows!");
 		else {
 			rez.beforeFirst();
 			rez.next();
@@ -138,10 +136,10 @@ public class User extends RecursiveTreeObject<User>{
 		}
 	}
 	
-	public void update() throws SQLException, DBException {
+	public void update() throws SQLException{
 		Connection con = Database.getConnection();
         if(this.id.get()==-1) {
-		    throw new DBException("Fetch user first!");
+		    throw new SQLException("Fetch user first!");
         }
         PreparedStatement pstmt1 = con.prepareStatement("select * from accounts where username = '?'");
 		pstmt1.setString(1, this.username.get());

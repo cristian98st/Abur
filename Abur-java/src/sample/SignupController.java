@@ -1,5 +1,11 @@
 package sample;
 
+import static javafx.application.Platform.exit;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+import database.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,13 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.IOException;
-import java.sql.SQLException;
-
-import database.User;
-
-import static javafx.application.Platform.exit;
 
 public class SignupController {
 	@FXML

@@ -1,7 +1,13 @@
 package database;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,11 +15,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class marketItem extends RecursiveTreeObject<marketItem> {
     public StringProperty player;
@@ -98,7 +99,7 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
         };
     }
 
-    public ObservableList<marketItem> get(String col, String name, String col2Order, String order) throws SQLException, DBException {
+    public ObservableList<marketItem> get(String col, String name, String col2Order, String order) throws SQLException{
         Connection con = Database.getConnection();
         String columns = "id, item_name,typeof,wear,rarity,class,added_at,updated_at";
         String ord = "asc,desc";
@@ -125,8 +126,6 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
 
     public ObservableList<marketItem> getMyIyems(int id) throws SQLException {
         Connection con = Database.getConnection();
-        String columns = "id, item_name,typeof,wear,rarity,class,added_at,updated_at";
-        String ord = "asc,desc";
         ObservableList<marketItem> list = FXCollections.observableArrayList();
         Statement pstmt = con.createStatement();
         ResultSet rez;

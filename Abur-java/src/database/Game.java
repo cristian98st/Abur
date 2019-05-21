@@ -1,10 +1,17 @@
 package database;
 
+import static java.sql.Types.VARCHAR;
+
 /**
  * @author Alex
  *
  */
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,18 +19,12 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import static java.sql.Types.VARCHAR;
 
 /**
  * @author Alex
@@ -158,7 +159,7 @@ public class Game extends RecursiveTreeObject<Game>{
 		this.price.set(price);
 	}
 
-	public ObservableList<Game> get(String col,String name,String col2Order,String order) throws SQLException, DBException {
+	public ObservableList<Game> get(String col,String name,String col2Order,String order) throws SQLException{
 		Connection con = Database.getConnection();
 		String columns = "id,title,price,launch_date,added_at,updated_at";
 		String ord = "asc,desc";
