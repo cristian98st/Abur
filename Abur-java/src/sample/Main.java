@@ -1,3 +1,6 @@
+
+// Shadow of Love - HG61GZLJE4
+
 package sample;
 
 import static javafx.application.Platform.exit;
@@ -23,12 +26,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -38,7 +39,7 @@ public class Main extends Application implements Initializable {
     @FXML
     private AnchorPane panelMyAccount, panelMyGames, panelMyItems, panelSellingItems, panelSettings;
     @FXML
-    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout, delete1, delete2, delete3;
+    private JFXButton btnMyAccount, btnMyGames, btnMyItems, btnSellingItems, btnSettings, btnLogout, delete1, delete2, delete3, buyButton2;
     @FXML
     private TableView<Game> gamesTable;
     @FXML
@@ -53,9 +54,11 @@ public class Main extends Application implements Initializable {
     private Label lblMoney, lblCoins, lblName, lblEmail;
     @FXML
     private GridPane gameGridPane, itemGridPane;
+    @FXML
+    private VBox vBoxBuy;
 
     private String username;
-    private int id;
+    private static int id;
     private String pass;
     private String mail;
     private int coins;
@@ -87,7 +90,7 @@ public class Main extends Application implements Initializable {
         this.coins = coins;
         lblMoney.setText("Coins: " + coins + "$");
         lblCoins.setText("Coins: " + coins + "$");
-        lblName. setText("Name: " + username);
+        lblName.setText("Name: " + username);
         lblEmail.setText("Email: " + mail);
 
         initMyGames();
@@ -98,15 +101,14 @@ public class Main extends Application implements Initializable {
         try {
             Game game = new Game();
             List<String> games = game.getMyGames(id);
-            int j=0;
-            for(String g : games)
-            {
+            int j = 0;
+            for (String g : games) {
                 JFXButton button = new JFXButton(g);
                 button.getStyleClass().add("gameOrItem");
                 button.setPrefSize(200, 200);
                 gameGridPane.addColumn(j, button);
                 j++;
-                if(j == 4)
+                if (j == 4)
                     j = 0;
             }
         } catch (SQLException e) {
@@ -118,15 +120,14 @@ public class Main extends Application implements Initializable {
         try {
             Item item = new Item();
             List<String> items = item.getMyItems(id);
-            int j=0;
-            for(String i : items)
-            {
+            int j = 0;
+            for (String i : items) {
                 JFXButton button = new JFXButton(i);
                 button.getStyleClass().add("gameOrItem");
                 button.setPrefSize(200, 200);
                 itemGridPane.addColumn(j, button);
                 j++;
-                if(j == 4)
+                if (j == 4)
                     j = 0;
             }
         } catch (SQLException e) {
@@ -205,7 +206,6 @@ public class Main extends Application implements Initializable {
             }
             marketItemTable.setItems(marketItems);
         }
-
     }
 
     private void makePanelInvisible(AnchorPane... panels) {
@@ -267,7 +267,7 @@ public class Main extends Application implements Initializable {
         });
 
         TableColumn<Game, String> date = new TableColumn<>("Release Date");
-        date.setPrefWidth(200);
+        date.setPrefWidth(190);
         date.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
@@ -278,18 +278,53 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        TableColumn<Game, JFXButton> buyButton1 = new TableColumn<>("");
+        TableColumn<Game, Void> buyButton1 = new TableColumn<>("Yes");
         buyButton1.setPrefWidth(70);
         buyButton1.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
-        buyButton1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Game, JFXButton>, ObservableValue<JFXButton>>() {
-            @Override
-            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<Game, JFXButton> param) {
-                return param.getValue().buyButton;
-            }
-        });
 
-        gamesTable.getColumns().setAll(buyButton1, gameID, title, gamePrice, date);
+        addButtonTable(buyButton1);
+
+        gamesTable.getColumns().add(gameID);
+        gamesTable.getColumns().add(title);
+        gamesTable.getColumns().add(gamePrice);
+        gamesTable.getColumns().add(date);
+    }
+
+    private void addButtonTable(TableColumn<Game, Void> buyButton1) {
+//        TableColumn<Game, Void> buyButton1 = new TableColumn("Button Column");
+
+        Callback<TableColumn<Game, Void>, TableCell<Game, Void>> cellFactory = new Callback<TableColumn<Game, Void>, TableCell<Game, Void>>() {
+            @Override
+            public TableCell<Game, Void> call(final TableColumn<Game, Void> param) {
+                final TableCell<Game, Void> cell = new TableCell<Game, Void>() {
+
+                    private final JFXButton btn = new JFXButton("Buy");
+                    {
+                        btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+                        btn.setOnAction((ActionEvent event) -> {
+                            System.out.println("selectedData: ");
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        buyButton1.setCellFactory(cellFactory);
+
+        gamesTable.getColumns().add(buyButton1);
+
     }
 
     public void items() {
@@ -579,5 +614,9 @@ public class Main extends Application implements Initializable {
 
         sellingTable.getColumns().setAll(deleteButton, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
 
+    }
+
+    public static int getID() {
+        return id;
     }
 }

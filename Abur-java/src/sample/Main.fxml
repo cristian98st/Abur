@@ -131,7 +131,7 @@
                         </JFXButton>
                         <Separator layoutX="60.0" layoutY="111.0" prefHeight="9.0" prefWidth="1016.0" />
                         <JFXHamburger layoutX="625.0" layoutY="55.0" />
-                        <TableView id="table" fx:id="gamesTable" layoutX="45.0" layoutY="126.0" prefHeight="458.0" prefWidth="1050.0" />
+                        <TableView id="table" fx:id="gamesTable" layoutX="45.0" layoutY="126.0" prefHeight="458.0" prefWidth="1046.0" />
                      </children></AnchorPane>
               </content>
             </Tab>
