@@ -101,7 +101,7 @@ public class LoginController {
     }
 
 
-    private void retrieveByName(String name) throws SQLException{
+    public void retrieveByName(String name) throws SQLException{
         Connection con = Database.getConnection();
         Statement pstmt = con.createStatement();
         ResultSet rez = pstmt.executeQuery("select * from accounts where username = '" + name + "'");

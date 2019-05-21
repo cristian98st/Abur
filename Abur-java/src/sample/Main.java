@@ -97,11 +97,23 @@ public class Main extends Application implements Initializable {
         initMyItems();
     }
 
+    public void reinit() throws SQLException {
+        LoginController loginController = new LoginController();
+        loginController.retrieveByName(username);
+        coins = loginController.getCoins();
+        lblMoney.setText("Coins: " + coins + "$");
+        lblCoins.setText("Coins: " + coins + "$");
+
+        initMyGames();
+        initMyItems();
+    }
+
     private void initMyGames() {
         try {
             Game game = new Game();
             List<String> games = game.getMyGames(id);
             int j = 0;
+            gameGridPane.getChildren().clear();
             for (String g : games) {
                 JFXButton button = new JFXButton(g);
                 button.getStyleClass().add("gameOrItem");
@@ -121,6 +133,7 @@ public class Main extends Application implements Initializable {
             Item item = new Item();
             List<String> items = item.getMyItems(id);
             int j = 0;
+            itemGridPane.getChildren().clear();
             for (String i : items) {
                 JFXButton button = new JFXButton(i);
                 button.getStyleClass().add("gameOrItem");
@@ -283,7 +296,7 @@ public class Main extends Application implements Initializable {
         buyButton1.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
 
-        addButtonTable(buyButton1);
+        addButtonTableGames(buyButton1);
 
         gamesTable.getColumns().add(gameID);
         gamesTable.getColumns().add(title);
@@ -291,7 +304,7 @@ public class Main extends Application implements Initializable {
         gamesTable.getColumns().add(date);
     }
 
-    private void addButtonTable(TableColumn<Game, Void> buyButton1) {
+    private void addButtonTableGames(TableColumn<Game, Void> buyButton1) {
 //        TableColumn<Game, Void> buyButton1 = new TableColumn("Button Column");
 
         Callback<TableColumn<Game, Void>, TableCell<Game, Void>> cellFactory = new Callback<TableColumn<Game, Void>, TableCell<Game, Void>>() {
@@ -303,7 +316,24 @@ public class Main extends Application implements Initializable {
                     {
                         btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
                         btn.setOnAction((ActionEvent event) -> {
-                            System.out.println("selectedData: ");
+
+                            int row = getTableRow().getIndex();
+                            TableColumn col = gamesTable.getColumns().get(1);
+                            Game g = gamesTable.getItems().get(row);
+                            int id_game = Integer.parseInt((String) col.getCellObservableValue(g).getValue());
+                            String result;
+                            try {
+                                result = Game.buyGame(id, id_game);
+                                System.out.println(result);
+                                g.openPopUP(result);
+                                reinit();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         });
                     }
 

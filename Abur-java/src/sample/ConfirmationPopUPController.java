@@ -1,6 +1,7 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
+import database.Game;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +26,6 @@ public class ConfirmationPopUPController {
     }
 
     public void cancel(ActionEvent actionEvent) {
-        exit();
+        Game.cancelConfirmation();
     }
 }
