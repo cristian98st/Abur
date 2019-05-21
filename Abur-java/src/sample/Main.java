@@ -291,7 +291,7 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        TableColumn<Game, Void> buyButton1 = new TableColumn<>("Yes");
+        TableColumn<Game, Void> buyButton1 = new TableColumn<>("");
         buyButton1.setPrefWidth(70);
         buyButton1.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
@@ -305,8 +305,6 @@ public class Main extends Application implements Initializable {
     }
 
     private void addButtonTableGames(TableColumn<Game, Void> buyButton1) {
-//        TableColumn<Game, Void> buyButton1 = new TableColumn("Button Column");
-
         Callback<TableColumn<Game, Void>, TableCell<Game, Void>> cellFactory = new Callback<TableColumn<Game, Void>, TableCell<Game, Void>>() {
             @Override
             public TableCell<Game, Void> call(final TableColumn<Game, Void> param) {
@@ -441,19 +439,71 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        TableColumn<Item, JFXButton> buyButton2 = new TableColumn<>();
+        TableColumn<Item, Void> buyButton2 = new TableColumn<>();
         buyButton2.setPrefWidth(70);
         buyButton2.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
-        buyButton2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Item, JFXButton>, ObservableValue<JFXButton>>() {
+        addButtonTableItems(buyButton2);
+
+
+        itemsTable.getColumns().add(itemID);
+        itemsTable.getColumns().add(itemName);
+        itemsTable.getColumns().add(classa);
+        itemsTable.getColumns().add(typeOf);
+        itemsTable.getColumns().add(wear);
+        itemsTable.getColumns().add(rarity);
+        itemsTable.getColumns().add(itemPrice);
+    }
+
+    private void addButtonTableItems(TableColumn<Item, Void> buyButton2) {
+        Callback<TableColumn<Item, Void>, TableCell<Item, Void>> cellFactory = new Callback<TableColumn<Item, Void>, TableCell<Item, Void>>() {
             @Override
-            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<Item, JFXButton> param) {
-                return param.getValue().buyButton;
+            public TableCell<Item, Void> call(final TableColumn<Item, Void> param) {
+                final TableCell<Item, Void> cell = new TableCell<Item, Void>() {
+
+                    private final JFXButton btn = new JFXButton("Buy");
+                    {
+                        btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+                        btn.setOnAction((ActionEvent event) -> {
+
+                            int row = getTableRow().getIndex();
+                            TableColumn col = itemsTable.getColumns().get(1);
+                            Item i = itemsTable.getItems().get(row);
+                            int id_item = Integer.parseInt((String) col.getCellObservableValue(i).getValue());
+                            String result;
+                            try {
+                                result = Item.buyItem(id, id_item);
+                                System.out.println(result);
+                                i.openPopUP(result);
+                                reinit();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
             }
-        });
+        };
 
+        buyButton2.setCellFactory(cellFactory);
 
-        itemsTable.getColumns().setAll(buyButton2, itemID, itemName, classa, typeOf, wear, rarity, itemPrice);
+        itemsTable.getColumns().add(buyButton2);
+
     }
 
     public void marketplace() {

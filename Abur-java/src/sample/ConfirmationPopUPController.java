@@ -2,6 +2,7 @@ package sample;
 
 import com.jfoenix.controls.JFXButton;
 import database.Game;
+import database.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,11 +22,17 @@ public class ConfirmationPopUPController {
     @FXML
     JFXButton btnConfirm, X;
 
-    public void init(String message){
+    private String clasa;
+
+    public void init(String message, String parentClass){
+        clasa = parentClass;
         lblMessage.setText(message);
     }
 
     public void cancel(ActionEvent actionEvent) {
-        Game.cancelConfirmation();
+        if(clasa.equals("game"))
+            Game.cancelConfirmation();
+        else if(clasa.equals("item"))
+            Item.cancelConfirmation();
     }
 }

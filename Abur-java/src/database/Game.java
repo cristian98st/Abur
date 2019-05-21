@@ -44,7 +44,6 @@ public class Game extends RecursiveTreeObject<Game> {
     public StringProperty title = new SimpleStringProperty();
     public StringProperty launch_date = new SimpleStringProperty();
     public StringProperty price = new SimpleStringProperty();
-    public JFXButton buyButton;
 
     public static Stage confirmationStage;
 
@@ -81,7 +80,7 @@ public class Game extends RecursiveTreeObject<Game> {
 
         ConfirmationPopUPController controller =
                 loader.<ConfirmationPopUPController>getController();
-        controller.init(answer);
+        controller.init(answer, "game");
         confirmationStage = stage;
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();

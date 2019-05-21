@@ -10,6 +10,10 @@
     -fx-text-fill: #fff;
 }
 
+.button:pressed{
+    -fx-opacity: 0.5;
+}
+
 .gameOrItem {
     -fx-background-color: #323232;
     -fx-border-color: #252526;
@@ -21,10 +25,6 @@
 
 .gameOrItem:pressed{
     -fx-background-color: #ddd;
-}
-
-.button:pressed{
-    -fx-opacity: 0.5;
 }
 
 .table-view *.scroll-bar *.increment-button,
@@ -46,6 +46,10 @@
     -fx-border-radius:2em;
 }
 
+.table-view .corner {
+    -fx-background-color: #27ff3b;
+}
+
 .table-view .scroll-bar .thumb {
     -fx-background-color:#252526;
     -fx-background-insets: 2, 0, 0;
@@ -56,6 +60,12 @@
 .text-field{
     -fx-background-color: #535353;
     -fx-border-color: #000000;
+}
+
+.rootPane {
+    -fx-border-radius: 1;
+    -fx-border-color: #252526;
+    -fx-border-width: 3;
 }
 
 #background2 {

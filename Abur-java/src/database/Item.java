@@ -2,6 +2,7 @@ package database;
 
 import static java.sql.Types.VARCHAR;
 
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,275 +22,250 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import sample.ConfirmationPopUPController;
 
 /**
  * @author Alex
- *
  */
-public class Item extends RecursiveTreeObject<Item>{
+public class Item extends RecursiveTreeObject<Item> {
 
-	public StringProperty id = new SimpleStringProperty();
-	public StringProperty name = new SimpleStringProperty();
-	public StringProperty pclass = new SimpleStringProperty();
-	public StringProperty type = new SimpleStringProperty();
-	public StringProperty wear = new SimpleStringProperty();
-	public StringProperty rarity = new SimpleStringProperty();
-	public StringProperty price = new SimpleStringProperty();
-	public ObservableValue<JFXButton> buyButton;
+    public StringProperty id = new SimpleStringProperty();
+    public StringProperty name = new SimpleStringProperty();
+    public StringProperty pclass = new SimpleStringProperty();
+    public StringProperty type = new SimpleStringProperty();
+    public StringProperty wear = new SimpleStringProperty();
+    public StringProperty rarity = new SimpleStringProperty();
+    public StringProperty price = new SimpleStringProperty();
 
-	public Item() {
-		this.id.set("-1");
-	}
+    public static Stage confirmationStage;
 
-
-	public Item(String id,String name,String pclass,String type,String wear,String rarity,String price) {
-		this.id.set(id);
-		this.name.set(name);
-		this.pclass.set(pclass);
-		this.type.set(type);
-		this.wear.set(wear);
-		this.rarity.set(rarity);
-		this.price.set(price);
-
-		this.buyButton = new ObservableValue<JFXButton>() {
-			@Override
-			public void addListener(ChangeListener<? super JFXButton> listener) {
-
-			}
-
-			@Override
-			public void removeListener(ChangeListener<? super JFXButton> listener) {
-
-			}
-
-			@Override
-			public JFXButton getValue() {
-				JFXButton button = new JFXButton("Buy");
-				button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
-				return button;
-			}
-
-			@Override
-			public void addListener(InvalidationListener listener) {
-
-			}
-
-			@Override
-			public void removeListener(InvalidationListener listener) {
-
-			}
-		};
-	}
-
-	public Item(String name,String pclass,String type,String wear,String rarity,String price) {
-		this.id.set("-1");
-		this.name.set(name);
-		this.pclass.set(pclass);
-		this.type.set(type);
-		this.wear.set(wear);
-		this.rarity.set(rarity);
-		this.price.set(price);
-
-		this.buyButton = new ObservableValue<JFXButton>() {
-			@Override
-			public void addListener(ChangeListener<? super JFXButton> listener) {
-
-			}
-
-			@Override
-			public void removeListener(ChangeListener<? super JFXButton> listener) {
-
-			}
-
-			@Override
-			public JFXButton getValue() {
-				JFXButton button = new JFXButton("Buy");
-				button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
-				return button;
-			}
-
-			@Override
-			public void addListener(InvalidationListener listener) {
-
-			}
-
-			@Override
-			public void removeListener(InvalidationListener listener) {
-
-			}
-		};
-	}
+    public Item() {
+        this.id.set("-1");
+    }
 
 
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return Integer.valueOf(id.get());
-	}
+    public Item(String id, String name, String pclass, String type, String wear, String rarity, String price) {
+        this.id.set(id);
+        this.name.set(name);
+        this.pclass.set(pclass);
+        this.type.set(type);
+        this.wear.set(wear);
+        this.rarity.set(rarity);
+        this.price.set(price);
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id.set(String.valueOf(id));
-	}
+    public Item(String name, String pclass, String type, String wear, String rarity, String price) {
+        this.id.set("-1");
+        this.name.set(name);
+        this.pclass.set(pclass);
+        this.type.set(type);
+        this.wear.set(wear);
+        this.rarity.set(rarity);
+        this.price.set(price);
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return this.name.get();
-	}
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name.set(name);
-	}
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return Integer.valueOf(id.get());
+    }
 
-	/**
-	 * @return the pclass
-	 */
-	public String getPclass() {
-		return this.pclass.get();
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id.set(String.valueOf(id));
+    }
 
-	/**
-	 * @param pclas the pclass to set
-	 */
-	public void setPclass(String pclas) {
-		this.pclass.set(pclas);
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return this.name.get();
+    }
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return this.type.get();
-	}
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name.set(name);
+    }
 
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type.set(type);
-	}
+    /**
+     * @return the pclass
+     */
+    public String getPclass() {
+        return this.pclass.get();
+    }
 
-	/**
-	 * @return the wear
-	 */
-	public String getWear() {
-		return this.wear.get();
-	}
+    /**
+     * @param pclas the pclass to set
+     */
+    public void setPclass(String pclas) {
+        this.pclass.set(pclas);
+    }
 
-	/**
-	 * @param wear the wear to set
-	 */
-	public void setWear(String wear) {
-		this.wear.set(wear);
-	}
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return this.type.get();
+    }
 
-	/**
-	 * @return the rarity
-	 */
-	public String getRarity() {
-		return this.rarity.get();
-	}
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type.set(type);
+    }
 
-	/**
-	 * @param rarity the rarity to set
-	 */
-	public void setRarity(String rarity) {
-		this.rarity.set(rarity);
-	}
+    /**
+     * @return the wear
+     */
+    public String getWear() {
+        return this.wear.get();
+    }
 
-	/**
-	 * @return the price
-	 */
-	public Float getPrice() {
-		return Float.valueOf(this.price.get());
-	}
+    /**
+     * @param wear the wear to set
+     */
+    public void setWear(String wear) {
+        this.wear.set(wear);
+    }
 
-	/**
-	 * @param price the price to set
-	 */
-	public void setPrice(Float price) {
-		this.price.set(String.valueOf(price));
-	}
+    /**
+     * @return the rarity
+     */
+    public String getRarity() {
+        return this.rarity.get();
+    }
 
-	public ObservableList<Item> get(String col,String name,String col2Order,String order) throws SQLException {
-		Connection con = Database.getConnection();
-		String columns = "id,item_name,typeof,wear,rarity,class,added_at,updated_at";
-		String ord = "asc,desc";
-		ObservableList<Item> list = FXCollections.observableArrayList();
-		Statement pstmt = con.createStatement();
-		ResultSet rez;
-		if(columns.contains(col) && !col.contains(",")) {
-			if(ord.contains(order) && !order.contains(",")) {
-				rez = pstmt.executeQuery("select * from items where "+ col+" like '%"+ name +"%' order by "+col2Order +" "+order);
-			}
-			else
-				rez = pstmt.executeQuery("select * from items where "+ col+" like '%"+ name +"%' ");
-			while(rez.next()) {
-				Item x = new Item(String.valueOf(rez.getInt(1)),rez.getString(2),rez.getString(3),rez.getString(4),rez.getString(5),rez.getString(6),String.valueOf(rez.getInt(7)));
-				list.add(x);
-			}
-		}
-		return list;
-	}
+    /**
+     * @param rarity the rarity to set
+     */
+    public void setRarity(String rarity) {
+        this.rarity.set(rarity);
+    }
 
-	public static String buyItem(int buyerID, int itemID) throws SQLException {
-		Connection con = Database.getConnection();
-		String procedure = "{ call BUY_ITEM(?,?,?)}";
-		CallableStatement cs = con.prepareCall(procedure);
+    /**
+     * @return the price
+     */
+    public Float getPrice() {
+        return Float.valueOf(this.price.get());
+    }
 
-		cs.setInt(1,buyerID);
-		cs.setInt(2, itemID);
-		cs.registerOutParameter(3, VARCHAR);
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(Float price) {
+        this.price.set(String.valueOf(price));
+    }
 
-		cs.execute();
+    public ObservableList<Item> get(String col, String name, String col2Order, String order) throws SQLException {
+        Connection con = Database.getConnection();
+        String columns = "id,item_name,typeof,wear,rarity,class,added_at,updated_at";
+        String ord = "asc,desc";
+        ObservableList<Item> list = FXCollections.observableArrayList();
+        Statement pstmt = con.createStatement();
+        ResultSet rez;
+        if (columns.contains(col) && !col.contains(",")) {
+            if (ord.contains(order) && !order.contains(",")) {
+                rez = pstmt.executeQuery("select * from items where " + col + " like '%" + name + "%' order by " + col2Order + " " + order);
+            } else
+                rez = pstmt.executeQuery("select * from items where " + col + " like '%" + name + "%' ");
+            while (rez.next()) {
+                Item x = new Item(String.valueOf(rez.getInt(1)), rez.getString(2), rez.getString(3), rez.getString(4), rez.getString(5), rez.getString(6), String.valueOf(rez.getInt(7)));
+                list.add(x);
+            }
+        }
+        return list;
+    }
 
-		String result = cs.getString(3);
-		con.close();
+    public static String buyItem(int buyerID, int itemID) {
+        Connection con = Database.getConnection();
+        String procedure = "{ call BUY_ITEM(?,?,?)}";
+        CallableStatement cs = null;
+        try {
+            cs = con.prepareCall(procedure);
 
-		return result;
-	}
 
-	public List<String> getMyItems(int id) throws SQLException {
-		Connection con = Database.getConnection();
-		List<String> items = new ArrayList<>();
-		Statement stms = con.createStatement();
-		ResultSet result = stms.executeQuery("SELECT item_name FROM items JOIN owned_items ON items.id = owned_items.id_item " +
-				"WHERE owned_items.id_owner = " + id );
+            cs.setInt(1, buyerID);
+            cs.setInt(2, itemID);
+            cs.registerOutParameter(3, VARCHAR);
 
-		while(result.next()){
-			items.add(result.getString(1));
-		}
+            cs.execute();
 
-		return items;
-	}
+            String result = cs.getString(3);
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Item already owned.";
+        }
+    }
 
-	public void commit() throws SQLException {
-		Connection con = Database.getConnection();
-		if(this.id.getValue()=="-1") {
-			try (Statement stmt = con.createStatement();
-				 ResultSet rs = stmt.executeQuery("select max(id) from items")){
-				this.id.set(String.valueOf((rs.next() ? rs.getInt(1)+1 : 1)));
-			}
-		}
-		PreparedStatement pstmt = con.prepareStatement("insert into items values(?,?,?,?,?,?,?,sysdate,sysdate)");
-		pstmt.setInt(1, this.getId());
+    public List<String> getMyItems(int id) throws SQLException {
+        Connection con = Database.getConnection();
+        List<String> items = new ArrayList<>();
+        Statement stms = con.createStatement();
+        ResultSet result = stms.executeQuery("SELECT item_name FROM items JOIN owned_items ON items.id = owned_items.id_item " +
+                "WHERE owned_items.id_owner = " + id);
+
+        while (result.next()) {
+            items.add(result.getString(1));
+        }
+
+        return items;
+    }
+
+    public void commit() throws SQLException {
+        Connection con = Database.getConnection();
+        if (this.id.getValue() == "-1") {
+            try (Statement stmt = con.createStatement();
+                 ResultSet rs = stmt.executeQuery("select max(id) from items")) {
+                this.id.set(String.valueOf((rs.next() ? rs.getInt(1) + 1 : 1)));
+            }
+        }
+        PreparedStatement pstmt = con.prepareStatement("insert into items values(?,?,?,?,?,?,?,sysdate,sysdate)");
+        pstmt.setInt(1, this.getId());
 //        System.out.print(this.name.get());
-		System.out.print(this.pclass.get()+'\n');
-		pstmt.setString(2, this.getName());
-		pstmt.setString(3, this.getPclass());
-		pstmt.setString(4, this.type.get());
-		pstmt.setString(5, this.wear.get());
-		pstmt.setString(6, this.rarity.get());
-		pstmt.setFloat(7, this.getPrice());
-		pstmt.executeUpdate();
-	}
+        System.out.print(this.pclass.get() + '\n');
+        pstmt.setString(2, this.getName());
+        pstmt.setString(3, this.getPclass());
+        pstmt.setString(4, this.type.get());
+        pstmt.setString(5, this.wear.get());
+        pstmt.setString(6, this.rarity.get());
+        pstmt.setFloat(7, this.getPrice());
+        pstmt.executeUpdate();
+    }
 
+    public void openPopUP(String answer) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "../sample/ConfirmationPopUP.fxml"
+                )
+        );
+
+        Stage stage = new Stage(StageStyle.DECORATED);
+        Pane custom = loader.load();
+        custom.getStyleClass().add("rootPane");
+        stage.setScene(new Scene(custom));
+
+        ConfirmationPopUPController controller =
+                loader.<ConfirmationPopUPController>getController();
+        controller.init(answer, "item");
+        confirmationStage = stage;
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
+    }
+
+    public static void cancelConfirmation() {
+        confirmationStage.close();
+    }
 }
