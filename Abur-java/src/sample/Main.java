@@ -1,5 +1,6 @@
 
 // Shadow of Love - HG61GZLJE4
+// Rock - 9NCA4XZB1H - 851
 
 package sample;
 
@@ -15,6 +16,7 @@ import com.jfoenix.controls.JFXButton;
 
 import database.Game;
 import database.Item;
+import database.User;
 import database.marketItem;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -54,8 +56,6 @@ public class Main extends Application implements Initializable {
     private Label lblMoney, lblCoins, lblName, lblEmail;
     @FXML
     private GridPane gameGridPane, itemGridPane;
-    @FXML
-    private VBox vBoxBuy;
 
     private String username;
     private static int id;
@@ -146,6 +146,17 @@ public class Main extends Application implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initMarketItems(){
+        ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
+        marketItem market = new marketItem();
+        try {
+            marketItems = market.get("item_name", search3.getText(), "item_name", "asc");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        marketItemTable.setItems(marketItems);
     }
 
     public static void main(String[] args) {
@@ -311,6 +322,7 @@ public class Main extends Application implements Initializable {
                 final TableCell<Game, Void> cell = new TableCell<Game, Void>() {
 
                     private final JFXButton btn = new JFXButton("Buy");
+
                     {
                         btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
                         btn.setOnAction((ActionEvent event) -> {
@@ -462,6 +474,7 @@ public class Main extends Application implements Initializable {
                 final TableCell<Item, Void> cell = new TableCell<Item, Void>() {
 
                     private final JFXButton btn = new JFXButton("Buy");
+
                     {
                         btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
                         btn.setOnAction((ActionEvent event) -> {
@@ -591,18 +604,77 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        TableColumn<marketItem, JFXButton> buyButton3 = new TableColumn<>();
+        TableColumn<marketItem, Void> buyButton3 = new TableColumn<>();
         buyButton3.setPrefWidth(70);
         buyButton3.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
-        buyButton3.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, JFXButton>, ObservableValue<JFXButton>>() {
-            @Override
-            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<marketItem, JFXButton> param) {
-                return param.getValue().buyButton;
-            }
-        });
+        addButtonTableMarketItem(buyButton3);
 
-        marketItemTable.getColumns().setAll(buyButton3, marketPlayer, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
+        marketItemTable.getColumns().add(marketPlayer);
+        marketItemTable.getColumns().add(marketItemName);
+        marketItemTable.getColumns().add(marketClassa);
+        marketItemTable.getColumns().add(marketWear);
+        marketItemTable.getColumns().add(marketRarity);
+        marketItemTable.getColumns().add(marketItemPrice);
+        marketItemTable.getColumns().add(marketExpireDate);
+
+    }
+
+    private void addButtonTableMarketItem(TableColumn<marketItem, Void> buyButton3) {
+        Callback<TableColumn<marketItem, Void>, TableCell<marketItem, Void>> cellFactory = new Callback<TableColumn<marketItem, Void>, TableCell<marketItem, Void>>() {
+            @Override
+            public TableCell<marketItem, Void> call(final TableColumn<marketItem, Void> param) {
+                final TableCell<marketItem, Void> cell = new TableCell<marketItem, Void>() {
+
+                    private final JFXButton btn = new JFXButton("Buy");
+
+                    {
+                        btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+                        btn.setOnAction((ActionEvent event) -> {
+
+                            int row = getTableRow().getIndex();
+                            TableColumn col1 = marketItemTable.getColumns().get(1);
+                            TableColumn col2 = marketItemTable.getColumns().get(2);
+                            marketItem i = marketItemTable.getItems().get(row);
+                            try {
+                                System.out.println((String) col1.getCellObservableValue(i).getValue());
+                                int seller_id = User.fetchUserIDByName((String) col1.getCellObservableValue(i).getValue());
+                                int id_item = marketItem.fetchItemIDByName((String) col2.getCellObservableValue(i).getValue());
+                                String result;
+                                result = marketItem.buyMarketItem(seller_id, id, id_item);
+                                System.out.println(result);
+                                i.openPopUP(result);
+                                reinit();
+                                if(result.equals("Done"))
+                                    initMarketItems();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        buyButton3.setCellFactory(cellFactory);
+
+        marketItemTable.getColumns().add(buyButton3);
+
     }
 
     public void sellingItems() {

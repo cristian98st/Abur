@@ -1,9 +1,7 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.IOException;
+import java.sql.*;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -15,6 +13,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import sample.ConfirmationPopUPController;
+
+import static java.sql.Types.VARCHAR;
 
 public class marketItem extends RecursiveTreeObject<marketItem> {
     public StringProperty player;
@@ -26,7 +32,7 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
     public StringProperty expireDate;
     //extra
     public ObservableValue<JFXButton> btnDelete;
-    public ObservableValue<JFXButton> buyButton;
+    static Stage confirmationStage;
 
     public marketItem() {
     }
@@ -54,35 +60,6 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
             @Override
             public JFXButton getValue() {
                 JFXButton button = new JFXButton("X");
-                button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
-                return button;
-            }
-
-            @Override
-            public void addListener(InvalidationListener listener) {
-
-            }
-
-            @Override
-            public void removeListener(InvalidationListener listener) {
-
-            }
-        };
-
-        this.buyButton = new ObservableValue<JFXButton>() {
-            @Override
-            public void addListener(ChangeListener<? super JFXButton> listener) {
-
-            }
-
-            @Override
-            public void removeListener(ChangeListener<? super JFXButton> listener) {
-
-            }
-
-            @Override
-            public JFXButton getValue() {
-                JFXButton button = new JFXButton("Buy");
                 button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
                 return button;
             }
@@ -138,6 +115,62 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
             list.add(x);
         }
         return list;
+    }
+
+    public static int fetchItemIDByName(String name) throws SQLException {
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT id from items where item_name = '" + name + "'");
+
+        result.next();
+        return result.getInt(1);
+    }
+
+    public static String buyMarketItem(int sellerID, int buyerID, int itemID){
+        Connection con = Database.getConnection();
+        String procedure = "{ call DO_AUCTION_TRANZACTION(?,?,?,?)}";
+        CallableStatement cs = null;
+        try {
+            cs = con.prepareCall(procedure);
+
+
+            cs.setInt(1, sellerID);
+            cs.setInt(2, buyerID);
+            cs.setInt(3, itemID);
+            cs.registerOutParameter(4, VARCHAR);
+
+            cs.execute();
+
+            String result = cs.getString(4);
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Item already owned.";
+        }
+    }
+
+    public void openPopUP(String answer) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "../sample/ConfirmationPopUP.fxml"
+                )
+        );
+
+        Stage stage = new Stage(StageStyle.DECORATED);
+        Pane custom = loader.load();
+        custom.getStyleClass().add("rootPane");
+        stage.setScene(new Scene(custom));
+
+        ConfirmationPopUPController controller =
+                loader.<ConfirmationPopUPController>getController();
+        controller.init(answer, "marketItem");
+        confirmationStage = stage;
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
+    }
+
+    public static void cancelConfirmation() {
+        confirmationStage.close();
     }
 
     @Override

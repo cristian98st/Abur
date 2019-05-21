@@ -3,6 +3,7 @@ package sample;
 import com.jfoenix.controls.JFXButton;
 import database.Game;
 import database.Item;
+import database.marketItem;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,5 +35,7 @@ public class ConfirmationPopUPController {
             Game.cancelConfirmation();
         else if(clasa.equals("item"))
             Item.cancelConfirmation();
+        else if(clasa.equals("marketItem"))
+            marketItem.cancelConfirmation();
     }
 }
