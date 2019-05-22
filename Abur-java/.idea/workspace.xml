@@ -8,11 +8,6 @@
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Abur/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Abur/sample/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database/marketItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/marketItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/ConfirmationPopUPController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/ConfirmationPopUPController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -69,7 +64,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="17">
@@ -132,15 +127,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/resources/dark-theme.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1139">
-              <caret line="67" column="23" selection-start-line="67" selection-start-column="23" selection-end-line="67" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/Login.fxml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="595">
@@ -180,7 +166,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/database/User.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1547">
@@ -190,6 +176,16 @@
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/Main.fxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="472">
+              <caret line="133" column="60" selection-start-line="133" selection-start-column="60" selection-end-line="133" selection-end-column="60" />
+            </state>
+          </provider>
+          <provider editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -349,7 +345,7 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558470414155" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558470439500" />
     <property name="dynamic.classpath" value="false" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="full.screen.before.presentation.mode" value="false" />
@@ -483,7 +479,7 @@
       <workItem from="1558374832059" duration="8032000" />
       <workItem from="1558416301761" duration="12703000" />
       <workItem from="1558431978209" duration="18925000" />
-      <workItem from="1558466366709" duration="3899000" />
+      <workItem from="1558466366709" duration="3983000" />
     </task>
     <task id="LOCAL-00001" summary="My selling items added.">
       <created>1558280083991</created>
@@ -562,11 +558,18 @@
       <option name="project" value="LOCAL" />
       <updated>1558465823830</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Acum poti cumpara iteme din market *Woop woop*.">
+      <created>1558470453014</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1558470453014</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="116119000" />
+    <option name="totallyTimeSpent" value="116203000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -579,13 +582,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="Capture Tool" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="4" sideWeight="0.6703755" visible="true" weight="0.26912752" />
+      <window_info active="true" content_ui="combo" id="Project" order="4" sideWeight="0.6703755" visible="true" weight="0.26912752" />
       <window_info id="Structure" order="5" weight="0.25" />
       <window_info id="Favorites" order="6" />
       <window_info anchor="bottom" id="Terminal" order="0" />
@@ -687,14 +689,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/Main.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="133" column="60" selection-start-line="133" selection-start-column="60" selection-end-line="133" selection-end-column="60" />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/dark-theme.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1139">
@@ -775,6 +769,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/database/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1547">
+          <caret line="113" column="65" selection-start-line="113" selection-start-column="65" selection-end-line="113" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/Main.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="472">
+          <caret line="133" column="60" selection-start-line="133" selection-start-column="60" selection-end-line="133" selection-end-column="60" />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -794,16 +806,6 @@
             <element signature="e#12548#16676#0" />
             <element signature="e#16682#18940#0" />
             <element signature="e#30941#30942#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/database/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1547">
-          <caret line="113" column="65" selection-start-line="113" selection-start-column="65" selection-end-line="113" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
