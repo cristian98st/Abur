@@ -1,6 +1,7 @@
 
 // Shadow of Love - HG61GZLJE4
 // Rock - 9NCA4XZB1H - 851
+// Luvitus - DGYLV2A9PW
 
 package sample;
 
@@ -157,6 +158,17 @@ public class Main extends Application implements Initializable {
             e.printStackTrace();
         }
         marketItemTable.setItems(marketItems);
+    }
+
+    private void initSellingItems() {
+        ObservableList<marketItem> sellingItems = FXCollections.observableArrayList();
+        marketItem market = new marketItem();
+        try {
+            sellingItems = market.getMyIyems(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        sellingTable.setItems(sellingItems);
     }
 
     public static void main(String[] args) {
@@ -752,19 +764,70 @@ public class Main extends Application implements Initializable {
             }
         });
 
-        TableColumn<marketItem, JFXButton> deleteButton = new TableColumn<>("");
+        TableColumn<marketItem, Void> deleteButton = new TableColumn<>("");
         deleteButton.setPrefWidth(50);
         deleteButton.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
 
-        deleteButton.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, JFXButton>, ObservableValue<JFXButton>>() {
+        addButtonTableSellingItem(deleteButton);
+
+        sellingTable.getColumns().add(marketItemName);
+        sellingTable.getColumns().add(marketClassa);
+        sellingTable.getColumns().add(marketWear);
+        sellingTable.getColumns().add(marketRarity);
+        sellingTable.getColumns().add(marketItemPrice);
+        sellingTable.getColumns().add(marketExpireDate);
+    }
+
+    private void addButtonTableSellingItem(TableColumn<marketItem, Void> deleteButton) {
+        Callback<TableColumn<marketItem, Void>, TableCell<marketItem, Void>> cellFactory = new Callback<TableColumn<marketItem, Void>, TableCell<marketItem, Void>>() {
             @Override
-            public ObservableValue<JFXButton> call(TableColumn.CellDataFeatures<marketItem, JFXButton> param) {
-                return param.getValue().btnDelete;
+            public TableCell<marketItem, Void> call(final TableColumn<marketItem, Void> param) {
+                final TableCell<marketItem, Void> cell = new TableCell<marketItem, Void>() {
+
+                    private final JFXButton btn = new JFXButton("X");
+                    {
+                        btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
+                        btn.setOnAction((ActionEvent event) -> {
+
+                            int row = getTableRow().getIndex();
+                            TableColumn col1 = sellingTable.getColumns().get(1);
+                            marketItem i = sellingTable.getItems().get(row);
+                            try {
+                                int item_id = marketItem.fetchItemIDByName((String) col1.getCellObservableValue(i).getValue());
+                                String result;
+                                result = marketItem.deleteSellingItem(id, item_id);
+                                i.openPopUP(result);
+                                if(result.equals("Done")) {
+                                    initSellingItems();
+                                    initMyItems();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
             }
-        });
+        };
 
+        deleteButton.setCellFactory(cellFactory);
 
-        sellingTable.getColumns().setAll(deleteButton, marketItemName, marketClassa, marketWear, marketRarity, marketItemPrice, marketExpireDate);
+        sellingTable.getColumns().add(deleteButton);
 
     }
 
