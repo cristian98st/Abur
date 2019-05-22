@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="background2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="716.0" prefWidth="1136.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Main">
+<AnchorPane fx:id="background2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1133.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Main">
    <children>
       <Label layoutX="507.0" layoutY="14.0" text="ABUR">
          <font>
@@ -101,6 +101,7 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                     </GridPane>
+                                    <JFXPopup fx:id="infoPopUP" layoutX="1004.0" layoutY="608.0" prefHeight="0.0" prefWidth="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane fx:id="panelSellingItems" prefHeight="607.0" prefWidth="911.0" visible="false">

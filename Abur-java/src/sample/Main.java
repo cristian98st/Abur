@@ -7,6 +7,7 @@ package sample;
 
 import static javafx.application.Platform.exit;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,6 +32,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -63,6 +65,8 @@ public class Main extends Application implements Initializable {
     private GridPane gameGridPane, itemGridPane;
     @FXML
     private JFXPopup itemPopUP = new JFXPopup();
+    @FXML
+    private JFXPopup infoPopUP = new JFXPopup();
 
     private String username, sellingItemName;
     private static int id;
@@ -71,7 +75,14 @@ public class Main extends Application implements Initializable {
     private int coins;
     public static BooleanProperty sellPopUPOpen = new SimpleBooleanProperty();
 
+    Label lbblID = new Label(), lbblName = new Label(), lbblClass = new Label(), lbblType = new Label();
+    Label lbblWear = new Label(), lbblRarity = new Label(), lbblPrice = new Label();
+
     static Stage stage = new Stage();
+    private VBox vBox = new VBox();
+    private double positionX;
+    private double positionY;
+    private Scene mainScene;
 
     public static void closeStage() {
         stage.close();
@@ -87,10 +98,9 @@ public class Main extends Application implements Initializable {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
         stage = primaryStage;
-
     }
 
-    public void init(int id, String username, String pass, String mail, int coins) {
+    public void init(int id, String username, String pass, String mail, int coins, Scene scene) {
         this.id = id;
         this.username = username;
         this.pass = pass;
@@ -100,6 +110,7 @@ public class Main extends Application implements Initializable {
         lblCoins.setText("Coins: " + coins + "$");
         lblName.setText("Name: " + username);
         lblEmail.setText("Email: " + mail);
+        this.mainScene = scene;
 
         initMyGames();
         initMyItems();
@@ -142,6 +153,10 @@ public class Main extends Application implements Initializable {
             List<String> items = item.getMyItems(id);
             int j = 0;
             itemGridPane.getChildren().clear();
+            itemGridPane.setOnMouseMoved(e -> {
+                positionX = e.getX();
+                positionY = e.getY();
+            });
             for (String i : items) {
                 JFXButton button = new JFXButton(i);
                 button.getStyleClass().add("gameOrItem");
@@ -149,6 +164,27 @@ public class Main extends Application implements Initializable {
                 button.setOnMouseClicked(event -> {
                     showPopUP(event.getSceneX(), event.getSceneY(), i);
                 });
+                button.setOnMouseEntered(e -> {
+                    boolean isStationary = true;
+                    long t = System.currentTimeMillis();
+                    long end = t + 800;
+                    double xPosition = e.getX() - positionX;
+                    double yPosition = e.getY() - positionY;
+                    while (System.currentTimeMillis() < end) {
+                        if (xPosition != e.getX() - positionX || yPosition != e.getY() - positionY) {
+                            isStationary = false;
+                            break;
+                        }
+                    }
+                    if (isStationary == true) {
+                        sellingItemName = i;
+                        showInfoPopUP(e.getSceneX(), e.getSceneY(), i);
+                    }
+                });
+                button.setOnMouseExited(e -> {
+                    cancelInfoPopUP();
+                });
+
                 itemGridPane.addColumn(j, button);
                 j++;
                 if (j == 4)
@@ -266,7 +302,7 @@ public class Main extends Application implements Initializable {
         sellPopUPOpen.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue == false) {
+                if (newValue == false) {
                     initMyItems();
                     cancelPopUP();
                 }
@@ -287,9 +323,19 @@ public class Main extends Application implements Initializable {
         // My selling items
         sellingItems();
 
-        // My games popup
+        // My items popup
         initPopUP();
+        initInfoPopUP();
+    }
 
+    private void initInfoPopUP() {
+        vBox = new VBox(lbblID, lbblName, lbblClass, lbblType, lbblWear, lbblRarity, lbblPrice);
+
+        vBox.setPrefSize(250, 200);
+        vBox.setStyle("-fx-background-color: #323232; -fx-border-width: 2px; -fx-border-color: #252526");
+        vBox.setPadding(new Insets(10));
+        infoPopUP.setContent(vBox);
+        infoPopUP.setSource(itemGridPane);
     }
 
     private void initPopUP() {
@@ -881,12 +927,41 @@ public class Main extends Application implements Initializable {
         return id;
     }
 
-    public void showPopUP(double x, double y, String g) {
+    public void showPopUP(double x, double y, String i) {
         itemPopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT, x - 290, y - 90);
-        sellingItemName = g;
+        sellingItemName = i;
     }
 
     public void cancelPopUP() {
         itemPopUP.close();
     }
+
+    private void showInfoPopUP(double x, double y, String i) {
+        sellingItemName = i;
+        Item item = new Item();
+        try {
+            item.fetchItemByName(sellingItemName);
+            lbblID.setText("ID: " + item.getId());
+            lbblName.setText("Name: " + item.getName());
+            lbblClass.setText("Class: " + item.getPclass());
+            lbblType.setText("Type: " + item.getType());
+            lbblWear.setText("Wear: " + item.getWear());
+            lbblRarity.setText("Rarity: " + item.getRarity());
+            lbblPrice.setText("Official Price: " + item.getPrice());
+
+            vBox.getChildren().clear();
+            vBox.getChildren().setAll(lbblID, lbblName, lbblClass, lbblType, lbblWear, lbblRarity, lbblPrice);
+
+            infoPopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, x - 1850, y - 700);
+            infoPopUP.setPrefSize(0, 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void cancelInfoPopUP() {
+        infoPopUP.close();
+//        infoPopUP.
+    }
+
 }
