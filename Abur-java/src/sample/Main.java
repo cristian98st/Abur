@@ -15,11 +15,15 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 
+import com.jfoenix.controls.JFXPopup;
 import database.Game;
 import database.Item;
 import database.User;
 import database.marketItem;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,12 +61,15 @@ public class Main extends Application implements Initializable {
     private Label lblMoney, lblCoins, lblName, lblEmail;
     @FXML
     private GridPane gameGridPane, itemGridPane;
+    @FXML
+    private JFXPopup itemPopUP = new JFXPopup();
 
-    private String username;
+    private String username, sellingItemName;
     private static int id;
     private String pass;
     private String mail;
     private int coins;
+    public static BooleanProperty sellPopUPOpen = new SimpleBooleanProperty();
 
     static Stage stage = new Stage();
 
@@ -139,6 +146,9 @@ public class Main extends Application implements Initializable {
                 JFXButton button = new JFXButton(i);
                 button.getStyleClass().add("gameOrItem");
                 button.setPrefSize(200, 200);
+                button.setOnMouseClicked(event -> {
+                    showPopUP(event.getSceneX(), event.getSceneY(), i);
+                });
                 itemGridPane.addColumn(j, button);
                 j++;
                 if (j == 4)
@@ -149,7 +159,7 @@ public class Main extends Application implements Initializable {
         }
     }
 
-    private void initMarketItems(){
+    private void initMarketItems() {
         ObservableList<marketItem> marketItems = FXCollections.observableArrayList();
         marketItem market = new marketItem();
         try {
@@ -253,6 +263,18 @@ public class Main extends Application implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
+        sellPopUPOpen.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue == false) {
+                    initMyItems();
+                    cancelPopUP();
+                }
+            }
+        });
+
+        itemGridPane.setOnMouseClicked(e -> cancelPopUP());
+
         // Games
         games();
 
@@ -264,6 +286,29 @@ public class Main extends Application implements Initializable {
 
         // My selling items
         sellingItems();
+
+        // My games popup
+        initPopUP();
+
+    }
+
+    private void initPopUP() {
+        JFXButton gameSellButton = new JFXButton("Sell");
+        gameSellButton.setOnMouseClicked(e -> {
+            try {
+                Item item = new Item();
+                item.fetchItemByName(sellingItemName);
+                item.openSellPopUP(id, item.getName(), item.getPclass(), item.getType(), item.getWear(), item.getRarity());
+                sellPopUPOpen.setValue(true);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+        VBox vBox1 = new VBox(gameSellButton);
+        itemPopUP.setContent(vBox1);
+        itemPopUP.setSource(itemGridPane);
     }
 
     public void games() {
@@ -657,7 +702,7 @@ public class Main extends Application implements Initializable {
                                 System.out.println(result);
                                 i.openPopUP(result);
                                 reinit();
-                                if(result.equals("Done"))
+                                if (result.equals("Done"))
                                     initMarketItems();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -785,6 +830,7 @@ public class Main extends Application implements Initializable {
                 final TableCell<marketItem, Void> cell = new TableCell<marketItem, Void>() {
 
                     private final JFXButton btn = new JFXButton("X");
+
                     {
                         btn.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
                         btn.setOnAction((ActionEvent event) -> {
@@ -797,7 +843,7 @@ public class Main extends Application implements Initializable {
                                 String result;
                                 result = marketItem.deleteSellingItem(id, item_id);
                                 i.openPopUP(result);
-                                if(result.equals("Done")) {
+                                if (result.equals("Done")) {
                                     initSellingItems();
                                     initMyItems();
                                 }
@@ -833,5 +879,14 @@ public class Main extends Application implements Initializable {
 
     public static int getID() {
         return id;
+    }
+
+    public void showPopUP(double x, double y, String g) {
+        itemPopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT, x - 290, y - 90);
+        sellingItemName = g;
+    }
+
+    public void cancelPopUP() {
+        itemPopUP.close();
     }
 }

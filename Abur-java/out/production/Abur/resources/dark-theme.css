@@ -47,7 +47,7 @@
 }
 
 .table-view .corner {
-    -fx-background-color: #27ff3b;
+    -fx-background-color: #323232;
 }
 
 .table-view .scroll-bar .thumb {
@@ -55,6 +55,11 @@
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;
 
+}
+
+
+#error {
+    -fx-text-fill: #8f2300;
 }
 
 .text-field{

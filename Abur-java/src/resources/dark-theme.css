@@ -57,6 +57,11 @@
 
 }
 
+
+#error {
+    -fx-text-fill: #8f2300;
+}
+
 .text-field{
     -fx-background-color: #535353;
     -fx-border-color: #000000;

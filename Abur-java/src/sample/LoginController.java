@@ -63,6 +63,7 @@ public class LoginController {
             primaryStage.show();
             stage = primaryStage;
             Main.closeStage();
+
         } else {
             lblStatus.setText("Login Failed");
         }
