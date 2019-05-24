@@ -7,6 +7,16 @@ added_at date
 )
 /
 
+drop table marketprice_history;
+create table marketprice_history(
+item_id int not null,
+item_price number(5,2) not null,
+modified_at date,
+primary key(item_id, item_price)
+)
+
+/
+
 CREATE OR REPLACE PROCEDURE create_account
   (username in varchar2,pass in varchar2,email in varchar2,coins in number)
   IS
@@ -41,84 +51,8 @@ create or replace procedure create_auction
   dbms_output.put_line('DONE');
   END;
   /
-  
-    create or replace trigger updated_at_accounts
-    after update of username,pass,email,coins on accounts
-    begin
-    update accounts
-    set updated_at = sysdate;
-    end;
-    /
 
-  create or replace trigger price_change
-    after update or insert of price on games
-    for each row
-    declare
-    new_id int := 0;
-    begin
-    select max(id) into new_id from changes;
-    if new_id = NULL then
-      new_id:=0;
-    end if;
-    insert into changes values(new_id+1,:NEW.id,:NEW.price,sysdate);
-    end;
-    /
-    
-  create or replace trigger updated_at_items
-    after update of item_name,class,typeof,wear,rarity,price on items
-    begin
-    update items
-    set updated_at = sysdate;
-    end;
-    /
-    
-  create or replace trigger updated_at_games
-    after update of title,price,launch_date on games
-    begin
-    update games
-    set updated_at = sysdate;
-    end;
-    /
-    
-  create or replace trigger updated_at_specific_items
-    after update of id_game,id_item on specific_items
-    begin
-    update specific_items
-    set updated_at = sysdate;
-    end;
-    /
-    
-  create or replace trigger updated_at_owned_items
-    after update of id_owner,id_item on owned_items
-    begin
-    update owned_items
-    set updated_at = sysdate;
-    end;
-    /
-    
-     create or replace trigger updated_at_auction
-    after update of id_gamer,id_item,price,exp_date on auction
-    begin
-    update auction
-    set updated_at = sysdate;
-    end;
-    /
-  
-  create or replace trigger password_alphanumeric
-    before update of pass on accounts
-    for each row
-    declare
-    wrong_pass EXCEPTION;
-    old_pass VARCHAR2(50) := '';
-    begin
-    dbms_output.put_line('Password is ' || :NEW.pass);
-    old_pass := :NEW.pass;
-      if old_pass = lower(old_pass) or length(old_pass)<6 or old_pass = upper(old_pass) or old_pass = translate(old_pass,'0123456789','') then
-        rollback;
-        dbms_output.put_line('Wrong type of password');
-        end if;
-    end;
-    /
+
 CREATE OR REPLACE PROCEDURE DO_AUCTION_TRANZACTION 
 (
   SELLER_ID IN NUMBER
@@ -215,3 +149,90 @@ BEGIN
   INSERT INTO owned_items Values(SELLER_ID, ITEM_ID, sysdate, sysdate);
   RESULT := 'Done';
 END ELIMINATE_FROM_AUCTION;
+
+/
+  
+    create or replace trigger updated_at_accounts
+    after update of username,pass,email,coins on accounts
+    begin
+    update accounts
+    set updated_at = sysdate;
+    end;
+    /
+
+  create or replace trigger price_change
+    after update or insert of price on games
+    for each row
+    declare
+    new_id int := 0;
+    begin
+    select max(id) into new_id from changes;
+    if new_id = NULL then
+      new_id:=0;
+    end if;
+    insert into changes values(new_id+1,:NEW.id,:NEW.price,sysdate);
+    end;
+    /
+    
+  create or replace trigger updated_at_items
+    after update of item_name,class,typeof,wear,rarity,price on items
+    begin
+    update items
+    set updated_at = sysdate;
+    end;
+    /
+    
+  create or replace trigger updated_at_games
+    after update of title,price,launch_date on games
+    begin
+    update games
+    set updated_at = sysdate;
+    end;
+    /
+    
+  create or replace trigger updated_at_specific_items
+    after update of id_game,id_item on specific_items
+    begin
+    update specific_items
+    set updated_at = sysdate;
+    end;
+    /
+    
+  create or replace trigger updated_at_owned_items
+    after update of id_owner,id_item on owned_items
+    begin
+    update owned_items
+    set updated_at = sysdate;
+    end;
+    /
+    
+     create or replace trigger updated_at_auction
+    after update of id_gamer,id_item,price,exp_date on auction
+    begin
+    update auction
+    set updated_at = sysdate;
+    end;
+    /
+  
+  create or replace trigger password_alphanumeric
+    before update of pass on accounts
+    for each row
+    declare
+    wrong_pass EXCEPTION;
+    old_pass VARCHAR2(50) := '';
+    begin
+    dbms_output.put_line('Password is ' || :NEW.pass);
+    old_pass := :NEW.pass;
+      if old_pass = lower(old_pass) or length(old_pass)<6 or old_pass = upper(old_pass) or old_pass = translate(old_pass,'0123456789','') then
+        rollback;
+        dbms_output.put_line('Wrong type of password');
+        end if;
+    end;
+    /
+
+create or replace trigger item_added_to_market
+    after insert on auction
+    for each row
+    begin
+    insert into MARKETPRICE_HISTORY VALUES(:NEW.id_item, :NEW.price, sysdate);
+end;
