@@ -7,7 +7,6 @@ package sample;
 
 import static javafx.application.Platform.exit;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -67,8 +66,10 @@ public class Main extends Application implements Initializable {
     private JFXPopup itemPopUP = new JFXPopup();
     @FXML
     private JFXPopup infoPopUP = new JFXPopup();
+    @FXML
+    private JFXPopup gameInfoPopUP = new JFXPopup();
 
-    private String username, sellingItemName;
+    private String username, sellingItemName, sellingGameName;
     private static int id;
     private String pass;
     private String mail;
@@ -83,6 +84,7 @@ public class Main extends Application implements Initializable {
     private double positionX;
     private double positionY;
     private Scene mainScene;
+    private VBox vBox1;
 
     public static void closeStage() {
         stage.close();
@@ -133,10 +135,36 @@ public class Main extends Application implements Initializable {
             List<String> games = game.getMyGames(id);
             int j = 0;
             gameGridPane.getChildren().clear();
+            gameGridPane.setOnMouseMoved(e -> {
+                if(gameGridPane.isVisible()) {
+                    positionX = e.getX();
+                    positionY = e.getY();
+                }
+            });
             for (String g : games) {
                 JFXButton button = new JFXButton(g);
                 button.getStyleClass().add("gameOrItem");
                 button.setPrefSize(200, 200);
+                button.setOnMouseEntered(e -> {
+                    boolean isStationary = true;
+                    long t = System.currentTimeMillis();
+                    long end = t + 800;
+                    double xPosition = e.getX() - positionX;
+                    double yPosition = e.getY() - positionY;
+                    while (System.currentTimeMillis() < end) {
+                        if (xPosition != e.getX() - positionX || yPosition != e.getY() - positionY) {
+                            isStationary = false;
+                            break;
+                        }
+                    }
+                    if (isStationary == true) {
+                        sellingGameName = g;
+                        showGameInfoPopUP(e.getSceneX(), e.getSceneY(), g);
+                    }
+                });
+                button.setOnMouseExited(e -> {
+                    cancelGameInfoPopUP();
+                });
                 gameGridPane.addColumn(j, button);
                 j++;
                 if (j == 4)
@@ -154,8 +182,10 @@ public class Main extends Application implements Initializable {
             int j = 0;
             itemGridPane.getChildren().clear();
             itemGridPane.setOnMouseMoved(e -> {
-                positionX = e.getX();
-                positionY = e.getY();
+                if(itemGridPane.isVisible()) {
+                    positionX = e.getX();
+                    positionY = e.getY();
+                }
             });
             for (String i : items) {
                 JFXButton button = new JFXButton(i);
@@ -325,10 +355,11 @@ public class Main extends Application implements Initializable {
 
         // My items popup
         initPopUP();
-        initInfoPopUP();
+        initGamePopUP();
+        initItemPopUP();
     }
 
-    private void initInfoPopUP() {
+    private void initItemPopUP() {
         vBox = new VBox(lbblID, lbblName, lbblClass, lbblType, lbblWear, lbblRarity, lbblPrice);
 
         vBox.setPrefSize(250, 200);
@@ -336,6 +367,17 @@ public class Main extends Application implements Initializable {
         vBox.setPadding(new Insets(10));
         infoPopUP.setContent(vBox);
         infoPopUP.setSource(itemGridPane);
+    }
+
+
+    private void initGamePopUP() {
+        vBox1 = new VBox(lbblID, lbblName, lbblClass, lbblType, lbblWear, lbblRarity, lbblPrice);
+
+        vBox1.setPrefSize(250, 200);
+        vBox1.setStyle("-fx-background-color: #323232; -fx-border-width: 2px; -fx-border-color: #252526");
+        vBox1.setPadding(new Insets(10));
+        gameInfoPopUP.setContent(vBox1);
+        gameInfoPopUP.setSource(itemGridPane);
     }
 
     private void initPopUP() {
@@ -437,7 +479,6 @@ public class Main extends Application implements Initializable {
                             String result;
                             try {
                                 result = Game.buyGame(id, id_game);
-                                System.out.println(result);
                                 g.openPopUP(result);
                                 reinit();
                             } catch (IOException e) {
@@ -589,7 +630,6 @@ public class Main extends Application implements Initializable {
                             String result;
                             try {
                                 result = Item.buyItem(id, id_item);
-                                System.out.println(result);
                                 i.openPopUP(result);
                                 reinit();
                             } catch (IOException e) {
@@ -655,7 +695,7 @@ public class Main extends Application implements Initializable {
         marketClassa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().itemPrice;
+                return param.getValue().classa;
             }
         });
 
@@ -740,12 +780,10 @@ public class Main extends Application implements Initializable {
                             TableColumn col2 = marketItemTable.getColumns().get(2);
                             marketItem i = marketItemTable.getItems().get(row);
                             try {
-                                System.out.println((String) col1.getCellObservableValue(i).getValue());
                                 int seller_id = User.fetchUserIDByName((String) col1.getCellObservableValue(i).getValue());
                                 int id_item = marketItem.fetchItemIDByName((String) col2.getCellObservableValue(i).getValue());
                                 String result;
                                 result = marketItem.buyMarketItem(seller_id, id, id_item);
-                                System.out.println(result);
                                 i.openPopUP(result);
                                 reinit();
                                 if (result.equals("Done"))
@@ -959,9 +997,34 @@ public class Main extends Application implements Initializable {
         }
     }
 
+    private void showGameInfoPopUP(double x, double y, String g) {
+        sellingGameName = g;
+        Game game = new Game();
+
+        try{
+            game.fetchGameByName(sellingGameName);
+            lbblID.setText("ID: " + game.getId());
+            lbblName.setText("Name: " + game.getTitle());
+            lbblRarity.setText("Launch date: " + game.getDate());
+            lbblPrice.setText("Official Price: " + game.getPrice());
+
+            vBox1.getChildren().clear();
+            vBox1.getChildren().setAll(lbblID, lbblName, lbblRarity, lbblPrice);
+
+            gameInfoPopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, x-1850, y-700);
+            gameInfoPopUP.setPrefSize(0,0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void cancelInfoPopUP() {
         infoPopUP.close();
-//        infoPopUP.
+    }
+
+    public void cancelGameInfoPopUP() {
+        gameInfoPopUP.close();
     }
 
 }

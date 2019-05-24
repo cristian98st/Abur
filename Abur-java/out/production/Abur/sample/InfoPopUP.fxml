@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="background" prefHeight="400.0" prefWidth="338.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.InfoPopUPController">
+   <children>
+      <Label fx:id="lblID" layoutX="45.0" layoutY="44.0" prefHeight="21.0" prefWidth="279.0" text="ID: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblName" layoutX="45.0" layoutY="91.0" prefHeight="21.0" prefWidth="279.0" text="Name: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblClass" layoutX="45.0" layoutY="138.0" prefHeight="21.0" prefWidth="279.0" text="Class: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblType" layoutX="45.0" layoutY="185.0" prefHeight="21.0" prefWidth="279.0" text="Type: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblPrice" layoutX="45.0" layoutY="326.0" prefHeight="21.0" prefWidth="279.0" text="Official Price: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblRarity" layoutX="45.0" layoutY="279.0" prefHeight="21.0" prefWidth="279.0" text="Rarity: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblWear" layoutX="45.0" layoutY="232.0" prefHeight="21.0" prefWidth="279.0" text="Wear: ">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

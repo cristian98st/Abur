@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="Abur.jnlp">
+  <information>
+    <title>Abur</title>
+    <vendor>Unknown</vendor>
+    <description>Abur</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="Abur.jar" size="75282" download="eager" />
+    <jar href="jfoenix.jar" size="2211776" download="eager" />
+    <jar href="ojdbc6.jar" size="3389454" download="eager" />
+    <jar href="ojdbc7.jar" size="3397734" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="600" height="400" main-class="sample.Main"  name="Abur" />
+  <update check="background"/>
+</jnlp>
