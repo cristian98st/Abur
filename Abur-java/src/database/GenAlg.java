@@ -1,11 +1,9 @@
-/**
- * 
- */
 package database;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,18 +51,21 @@ public class GenAlg {
 	public void getDatesAndValues() throws SQLException{
 		Connection con = Database.getConnection();
         Statement stms = con.createStatement();
-        ResultSet result = stms.executeQuery("SELECT max(added_at) - min(added_at) FROM changes");
+        ResultSet result = stms.executeQuery("SELECT max(added_at) - min(added_at) FROM changes where game_id = " + this.game_id);
         result.next();
         this.days = result.getFloat(1);
-        result = stms.executeQuery("SELECT min(added_at) FROM changes");
+        result = stms.executeQuery("SELECT min(added_at) FROM changes where game_id = " + this.game_id );
         result.next();
         this.start_date = result.getString(1);
-        System.out.print(2*this.days/10);
         int i=0;
+        DecimalFormat d= new DecimalFormat("0.00");
+        String sql;
         for(i=1;i<11;i++) {
-        	result = stms.executeQuery("SELECT price FROM changes having max(added_date)<to_date(" + this.start_date + ",'yyyy-mm-dd') + " + i*this.days/10);
+        	sql="SELECT * FROM changes where game_id = " + this.game_id + "and added_at<(to_date('" + this.start_date.substring(0, this.start_date.indexOf(' ')) + "','yyyy-mm-dd') + " + d.format(this.days/10*i)+") order by added_at desc";
+        	System.out.print(sql);
+        	result = stms.executeQuery(sql);
             result.next();
-            values.add(result.getFloat(1));
+            values.add(result.getFloat(2));
         }
 	}
 	
