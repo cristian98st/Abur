@@ -186,3 +186,32 @@ BEGIN
     RESULT := 'Done';
   END IF;
 END BUY_ITEM;
+
+/
+
+create or replace PROCEDURE SELL_ITEM 
+(
+  SELLER_ID IN NUMBER 
+, ITEM_ID IN NUMBER 
+, PRICE IN NUMBER
+, RESULT OUT VARCHAR2
+) AS 
+BEGIN
+  INSERT INTO auction VALUES (SELLER_ID, ITEM_ID, PRICE, sysdate + 30, sysdate, sysdate);
+  DELETE FROM owned_items WHERE id_owner = seller_id and ITEM_ID = ID_ITEM;
+  RESULT := 'Item added to auction.';
+END SELL_ITEM;
+
+/
+
+create or replace PROCEDURE ELIMINATE_FROM_AUCTION 
+(
+  SELLER_ID IN NUMBER 
+, ITEM_ID IN NUMBER 
+, RESULT OUT VARCHAR2
+) AS 
+BEGIN
+  DELETE FROM auction WHERE ID_GAMER = SELLER_ID AND ITEM_ID = ID_ITEM;
+  INSERT INTO owned_items Values(SELLER_ID, ITEM_ID, sysdate, sysdate);
+  RESULT := 'Done';
+END ELIMINATE_FROM_AUCTION;
