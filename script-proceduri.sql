@@ -7,6 +7,16 @@ added_at date
 )
 /
 
+drop table marketprice_history;
+create table marketprice_history(
+item_id int not null,
+item_price number(5,2) not null,
+modified_at date,
+primary key(item_id, item_price)
+)
+
+/
+
 CREATE OR REPLACE PROCEDURE create_account
   (username in varchar2,pass in varchar2,email in varchar2,coins in number)
   IS
@@ -41,6 +51,106 @@ create or replace procedure create_auction
   dbms_output.put_line('DONE');
   END;
   /
+
+
+CREATE OR REPLACE PROCEDURE DO_AUCTION_TRANZACTION 
+(
+  SELLER_ID IN NUMBER
+, BUYER_ID IN NUMBER
+, ITEM_ID IN NUMBER 
+, RESULT OUT VARCHAR2 
+) AS 
+v_coins NUMBER;
+v_price NUMBER;
+BEGIN
+  SELECT coins INTO v_coins FROM accounts WHERE ID = BUYER_ID;
+  SELECT price INTO v_price FROM auction WHERE ID_ITEM = ITEM_ID;
+  IF v_coins < v_price THEN
+    RESULT := 'Not enough coins';
+  ELSE
+    DELETE FROM auction WHERE ID_GAMER = SELLER_ID AND ID_ITEM = ITEM_ID;
+    DELETE FROM owned_items WHERE ID_OWNER = SELLER_ID AND ID_ITEM = ITEM_ID;
+    INSERT INTO owned_items VALUES(BUYER_ID, ITEM_ID, sysdate, sysdate);
+    RESULT := 'Done';
+  END IF;
+END DO_AUCTION_TRANZACTION;
+
+/
+
+CREATE OR REPLACE PROCEDURE BUY_GAME 
+(
+  BUYER_ID IN NUMBER 
+, GAME_ID IN NUMBER 
+, RESULT OUT VARCHAR2 
+) AS 
+v_coins NUMBER;
+v_price NUMBER;
+BEGIN
+  SELECT coins INTO v_coins FROM accounts WHERE ID = BUYER_ID;
+  SELECT price INTO v_price FROM games WHERE ID = GAME_ID;
+  
+  IF v_coins < v_price THEN
+    RESULT := 'Not enough coins';
+  ELSE
+    INSERT INTO owned_games VALUES(BUYER_ID, GAME_ID, sysdate, sysdate);
+    UPDATE accounts SET coins = coins-v_price WHERE ID = BUYER_ID;
+    RESULT := 'Done';
+  END IF;
+END BUY_GAME;
+
+/
+
+CREATE OR REPLACE PROCEDURE BUY_ITEM 
+(
+  BUYER_ID IN NUMBER 
+, ITEM_ID IN NUMBER 
+, RESULT OUT VARCHAR2 
+) AS 
+v_coins NUMBER;
+v_price NUMBER;
+BEGIN
+  SELECT coins INTO v_coins FROM accounts WHERE ID = BUYER_ID;
+  SELECT price INTO v_price FROM items WHERE ID = ITEM_ID;
+  
+  IF v_coins < v_price THEN
+    RESULT := 'Not enough coins';
+  ELSE
+    INSERT INTO owned_items VALUES(BUYER_ID, ITEM_ID, sysdate, sysdate);
+    UPDATE accounts SET coins = coins-v_price WHERE ID = BUYER_ID;
+    RESULT := 'Done';
+  END IF;
+END BUY_ITEM;
+
+/
+
+create or replace PROCEDURE SELL_ITEM 
+(
+  SELLER_ID IN NUMBER 
+, ITEM_ID IN NUMBER 
+, PRICE IN NUMBER
+, RESULT OUT VARCHAR2
+) AS 
+BEGIN
+  INSERT INTO auction VALUES (SELLER_ID, ITEM_ID, PRICE, sysdate + 30, sysdate, sysdate);
+  DELETE FROM owned_items WHERE id_owner = seller_id and ITEM_ID = ID_ITEM;
+  RESULT := 'Item added to auction.';
+END SELL_ITEM;
+
+/
+
+create or replace PROCEDURE ELIMINATE_FROM_AUCTION 
+(
+  SELLER_ID IN NUMBER 
+, ITEM_ID IN NUMBER 
+, RESULT OUT VARCHAR2
+) AS 
+BEGIN
+  DELETE FROM auction WHERE ID_GAMER = SELLER_ID AND ITEM_ID = ID_ITEM;
+  INSERT INTO owned_items Values(SELLER_ID, ITEM_ID, sysdate, sysdate);
+  RESULT := 'Done';
+END ELIMINATE_FROM_AUCTION;
+
+/
   
     create or replace trigger updated_at_accounts
     after update of username,pass,email,coins on accounts
@@ -119,70 +229,10 @@ create or replace procedure create_auction
         end if;
     end;
     /
-CREATE OR REPLACE PROCEDURE DO_AUCTION_TRANZACTION 
-(
-  SELLER_ID IN NUMBER
-, BUYER_ID IN NUMBER
-, ITEM_ID IN NUMBER 
-, RESULT OUT VARCHAR2 
-) AS 
-v_coins NUMBER;
-v_price NUMBER;
-BEGIN
-  SELECT coins INTO v_coins FROM accounts WHERE ID = BUYER_ID;
-  SELECT price INTO v_price FROM auction WHERE ID_ITEM = ITEM_ID;
-  IF v_coins < v_price THEN
-    RESULT := 'Not enough coins';
-  ELSE
-    DELETE FROM auction WHERE ID_GAMER = SELLER_ID AND ID_ITEM = ITEM_ID;
-    DELETE FROM owned_items WHERE ID_OWNER = SELLER_ID AND ID_ITEM = ITEM_ID;
-    INSERT INTO owned_items VALUES(BUYER_ID, ITEM_ID, sysdate, sysdate);
-    RESULT := 'Done';
-  END IF;
-END DO_AUCTION_TRANZACTION;
 
-/
-
-CREATE OR REPLACE PROCEDURE BUY_GAME 
-(
-  BUYER_ID IN NUMBER 
-, GAME_ID IN NUMBER 
-, RESULT OUT VARCHAR2 
-) AS 
-v_coins NUMBER;
-v_price NUMBER;
-BEGIN
-  SELECT coins INTO v_coins FROM accounts WHERE ID = BUYER_ID;
-  SELECT price INTO v_price FROM games WHERE ID = GAME_ID;
-  
-  IF v_coins < v_price THEN
-    RESULT := 'Not enough coins';
-  ELSE
-    INSERT INTO owned_games VALUES(BUYER_ID, GAME_ID, sysdate, sysdate);
-    UPDATE accounts SET coins = coins-v_price WHERE ID = BUYER_ID;
-    RESULT := 'Done';
-  END IF;
-END BUY_GAME;
-
-/
-
-CREATE OR REPLACE PROCEDURE BUY_ITEM 
-(
-  BUYER_ID IN NUMBER 
-, ITEM_ID IN NUMBER 
-, RESULT OUT VARCHAR2 
-) AS 
-v_coins NUMBER;
-v_price NUMBER;
-BEGIN
-  SELECT coins INTO v_coins FROM accounts WHERE ID = BUYER_ID;
-  SELECT price INTO v_price FROM items WHERE ID = ITEM_ID;
-  
-  IF v_coins < v_price THEN
-    RESULT := 'Not enough coins';
-  ELSE
-    INSERT INTO owned_items VALUES(BUYER_ID, ITEM_ID, sysdate, sysdate);
-    UPDATE accounts SET coins = coins-v_price WHERE ID = BUYER_ID;
-    RESULT := 'Done';
-  END IF;
-END BUY_ITEM;
+create or replace trigger item_added_to_market
+    after insert on auction
+    for each row
+    begin
+    insert into MARKETPRICE_HISTORY VALUES(:NEW.id_item, :NEW.price, sysdate);
+end;

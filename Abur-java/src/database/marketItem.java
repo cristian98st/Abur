@@ -153,7 +153,7 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
     public void openPopUP(String answer) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "../sample/ConfirmationPopUP.fxml"
+                        "/sample/ConfirmationPopUP.fxml"
                 )
         );
 

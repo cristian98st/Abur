@@ -27,6 +27,10 @@
     -fx-background-color: #ddd;
 }
 
+.gameOrItem:hover{
+    -fx-background-color: #535353;
+}
+
 .table-view *.scroll-bar *.increment-button,
 .table-view *.scroll-bar *.decrement-button {
     -fx-background-color: #3f3f3f;
@@ -61,6 +65,8 @@
 #error {
     -fx-text-fill: #8f2300;
 }
+
+
 
 .text-field{
     -fx-background-color: #535353;
@@ -163,3 +169,4 @@
 #link:pressed{
     -fx-font-style: italic;
 }
+

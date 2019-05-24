@@ -69,7 +69,7 @@ public class Game extends RecursiveTreeObject<Game> {
     public void openPopUP(String answer) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "../sample/ConfirmationPopUP.fxml"
+                        "/sample/ConfirmationPopUP.fxml"
                 )
         );
 
@@ -209,4 +209,14 @@ public class Game extends RecursiveTreeObject<Game> {
         pstmt.executeUpdate();
     }
 
+    public void fetchGameByName(String name) throws SQLException {
+        Connection con = Database.getConnection();
+        Statement pstmt = con.createStatement();
+        ResultSet rez = pstmt.executeQuery("select * from games where title = '" + name + "'");
+        rez.next();
+        this.id.set(String.valueOf(rez.getInt(1)));
+        this.title.set(rez.getString(2));
+        this.launch_date.set(rez.getString(3));
+        this.price.set(rez.getString(4));
+    }
 }

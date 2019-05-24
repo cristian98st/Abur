@@ -288,7 +288,7 @@ public class Item extends RecursiveTreeObject<Item> {
     public void openPopUP(String answer) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "../sample/ConfirmationPopUP.fxml"
+                        "/sample/ConfirmationPopUP.fxml"
                 )
         );
 
@@ -306,7 +306,7 @@ public class Item extends RecursiveTreeObject<Item> {
     }
 
     public void openSellPopUP(int sellerID, String itemName, String classa, String typeOf, String wear, String rarity) throws IOException {
-        FXMLLoader loader2 = new FXMLLoader(getClass().getResource("../sample/SellPopUP.fxml"));
+        FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/sample/SellPopUP.fxml"));
 
         Stage stage2 = new Stage(StageStyle.DECORATED);
         Pane custom2 = loader2.load();
