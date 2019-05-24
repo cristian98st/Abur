@@ -35,7 +35,8 @@ public class LoginController {
     private String mail;
     private int coins;
 
-    private static Stage stage = new Stage();
+    public static Stage stage = new Stage();
+    public static Scene mainScene;
 
 
     private HashMap<String, String> users = new HashMap<>();
@@ -57,12 +58,13 @@ public class LoginController {
             scene.getStylesheets().add("/resources/dark-theme.css");
 
             Main controller = loader.getController();
-            controller.init(id, username, pass, mail, coins);
+            controller.init(id, username, pass, mail, coins, scene);
             primaryStage.setScene(scene);
             primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.show();
             stage = primaryStage;
             Main.closeStage();
+
         } else {
             lblStatus.setText("Login Failed");
         }

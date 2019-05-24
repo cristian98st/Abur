@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="background" prefHeight="283.0" prefWidth="514.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ConfirmationPopUPController">
+   <children>
+      <Label fx:id="lblMessage" alignment="CENTER" contentDisplay="CENTER" layoutY="92.0" prefHeight="26.0" prefWidth="514.0" text="Message">
+         <font>
+            <Font name="Arial" size="22.0" />
+         </font></Label>
+      <JFXButton fx:id="X" layoutX="451.0" layoutY="8.0" onAction="#cancel" prefHeight="51.0" prefWidth="48.0" text="X">
+         <font>
+            <Font name="Arial Bold" size="26.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnConfirm" layoutX="214.0" layoutY="195.0" onAction="#cancel" text="Confirm">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

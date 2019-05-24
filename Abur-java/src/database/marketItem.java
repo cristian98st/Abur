@@ -31,7 +31,6 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
     public StringProperty itemPrice;
     public StringProperty expireDate;
     //extra
-    public ObservableValue<JFXButton> btnDelete;
     static Stage confirmationStage;
 
     public marketItem() {
@@ -45,35 +44,16 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
         this.rarity = new SimpleStringProperty(rarity);
         this.itemPrice = new SimpleStringProperty(itemPrice);
         this.expireDate = new SimpleStringProperty(expireDate);
+    }
 
-        this.btnDelete = new ObservableValue<JFXButton>() {
-            @Override
-            public void addListener(ChangeListener<? super JFXButton> listener) {
-
-            }
-
-            @Override
-            public void removeListener(ChangeListener<? super JFXButton> listener) {
-
-            }
-
-            @Override
-            public JFXButton getValue() {
-                JFXButton button = new JFXButton("X");
-                button.setStyle("-fx-background-color: -fx-parent; -fx-border-color: -fx-parent; -fx-text-fill: #8f2300");
-                return button;
-            }
-
-            @Override
-            public void addListener(InvalidationListener listener) {
-
-            }
-
-            @Override
-            public void removeListener(InvalidationListener listener) {
-
-            }
-        };
+    public marketItem(String itemName, String classa, String wear, String rarity, String itemPrice, String expireDate) {
+        this.player = null;
+        this.itemName = new SimpleStringProperty(itemName);
+        this.classa = new SimpleStringProperty(classa);
+        this.wear = new SimpleStringProperty(wear);
+        this.rarity = new SimpleStringProperty(rarity);
+        this.itemPrice = new SimpleStringProperty(itemPrice);
+        this.expireDate = new SimpleStringProperty(expireDate);
     }
 
     public ObservableList<marketItem> get(String col, String name, String col2Order, String order) throws SQLException{
@@ -115,6 +95,27 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
             list.add(x);
         }
         return list;
+    }
+
+    public static String deleteSellingItem(int id, int item_id) {
+        Connection con = Database.getConnection();
+        String procedure = "{ call ELIMINATE_FROM_AUCTION(?,?,?)}";
+        CallableStatement cs = null;
+        try {
+            cs = con.prepareCall(procedure);
+
+            cs.setInt(1, id);
+            cs.setInt(2, item_id);
+            cs.registerOutParameter(3, VARCHAR);
+
+            cs.execute();
+
+            String result = cs.getString(3);
+
+            return result;
+        } catch (SQLException e) {
+            return "Unknown error occured.";
+        }
     }
 
     public static int fetchItemIDByName(String name) throws SQLException {

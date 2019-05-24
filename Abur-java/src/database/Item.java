@@ -28,6 +28,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.ConfirmationPopUPController;
+import sample.Main;
+import sample.SellPopUPController;
 
 /**
  * @author Alex
@@ -43,6 +45,7 @@ public class Item extends RecursiveTreeObject<Item> {
     public StringProperty price = new SimpleStringProperty();
 
     public static Stage confirmationStage;
+    private static Stage sellStage;
 
     public Item() {
         this.id.set("-1");
@@ -168,6 +171,20 @@ public class Item extends RecursiveTreeObject<Item> {
         this.price.set(String.valueOf(price));
     }
 
+    public void fetchItemByName(String name) throws SQLException {
+        Connection con = Database.getConnection();
+        Statement pstmt = con.createStatement();
+        ResultSet rez = pstmt.executeQuery("select * from items where item_name like '%" + name + "%'");
+        rez.next();
+        this.id.set(String.valueOf(rez.getInt(1)));
+        this.name.set(rez.getString(2));
+        this.pclass.set(rez.getString(3));
+        this.type.set(rez.getString(4));
+        this.wear.set(rez.getString(5));
+        this.rarity.set(rez.getString(6));
+        this.price.set(rez.getString(7));
+    }
+
     public ObservableList<Item> get(String col, String name, String col2Order, String order) throws SQLException {
         Connection con = Database.getConnection();
         String columns = "id,item_name,typeof,wear,rarity,class,added_at,updated_at";
@@ -210,6 +227,28 @@ public class Item extends RecursiveTreeObject<Item> {
         }
     }
 
+    public static String sellItem(int sellerID, int itemID, int price) {
+        Connection con = Database.getConnection();
+        String procedure = "{ call SELL_ITEM(?,?,?,?)}";
+        CallableStatement cs1 = null;
+        try {
+            cs1 = con.prepareCall(procedure);
+
+
+            cs1.setInt(1, sellerID);
+            cs1.setInt(2, itemID);
+            cs1.setInt(3, price);
+            cs1.registerOutParameter(4, VARCHAR);
+
+            cs1.execute();
+
+            String result = cs1.getString(4);
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "An error occurred.";
+        }
+    }
 
     public List<String> getMyItems(int id) throws SQLException {
         Connection con = Database.getConnection();
@@ -266,7 +305,27 @@ public class Item extends RecursiveTreeObject<Item> {
         stage.show();
     }
 
+    public void openSellPopUP(int sellerID, String itemName, String classa, String typeOf, String wear, String rarity) throws IOException {
+        FXMLLoader loader2 = new FXMLLoader(getClass().getResource("../sample/SellPopUP.fxml"));
+
+        Stage stage2 = new Stage(StageStyle.DECORATED);
+        Pane custom2 = loader2.load();
+        custom2.getStyleClass().add("rootPane");
+        stage2.setScene(new Scene(custom2));
+
+        SellPopUPController controller2 = loader2.getController();
+        controller2.init(sellerID, itemName, classa, typeOf, wear, rarity);
+        sellStage = stage2;
+        stage2.initStyle(StageStyle.TRANSPARENT);
+        stage2.show();
+    }
+
     public static void cancelConfirmation() {
         confirmationStage.close();
+    }
+
+    public static void cancelSell(){
+        Main.sellPopUPOpen.setValue(false);
+        sellStage.close();
     }
 }
