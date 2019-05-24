@@ -9,10 +9,12 @@ added_at date
 
 drop table marketprice_history;
 create table marketprice_history(
+seller_id int not null,
 item_id int not null,
 item_price number(5,2) not null,
-modified_at date,
-primary key(item_id, item_price)
+added_at date,
+bought_at date,
+primary key(seller_id, item_id)
 )
 
 /
@@ -52,8 +54,7 @@ create or replace procedure create_auction
   END;
   /
 
-
-CREATE OR REPLACE PROCEDURE DO_AUCTION_TRANZACTION 
+create or replace PROCEDURE DO_AUCTION_TRANZACTION 
 (
   SELLER_ID IN NUMBER
 , BUYER_ID IN NUMBER
@@ -71,6 +72,9 @@ BEGIN
     DELETE FROM auction WHERE ID_GAMER = SELLER_ID AND ID_ITEM = ITEM_ID;
     DELETE FROM owned_items WHERE ID_OWNER = SELLER_ID AND ID_ITEM = ITEM_ID;
     INSERT INTO owned_items VALUES(BUYER_ID, ITEM_ID, sysdate, sysdate);
+    UPDATE accounts SET coins = coins + v_price WHERE id = seller_id;
+    UPDATE accounts SET coins = coins - v_price WHERE id = buyer_id;
+    UPDATE MARKETPRICE_HISTORY m SET BOUGHT_AT = sysdate WHERE m.seller_id=seller_id AND m.item_id = item_id;
     RESULT := 'Done';
   END IF;
 END DO_AUCTION_TRANZACTION;
@@ -133,6 +137,7 @@ create or replace PROCEDURE SELL_ITEM
 BEGIN
   INSERT INTO auction VALUES (SELLER_ID, ITEM_ID, PRICE, sysdate + 30, sysdate, sysdate);
   DELETE FROM owned_items WHERE id_owner = seller_id and ITEM_ID = ID_ITEM;
+   insert into MARKETPRICE_HISTORY VALUES(seller_id, item_id, price, sysdate, null);
   RESULT := 'Item added to auction.';
 END SELL_ITEM;
 
@@ -228,11 +233,4 @@ END ELIMINATE_FROM_AUCTION;
         dbms_output.put_line('Wrong type of password');
         end if;
     end;
-    /
-
-create or replace trigger item_added_to_market
-    after insert on auction
-    for each row
-    begin
-    insert into MARKETPRICE_HISTORY VALUES(:NEW.id_item, :NEW.price, sysdate);
-end;
+    
