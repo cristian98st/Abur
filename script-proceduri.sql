@@ -3,7 +3,8 @@ create table changes (
 id int not null primary key,
 game_id int not null,
 price number(5,2),
-added_at date
+added_at date,
+constraint game_id_fk foreign key (game_id) references games(id)
 )
 /
 
@@ -12,10 +13,11 @@ create table marketprice_history(
 item_id int not null,
 item_price number(5,2) not null,
 modified_at date,
-primary key(item_id, item_price)
+primary key(item_id, item_price),
+constraint item_id_fk foreign key (item_id) references items(id)
 )
-
 /
+
 
 CREATE OR REPLACE PROCEDURE create_account
   (username in varchar2,pass in varchar2,email in varchar2,coins in number)
