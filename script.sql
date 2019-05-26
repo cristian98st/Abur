@@ -118,6 +118,8 @@ aux1 int;
 aux2 int;
 aux3 number;
 aux4 int;
+aux5 int;
+rez int;
 BEGIN
   DBMS_OUTPUT.PUT_LINE('Incepem');
   FOR v_i IN 1..400 LOOP
@@ -140,8 +142,8 @@ BEGIN
     FOR v_i IN 0..700 LOOP
         FOR v_j IN 0..99 LOOP
             w_gamename := game_names(v_i+1)||v_j;
-            w_launch := to_date('2000-01-01', 'yyyy-mm-dd')+trunc(DBMS_RANDOM.VALUE(1,6570));
-            INSERT INTO games VALUES(((v_i*100)+v_j),w_gamename,dbms_random.value(1,1000),w_launch,sysdate-300,sysdate-300);
+            w_launch := sysdate+trunc(DBMS_RANDOM.VALUE(1,360));
+            INSERT INTO games VALUES(((v_i*100)+v_j),w_gamename,dbms_random.value(1,999),w_launch,sysdate-300,sysdate-300);
         END LOOP;
     END LOOP;
     aux:=TRUNC(DBMS_RANDOM.VALUE(0,699))+1;
@@ -182,23 +184,27 @@ BEGIN
   END LOOP;
   FOR v_i IN 1..10000 LOOP
     select max(id) into aux from games;
-    aux1 := TRUNC(DBMS_RANDOM.VALUE(1,1000));
-    aux2 := TRUNC(DBMS_RANDOM.VALUE(1,aux));
+    aux1 := TRUNC(DBMS_RANDOM.VALUE(1,999));
+    aux2 := TRUNC(DBMS_RANDOM.VALUE(1,aux-1));
     aux3 := TRUNC(DBMS_RANDOM.VALUE(1,300));
     insert into changes values(v_i,aux2,aux1,sysdate-aux3);
   END LOOP;
     select max(id) into aux from items;
     select max(id) into aux1 from accounts;
-    FOR v_i IN 1..aux LOOP
+    FOR v_i IN 1..10000 LOOP
     aux2 := TRUNC(DBMS_RANDOM.VALUE(1,300));
     aux3 := TRUNC(DBMS_RANDOM.VALUE(1,aux2));
-    insert into marketprice_history values(DBMS_RANDOM.VALUE(1,trunc(aux1/2)-1),v_i,DBMS_RANDOM.VALUE(1,1000),sysdate-aux2,sysdate-aux3);
+    aux4 := TRUNC(DBMS_RANDOM.VALUE(1,aux)); 
+    aux5 := TRUNC(DBMS_RANDOM.VALUE(1,aux1));
+    select count(*) into rez from marketprice_history where seller_id = aux5 and item_id = aux4;
+    WHILE rez!=0 LOOP
+    aux4 := TRUNC(DBMS_RANDOM.VALUE(1,aux)); 
+    aux5 := TRUNC(DBMS_RANDOM.VALUE(1,aux1));
+    select count(*) into rez from marketprice_history where seller_id = aux5 and item_id = aux4;
+    END LOOP;
+    insert into marketprice_history values(aux5,aux4,DBMS_RANDOM.VALUE(1,1000),sysdate-aux2,sysdate-aux3);
   END LOOP;
-  FOR v_i IN 1..aux LOOP
-    aux2 := TRUNC(DBMS_RANDOM.VALUE(1,300));
-    aux3 := TRUNC(DBMS_RANDOM.VALUE(1,aux2));
-    insert into marketprice_history values(DBMS_RANDOM.VALUE(trunc(aux1/2)+1,aux1),v_i,DBMS_RANDOM.VALUE(1,1000),sysdate-aux2,sysdate-aux3);
-  END LOOP;
+
 END;
 /
 select * from auction;
