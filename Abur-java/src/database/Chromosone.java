@@ -37,6 +37,15 @@ public class Chromosone {
 			}
 	}
 	
+	public float eval(int nr) {
+		float ret=0;
+		for(int j=nr*7;j<(7+(nr*7));j++) {
+			if(this.bits[j])
+				ret+=Math.pow(2, j-(nr*7));
+		}
+		return ret/100;
+	}
+	
 	public void mutation() {
 		for(int i=0;i<70;i++)
 			if(Math.random()<MUT_RATE) {
