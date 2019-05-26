@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="background" prefHeight="720.0" prefWidth="1133.0" stylesheets="@../resources/dark-theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ItemStatisticsPopUPController">
+   <children>
+      <Label fx:id="itemTitle" alignment="CENTER" layoutY="54.0" prefHeight="39.0" prefWidth="1133.0" text="Item Title">
+         <font>
+            <Font name="Arial" size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="101.0" layoutY="152.0" text="Popularity:">
+         <font>
+            <Font name="Arial" size="28.0" />
+         </font>
+      </Label>
+      <Label id="popularityLevel" fx:id="popularityLevel" layoutX="240.0" layoutY="152.0" text="popularityLevel">
+         <font>
+            <Font name="Arial" size="28.0" />
+         </font>
+      </Label>
+      <LineChart fx:id="itemChart" layoutX="144.0" layoutY="221.0" prefHeight="461.0" prefWidth="846.0" title="Price Evolution">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <JFXButton fx:id="X" layoutX="1062.0" layoutY="14.0" onAction="#cancelStatistics" text="X">
+         <font>
+            <Font name="Arial Bold" size="27.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

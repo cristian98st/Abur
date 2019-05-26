@@ -170,3 +170,10 @@
     -fx-font-style: italic;
 }
 
+#popularityLevel {
+    -fx-text-fill: #27ff3b;
+}
+
+#price{
+    -fx-text-fill: red;
+}

@@ -1,7 +1,7 @@
 
-// Shadow of Love - HG61GZLJE4
-// Rock - 9NCA4XZB1H - 851
-// Luvitus - DGYLV2A9PW
+// Shadow of Love - FBPHBM8FK0
+// Rock - MJ68JTWLBJ - 851
+// Luvitus - OWFC0W1YM1
 
 package sample;
 
@@ -16,10 +16,7 @@ import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXButton;
 
 import com.jfoenix.controls.JFXPopup;
-import database.Game;
-import database.Item;
-import database.User;
-import database.marketItem;
+import database.*;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -64,6 +61,8 @@ public class Main extends Application implements Initializable {
     private GridPane gameGridPane, itemGridPane;
     @FXML
     private JFXPopup itemPopUP = new JFXPopup();
+    @FXML
+    private JFXPopup gamePopUP = new JFXPopup();
     @FXML
     private JFXPopup infoPopUP = new JFXPopup();
     @FXML
@@ -136,7 +135,7 @@ public class Main extends Application implements Initializable {
             int j = 0;
             gameGridPane.getChildren().clear();
             gameGridPane.setOnMouseMoved(e -> {
-                if(gameGridPane.isVisible()) {
+                if (gameGridPane.isVisible()) {
                     positionX = e.getX();
                     positionY = e.getY();
                 }
@@ -145,6 +144,9 @@ public class Main extends Application implements Initializable {
                 JFXButton button = new JFXButton(g);
                 button.getStyleClass().add("gameOrItem");
                 button.setPrefSize(200, 200);
+                button.setOnMouseClicked(e -> {
+                    showGamePopUP(e.getSceneX(), e.getSceneY(), g);
+                });
                 button.setOnMouseEntered(e -> {
                     boolean isStationary = true;
                     long t = System.currentTimeMillis();
@@ -182,7 +184,7 @@ public class Main extends Application implements Initializable {
             int j = 0;
             itemGridPane.getChildren().clear();
             itemGridPane.setOnMouseMoved(e -> {
-                if(itemGridPane.isVisible()) {
+                if (itemGridPane.isVisible()) {
                     positionX = e.getX();
                     positionY = e.getY();
                 }
@@ -354,7 +356,8 @@ public class Main extends Application implements Initializable {
         sellingItems();
 
         // My items popup
-        initPopUP();
+        initSellPopUP();
+        initGameSellPopUP();
         initGamePopUP();
         initItemPopUP();
     }
@@ -380,7 +383,7 @@ public class Main extends Application implements Initializable {
         gameInfoPopUP.setSource(itemGridPane);
     }
 
-    private void initPopUP() {
+    private void initSellPopUP() {
         JFXButton gameSellButton = new JFXButton("Sell");
         gameSellButton.setOnMouseClicked(e -> {
             try {
@@ -394,9 +397,46 @@ public class Main extends Application implements Initializable {
                 e1.printStackTrace();
             }
         });
-        VBox vBox1 = new VBox(gameSellButton);
+
+        JFXButton itemStatisticsButton = new JFXButton("Statistics");
+        itemStatisticsButton.setOnMouseClicked(e -> {
+            try {
+                Item item = new Item();
+                item.fetchItemByName(sellingItemName);
+                item.openItemStatistics(sellingItemName, item.getPopularity((int) item.getId()), item.getDates(item.getId()), item.getPrices(item.getId()));
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        VBox vBox1 = new VBox(gameSellButton, itemStatisticsButton);
+        vBox1.setSpacing(10);
         itemPopUP.setContent(vBox1);
         itemPopUP.setSource(itemGridPane);
+    }
+
+
+    private void initGameSellPopUP() {
+        JFXButton gameStatisticsButton = new JFXButton("Statistics");
+        gameStatisticsButton.setOnMouseClicked(e -> {
+            try {
+                Game game = new Game();
+                game.fetchGameByName(sellingGameName);
+                GenAlg x = new GenAlg(game.getId());
+                Double predictedPrice = Double.valueOf(x.start());
+                game.openGameStatistics(sellingGameName, predictedPrice, game.getDates(game.getId()), game.getPrices(game.getId()));
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        VBox vBox1 = new VBox(gameStatisticsButton);
+        gamePopUP.setContent(vBox1);
+        gamePopUP.setSource(gameGridPane);
     }
 
     public void games() {
@@ -740,13 +780,6 @@ public class Main extends Application implements Initializable {
         marketExpireDate.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
 
-        marketExpireDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
-                return param.getValue().expireDate;
-            }
-        });
-
         TableColumn<marketItem, Void> buyButton3 = new TableColumn<>();
         buyButton3.setPrefWidth(70);
         buyButton3.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff; -fx-font-weight: bold");
@@ -759,8 +792,6 @@ public class Main extends Application implements Initializable {
         marketItemTable.getColumns().add(marketWear);
         marketItemTable.getColumns().add(marketRarity);
         marketItemTable.getColumns().add(marketItemPrice);
-        marketItemTable.getColumns().add(marketExpireDate);
-
     }
 
     private void addButtonTableMarketItem(TableColumn<marketItem, Void> buyButton3) {
@@ -974,6 +1005,11 @@ public class Main extends Application implements Initializable {
         itemPopUP.close();
     }
 
+    private void showGamePopUP(double sceneX, double sceneY, String g) {
+        gamePopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT, sceneX - 290, sceneY - 90);
+        sellingGameName = g;
+    }
+
     private void showInfoPopUP(double x, double y, String i) {
         sellingItemName = i;
         Item item = new Item();
@@ -1001,7 +1037,7 @@ public class Main extends Application implements Initializable {
         sellingGameName = g;
         Game game = new Game();
 
-        try{
+        try {
             game.fetchGameByName(sellingGameName);
             lbblID.setText("ID: " + game.getId());
             lbblName.setText("Name: " + game.getTitle());
@@ -1011,8 +1047,8 @@ public class Main extends Application implements Initializable {
             vBox1.getChildren().clear();
             vBox1.getChildren().setAll(lbblID, lbblName, lbblRarity, lbblPrice);
 
-            gameInfoPopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, x-1850, y-700);
-            gameInfoPopUP.setPrefSize(0,0);
+            gameInfoPopUP.show(JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, x - 1850, y - 700);
+            gameInfoPopUP.setPrefSize(0, 0);
 
         } catch (SQLException e) {
             e.printStackTrace();

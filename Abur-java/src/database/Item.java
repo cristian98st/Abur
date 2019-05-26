@@ -12,14 +12,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.ConfirmationPopUPController;
+import sample.ItemStatisticsPopUPController;
 import sample.Main;
 import sample.SellPopUPController;
 
@@ -46,6 +43,7 @@ public class Item extends RecursiveTreeObject<Item> {
 
     public static Stage confirmationStage;
     private static Stage sellStage;
+    private static Stage statisticsStage;
 
     public Item() {
         this.id.set("-1");
@@ -71,7 +69,6 @@ public class Item extends RecursiveTreeObject<Item> {
         this.rarity.set(rarity);
         this.price.set(price);
     }
-
 
     /**
      * @return the id
@@ -320,6 +317,59 @@ public class Item extends RecursiveTreeObject<Item> {
         stage2.show();
     }
 
+    public void openItemStatistics(String itemTitle, int popularity, String[] dates, Double[] prices) throws IOException {
+        FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/sample/ItemStatisticsPopUP.fxml"));
+
+        Stage stage = new Stage(StageStyle.DECORATED);
+        Pane custom = loader3.load();
+        custom.getStyleClass().add("rootPane");
+        stage.setScene(new Scene(custom));
+
+        ItemStatisticsPopUPController controller = loader3.getController();
+        controller.init(itemTitle, popularity, dates, prices);
+        statisticsStage = stage;
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
+    }
+
+    public int getPopularity(int ID) throws SQLException {
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT AVG(bought_at - added_at) FROM MARKETPRICE_HISTORY where item_id = " + ID);
+
+        resultSet.next();
+
+        return resultSet.getInt(1);
+    }
+
+    public String[] getDates(int ID) throws SQLException {
+        List<String> dates = new ArrayList<>();
+
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT added_at FROM marketprice_history WHERE ITEM_ID = " + ID +"order by added_at");
+
+        resultSet.next();
+        while(resultSet.next())
+            dates.add(resultSet.getString(1));
+
+        return dates.toArray(new String[0]);
+    }
+
+    public Double[] getPrices(Integer id) throws SQLException {
+        List<Double> prices = new ArrayList<>();
+
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT item_price FROM marketprice_history WHERE ITEM_ID = " + id + "order by added_at");
+
+        resultSet.next();
+        while(resultSet.next())
+            prices.add(resultSet.getDouble(1));
+
+        return prices.toArray(new Double[0]);
+    }
+
     public static void cancelConfirmation() {
         confirmationStage.close();
     }
@@ -328,4 +378,10 @@ public class Item extends RecursiveTreeObject<Item> {
         Main.sellPopUPOpen.setValue(false);
         sellStage.close();
     }
+
+    public static void cancelStatistics() {
+        statisticsStage.close();
+    }
+
+
 }

@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.ConfirmationPopUPController;
+import sample.GameStatisticsPopUPController;
 import sample.Main;
 
 import static java.sql.Types.VARCHAR;
@@ -46,6 +47,7 @@ public class Game extends RecursiveTreeObject<Game> {
     public StringProperty price = new SimpleStringProperty();
 
     public static Stage confirmationStage;
+    private static Stage statisticsStage;
 
     public Game() {
         this.id.set("-1");
@@ -85,11 +87,6 @@ public class Game extends RecursiveTreeObject<Game> {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
-
-    public static void cancelConfirmation() {
-        confirmationStage.close();
-    }
-
 
     /**
      * @return the id
@@ -219,4 +216,56 @@ public class Game extends RecursiveTreeObject<Game> {
         this.launch_date.set(rez.getString(3));
         this.price.set(rez.getString(4));
     }
+
+    public void openGameStatistics(String gameTitle, double predictedPrice, String[] dates, Double[] prices) throws IOException {
+        FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/sample/GameStatisticsPopUP.fxml"));
+
+        Stage stage = new Stage(StageStyle.DECORATED);
+        Pane custom = loader3.load();
+        custom.getStyleClass().add("rootPane");
+        stage.setScene(new Scene(custom));
+
+        GameStatisticsPopUPController controller = loader3.getController();
+        controller.init(gameTitle, predictedPrice, dates, prices);
+        statisticsStage = stage;
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
+    }
+
+    public String[] getDates(String id) throws SQLException {
+        List<String> dates = new ArrayList<>();
+
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT added_at FROM changes WHERE GAME_ID = " + id +"order by added_at");
+
+        resultSet.next();
+        while(resultSet.next())
+            dates.add(resultSet.getString(1));
+
+        return dates.toArray(new String[0]);
+    }
+
+    public Double[] getPrices(String id) throws SQLException {
+        List<Double> prices = new ArrayList<>();
+
+        Connection con = Database.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT game_price FROM changes WHERE GAME_ID = " + id + "order by added_at");
+
+        resultSet.next();
+        while(resultSet.next())
+            prices.add(resultSet.getDouble(1));
+
+        return prices.toArray(new Double[0]);
+    }
+
+    public static void cancelStatistics(){
+        statisticsStage.close();
+    }
+
+    public static void cancelConfirmation() {
+        confirmationStage.close();
+    }
+
 }
