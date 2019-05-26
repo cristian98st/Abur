@@ -3,8 +3,8 @@ create table changes (
 id int not null primary key,
 game_id int not null,
 price number(5,2),
-added_at date,
-constraint game_id_fk foreign key (game_id) references games(id)
+added_at date
+/* constraint game_id_fk foreign key (game_id) references games(id) */
 )
 /
 
@@ -16,7 +16,7 @@ item_price number(5,2) not null,
 added_at date,
 bought_at date,
 primary key(seller_id, item_id)
-constraint item_id_fk foreign key (item_id) references items(id)
+/* constraint item_id_fk foreign key (item_id) references items(id) */
 )
 /
 
@@ -214,7 +214,7 @@ END ELIMINATE_FROM_AUCTION;
     /
     
      create or replace trigger updated_at_auction
-    after update of id_gamer,id_item,price,exp_date on auction
+    after update of id_gamer,id_item,price on auction
     begin
     update auction
     set updated_at = sysdate;
