@@ -41,9 +41,9 @@ public class Chromosone {
 		float ret=0;
 		for(int j=nr*7;j<(7+(nr*7));j++) {
 			if(this.bits[j])
-				ret+=Math.pow(2, j-nr);
+				ret+=Math.pow(2, j-(nr*7));
 		}
-		return ret;
+		return ret/100;
 	}
 	
 	public void mutation() {

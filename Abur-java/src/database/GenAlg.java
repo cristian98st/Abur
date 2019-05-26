@@ -23,6 +23,7 @@ public class GenAlg {
 	public GenAlg(String y) {
 		this.population = new ArrayList<Chromosone>();
 		this.fitness = new ArrayList<Float>();
+		this.values = new ArrayList<Float>();
 		for(int i=0; i<100; i++) {
 			Chromosone x = new Chromosone();
 			this.population.add(x);
@@ -30,23 +31,6 @@ public class GenAlg {
 		}
 		this.game_id=y;
 	}
-	
-//	public void getDatesAndValues() throws SQLException{
-//		Connection con = Database.getConnection();
-//        Statement stms = con.createStatement();
-//        ResultSet result = stms.executeQuery("SELECT max(added_at) - min(added_at) FROM changes where game_id = " + this.game_id );
-//        result.next();
-//        this.days = result.getFloat(1);
-//        result = stms.executeQuery("SELECT min(added_at) FROM changes where game_id = " + this.game_id );
-//        result.next();
-//        this.start_date = result.getString(1);
-//        int i=0;
-//        for(i=1;i<11;i++) {
-//        	result = stms.executeQuery("SELECT price FROM changes where game_id = " + this.game_id + " having max(added_date)<to_date(" + this.start_date + ") + " + String.valueOf(i*this.days/10));
-//            result.next();
-//            values.add(result.getFloat(1));
-//        }
-//	}
 	
 	public void getDatesAndValues() throws SQLException{
 		Connection con = Database.getConnection();
@@ -60,12 +44,16 @@ public class GenAlg {
         int i=0;
         DecimalFormat d= new DecimalFormat("0.00");
         String sql;
+        if(this.days == 0.0f ) {
+        	this.days = 1.0f;
+        }
+        ResultSet res;
         for(i=1;i<11;i++) {
-        	sql="SELECT * FROM changes where game_id = " + this.game_id + "and added_at<(to_date('" + this.start_date.substring(0, this.start_date.indexOf(' ')) + "','yyyy-mm-dd') + " + d.format(this.days/10*i)+") order by added_at desc";
-        	System.out.print(sql);
-        	result = stms.executeQuery(sql);
-            result.next();
-            values.add(result.getFloat(2));
+        	sql="SELECT price FROM changes where game_id = " + this.game_id + "and added_at<(to_date('" + this.start_date.substring(0, this.start_date.indexOf(' ')) + "','yyyy-mm-dd') + " + d.format(this.days/10*i)+") order by added_at desc";
+//        	System.out.print(sql);
+        	res = stms.executeQuery(sql);
+        	if(res.next())
+        		values.add(res.getFloat(1));
         }
 	}
 	
@@ -73,9 +61,8 @@ public class GenAlg {
 		for(int i=0;i<100;i++) {
 			this.fitness.set(i, 0.0f);
 			for(int j=0;j<9;j++) {
-				this.fitness.set(i, this.fitness.get(i)+Math.abs(population.get(i).eval(j)));
+				this.fitness.set(i, this.fitness.get(i)+Math.abs(population.get(i).eval(j)-this.values.get(j)));
 			}
-			this.fitness.set(i, Math.abs(this.fitness.get(i)+this.values.get(i)));
 		}
 	}
 	
@@ -120,8 +107,8 @@ public class GenAlg {
 	public float exit() {
 		float ret=0.0f;
 		for(int i=0;i<100;i++)
-			ret+=this.population.get(i).eval(10);
-		return ret/100;
+			ret+=this.population.get(i).eval(9);
+		return ret*10;
 	}
 	
 	public float start() {
