@@ -1,5 +1,5 @@
 
-// Shadow of Love - FBPHBM8FK0
+// Shadow of Love - 2IKX8TNPG5
 // Rock - MJ68JTWLBJ - 851
 // Luvitus - OWFC0W1YM1
 
@@ -731,7 +731,6 @@ public class Main extends Application implements Initializable {
         marketClassa.setPrefWidth(150);
         marketClassa.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
-
         marketClassa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
@@ -779,6 +778,13 @@ public class Main extends Application implements Initializable {
         marketExpireDate.setPrefWidth(150);
         marketExpireDate.setStyle("-fx-background-color: #323232; -fx-text-fill: #fff");
 
+        marketExpireDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<marketItem, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<marketItem, String> param) {
+                return param.getValue().expireDate;
+            }
+        });
+
 
         TableColumn<marketItem, Void> buyButton3 = new TableColumn<>();
         buyButton3.setPrefWidth(70);
@@ -792,6 +798,7 @@ public class Main extends Application implements Initializable {
         marketItemTable.getColumns().add(marketWear);
         marketItemTable.getColumns().add(marketRarity);
         marketItemTable.getColumns().add(marketItemPrice);
+        marketItemTable.getColumns().add(marketExpireDate);
     }
 
     private void addButtonTableMarketItem(TableColumn<marketItem, Void> buyButton3) {

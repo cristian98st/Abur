@@ -65,16 +65,16 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
         ResultSet rez;
         if (columns.contains(col) && !col.contains(",")) {
             if (ord.contains(order) && !order.contains(",")) {
-                rez = pstmt.executeQuery("select acc.username, i.item_name, i.class, i.wear, i.rarity, auc.price from auction auc join accounts acc on auc.id_gamer = acc.id " +
+                rez = pstmt.executeQuery("select acc.username, i.item_name, i.class, i.wear, i.rarity, auc.price, auc.exp_date from auction auc join accounts acc on auc.id_gamer = acc.id " +
                         "join items i on auc.id_item = i.id " +
                         "where i." + col + " like '%" + name + "%' order by i." + col2Order + " " + order);
             } else {
-                rez = pstmt.executeQuery("select acc.username, i.item_name, i.class, i.wear, i.rarity, auc.price from auction auc join accounts acc on auc.id_gamer = acc.id " +
+                rez = pstmt.executeQuery("select acc.username, i.item_name, i.class, i.wear, i.rarity, auc.price, auc.exp_date from auction auc join accounts acc on auc.id_gamer = acc.id " +
                         "join items i on auc.id_item = i.id " +
                         "where i." + col + " like '%" + name + "%' ");
             }
             while (rez.next()) {
-                marketItem x = new marketItem(rez.getString(1), rez.getString(2), rez.getString(3), rez.getString(4), rez.getString(5), String.valueOf(rez.getFloat(6)));
+                marketItem x = new marketItem(rez.getString(1), rez.getString(2), rez.getString(3), rez.getString(4), rez.getString(5), String.valueOf(rez.getFloat(6)), rez.getString(7));
                 list.add(x);
             }
         }
@@ -87,11 +87,11 @@ public class marketItem extends RecursiveTreeObject<marketItem> {
         Statement pstmt = con.createStatement();
         ResultSet rez;
 
-        rez = pstmt.executeQuery("select acc.username, i.item_name, i.class, i.wear, i.rarity, auc.price from auction auc join accounts acc on auc.id_gamer = acc.id " +
+        rez = pstmt.executeQuery("select acc.username, i.item_name, i.class, i.wear, i.rarity, auc.price, auc.exp_date from auction auc join accounts acc on auc.id_gamer = acc.id " +
                 "join items i on auc.id_item = i.id " +
                 "where acc.id = " + id);
         while (rez.next()) {
-            marketItem x = new marketItem(rez.getString(1), rez.getString(2), rez.getString(3), rez.getString(4), rez.getString(5), String.valueOf(rez.getFloat(6)));
+            marketItem x = new marketItem(rez.getString(1), rez.getString(2), rez.getString(3), rez.getString(4), rez.getString(5), String.valueOf(rez.getFloat(6)), rez.getString(7));
             list.add(x);
         }
         return list;
