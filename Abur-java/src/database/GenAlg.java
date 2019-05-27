@@ -16,14 +16,14 @@ public class GenAlg {
 	private String start_date;
 	private float days;
 	private List<Float> fitness;
-	private List<Float> values;
+	private float values[];
 	private String game_id;
 	private int Generation; 
 	
 	public GenAlg(String y) {
 		this.population = new ArrayList<Chromosone>();
 		this.fitness = new ArrayList<Float>();
-		this.values = new ArrayList<Float>();
+		this.values=new float[10];
 		for(int i=0; i<100; i++) {
 			Chromosone x = new Chromosone();
 			this.population.add(x);
@@ -38,30 +38,53 @@ public class GenAlg {
         ResultSet result = stms.executeQuery("SELECT max(added_at) - min(added_at) FROM changes where game_id = " + this.game_id);
         result.next();
         this.days = result.getFloat(1);
+        stms = con.createStatement();
         result = stms.executeQuery("SELECT min(added_at) FROM changes where game_id = " + this.game_id );
         result.next();
         this.start_date = result.getString(1);
+        if(this.start_date == null) {
+        	stms = con.createStatement();
+            result = stms.executeQuery("SELECT added_at FROM games where id = " + this.game_id );
+            result.next();
+            this.start_date = result.getString(1);
+        }
         int i=0;
         DecimalFormat d= new DecimalFormat("0.00");
         String sql;
         if(this.days == 0.0f ) {
         	this.days = 1.0f;
         }
+//        System.out.println(this.days);
+//        System.out.println(this.start_date);
         ResultSet res;
+        sql="SELECT price FROM games where id = " + this.game_id;
+        res = stms.executeQuery(sql);
+        if(res.next()) {
+        	float x = res.getFloat(1);
+        	System.out.print(x);
+        	for(int j=0;j<10;j++)
+        		values[j]=(float)x;
+        }
         for(i=1;i<11;i++) {
         	sql="SELECT price FROM changes where game_id = " + this.game_id + "and added_at<(to_date('" + this.start_date.substring(0, this.start_date.indexOf(' ')) + "','yyyy-mm-dd') + " + d.format(this.days/10*i)+") order by added_at desc";
 //        	System.out.print(sql);
         	res = stms.executeQuery(sql);
         	if(res.next())
-        		values.add(res.getFloat(1));
+        		values[i-1]=res.getFloat(1);
         }
 	}
 	
 	public void eval() {
+		float x;
 		for(int i=0;i<100;i++) {
-			this.fitness.set(i, 0.0f);
+			Float y = new Float(0.0f);
+			this.fitness.add(y);
 			for(int j=0;j<9;j++) {
-				this.fitness.set(i, this.fitness.get(i)+Math.abs(population.get(i).eval(j)-this.values.get(j)));
+//				System.out.println(this.values[j]);
+//				System.out.println(population.get(i).eval(j));
+//				System.out.println(this.fitness.get(i));
+				x=this.fitness.get(i)+Math.abs(population.get(i).eval(j)-this.values[j]);
+				this.fitness.set(i, x);
 			}
 		}
 	}

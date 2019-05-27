@@ -251,7 +251,7 @@ public class Game extends RecursiveTreeObject<Game> {
 
         Connection con = Database.getConnection();
         Statement stmt = con.createStatement();
-        ResultSet resultSet = stmt.executeQuery("SELECT game_price FROM changes WHERE GAME_ID = " + id + "order by added_at");
+        ResultSet resultSet = stmt.executeQuery("SELECT price FROM changes WHERE GAME_ID = " + id + "order by added_at");
 
         resultSet.next();
         while(resultSet.next())

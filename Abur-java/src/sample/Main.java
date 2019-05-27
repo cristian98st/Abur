@@ -425,6 +425,7 @@ public class Main extends Application implements Initializable {
                 Game game = new Game();
                 game.fetchGameByName(sellingGameName);
                 GenAlg x = new GenAlg(game.getId());
+                x.getDatesAndValues();
                 Double predictedPrice = Double.valueOf(x.start());
                 game.openGameStatistics(sellingGameName, predictedPrice, game.getDates(game.getId()), game.getPrices(game.getId()));
             } catch (SQLException e1) {
